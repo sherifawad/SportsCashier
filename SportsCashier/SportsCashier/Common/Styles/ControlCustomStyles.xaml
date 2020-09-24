@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Style TargetType="Button" x:Key="BaseButton">
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+    </Style>
+    <Style TargetType="Button" x:Key="AddButton" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="Text" Value="Add" />
+        <Setter Property="BackgroundColor" Value="LightGreen" />
+        <Setter Property="ImageSource">
+            <Setter.Value>
+                <FontImageSource Glyph="&#xf067;" FontFamily="SolidAwesome" Color="White" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="Button" x:Key="RemoveButton" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="Text" Value="remove" />
+        <Setter Property="BackgroundColor" Value="Red" />
+        <Setter Property="ImageSource">
+            <Setter.Value>
+                <FontImageSource Glyph="&#xf068;" FontFamily="SolidAwesome" Color="White" Size="Subtitle" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="Button" x:Key="EditButton" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="Text" Value="Edit" />
+        <Setter Property="ImageSource">
+            <Setter.Value>
+                <FontImageSource Glyph="&#xf044;" FontFamily="SolidAwesome" Color="White" Size="Subtitle" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="Button" x:Key="LikeButton" BasedOn="{StaticResource AddButton}">
+        <Setter Property="Text" Value="Save" />
+        <Setter Property="ImageSource">
+            <Setter.Value>
+                <FontImageSource Glyph="&#xf164;" FontFamily="SolidAwesome" Color="White"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="Button" x:Key="DisLikeButton" BasedOn="{StaticResource RemoveButton}">
+        <Setter Property="Text" Value="Cancel" />
+        <Setter Property="ImageSource">
+            <Setter.Value>
+                <FontImageSource Glyph="&#xf165;" FontFamily="SolidAwesome" Color="White" Size="Subtitle" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

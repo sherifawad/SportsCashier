@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SportsCashier"
+             local:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:viewModels="clr-namespace:SportsCashier.ViewModels"
+                          xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             x:Class="SportsCashier.Views.HomeView">
+
+    <Grid>
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" HorizontalOptions="Center" Color="LightGreen" />
+        <FlexLayout x:Name="FlexTypes" BindableLayout.ItemsSource="{Binding HomeItemsCollection}" 
+           Wrap="Wrap"
+           Direction="Row"
+           JustifyContent="Start"
+           AlignItems="Start"
+           AlignContent="Start"
+           Padding="8">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,4,4,4"
+                      FlexLayout.Basis="{OnIdiom Phone='50%', Tablet='33%'}"
+                      FlexLayout.AlignSelf="Start">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.TappingCommand, Source={x:Reference FlexTypes}}" CommandParameter="{Binding ViewModel}" />
+                        </Grid.GestureRecognizers>
+                        <Frame Padding="0" 
+                        VerticalOptions="Start"
+                        HasShadow="True">
+                            <Grid Padding="0" RowDefinitions="Auto, Auto" >
+                                <Label Text="{Binding IconText}" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"
+                            FontFamily="SolidAwesome" FontAttributes="Bold"
+                            FontSize="Header"
+                               TextColor="Red"/>
+                                <Label Grid.Row="1" Margin="10,0" Text="{Binding Name}" TextColor="Black" HorizontalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+    </Grid>
+</local:BasePage>

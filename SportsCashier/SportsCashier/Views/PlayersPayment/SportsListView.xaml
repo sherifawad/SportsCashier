@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:view="clr-namespace:SportsCashier.Views.PlayersPayment"
+             xmlns:viewModel="clr-namespace:SportsCashier.ViewModels.PlayersPayment"
+             xmlns:controls="clr-namespace:SportsCashier.Views.Controls"
+             xmlns:converter="clr-namespace:SportsCashier.ValueConverters"
+             x:Name="sportsList_View"
+             x:Class="SportsCashier.Views.PlayersPayment.SportsListView"
+             Visual="Material">
+
+    <Frame  Margin="5" HasShadow="True" CornerRadius="10" BorderColor="LightGray" >
+
+
+        <Grid RowDefinitions="Auto, Auto" >
+
+            <!--#region Picker And Add Button -->
+
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Margin="0,0,15,0" 
+                                Style="{StaticResource AddButton}"
+                                Command="{Binding AddSportCommand}" 
+                                CommandParameter="{Binding Source={x:Reference picker}, Path=BindingContext.GetSport}" />
+
+                <view:SportsPicker x:Name="picker" Grid.Column="1" HorizontalOptions="FillAndExpand" />
+
+            </Grid>
+
+            <!--#endregion-->
+
+            <!--#region List With Remove Buttons -->
+            <Frame Grid.Row="1" Margin="5" CornerRadius="10" BorderColor="Silver" HasShadow="True" >
+
+
+                <ScrollView >
+                    <FlexLayout  Wrap="Wrap" BindableLayout.ItemsSource="{Binding Sports}"
+                                    
+                        Direction="Row"
+                        JustifyContent="Center"
+                        AlignItems="Center"
+                        AlignContent="Start">
+                        <BindableLayout.EmptyView>
+                            <Label Text="اختر اللعبة ثم اضغط اضافة"
+                                Margin="10,25,10,10"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalOptions="Fill"
+                                HorizontalTextAlignment="Center" />
+                        </BindableLayout.EmptyView>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <controls:EditableSportListItemContentView />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </ScrollView >
+            </Frame>
+
+            <!--#endregion-->
+
+        </Grid>
+
+    </Frame>
+</ContentView>

@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SportsCashier.Views.Controls"
+             xmlns:views="clr-namespace:SportsCashier.Views.PlayersPayment"
+             xmlns:local="clr-namespace:SportsCashier"
+             local:ViewModelLocator.AutoWireViewModel="True"
+             x:Class="SportsCashier.Views.PlayersPayment.NewPaymentView"
+             x:Name="Payment_View"
+             BackgroundColor="FloralWhite"
+             Visual="Material">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}" />
+    </Shell.BackButtonBehavior>
+
+    <Shell.BackgroundColor>
+        <Color>#599653</Color>
+    </Shell.BackgroundColor>
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,Auto">
+            <Label HorizontalTextAlignment="Center" Margin="0,0,10,0" Padding="0" VerticalTextAlignment="Center" TextColor="White" FontSize="20">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Total  " FontAttributes="Bold" TextTransform="Uppercase"/>
+                        <Span Text="{Binding Total, StringFormat='{0:D2}'}" Font="Bold, Italic" FontSize="Small" TextColor="Black" />
+                        <Span Text="  $" FontAttributes="Bold" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Button  Grid.Column="1" Text="Save" BackgroundColor="Transparent" Font="Bold, Italic" FontSize="Medium" TextColor="Black" Command="{Binding SaveCommand}" />
+        </Grid>
+    </Shell.TitleView>
+    
+
+    <!--<ContentPage.BindingContext>
+        <viewModels:NewPaymentViewModel />
+    </ContentPage.BindingContext>-->
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <ActivityIndicator Color="LightGreen" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All" />
+            
+            <Frame  Margin="5" HasShadow="True" CornerRadius="10" BorderColor="LightGray"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            BindingContext="{Binding Source={x:Reference Payment_View}, Path=BindingContext}">
+                <Grid RowDefinitions="Auto, Auto">
+                    <controls:MembershipNumberContentView />
+                    <StackLayout Grid.Row="1">
+                    <ScrollView >
+                            <FlexLayout  Wrap="Wrap" BindableLayout.ItemsSource="{Binding Players}"
+                                    
+                        Direction="Row"
+                        JustifyContent="Center"
+                        AlignItems="Center"
+                        AlignContent="Start">
+                                <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+
+
+                                        <!--#region Player Item -->
+                                        <controls:PlayerListItemContentView />
+                                        <!--#endregion-->
+
+                                    </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+
+                    </ScrollView>
+                        <Button  Text="Player"  
+                                     Style="{StaticResource AddButton}"
+                                     Command="{Binding AddPlayerCommand}" />
+                    </StackLayout>
+
+                </Grid>
+
+        </Frame>
+
+
+            <!--#region PopUp Area -->
+
+            <ContentView
+                    Padding="10,0"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All"
+                    BackgroundColor="#C0808080"
+                    IsVisible="{Binding popupVisibility}">
+
+
+                <Frame VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Margin="0,10,0,10"  CornerRadius="10" BorderColor="Silver" HasShadow="True" BackgroundColor="GhostWhite"
+                  BindingContext="{Binding Source={x:Reference Payment_View}, Path=BindingContext}">
+                    
+                    
+                    <StackLayout VerticalOptions="FillAndExpand">
+                      
+                        <views:PlayerView x:Name="NewplayerView" BindingContext="{Binding NewPlayerViewModel}" />
+
+                        <Grid ColumnDefinitions="*,*" VerticalOptions="EndAndExpand" >
+
+                            <Button Grid.Column="0"                                    
+                                    Text="Player"
+                                    Style="{StaticResource LikeButton}"
+                                    Command="{Binding SavePlayerCommand}"
+                                    IsEnabled="{Binding SavePlayerButtonIsEnabled}" />
+                            <Button Grid.Column="1"
+                                    Text="Player" 
+                                    Style="{StaticResource DisLikeButton}"
+                                        Command="{Binding CancelCommand}" />
+                        </Grid>
+                    </StackLayout>
+                    
+                    
+                </Frame>
+
+            </ContentView>
+
+
+            <!--#endregion-->
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</local:BasePage>

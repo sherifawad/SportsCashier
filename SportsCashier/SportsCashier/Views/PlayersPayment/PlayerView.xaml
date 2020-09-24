@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:SportsCashier.ViewModels.PlayersPayment"
+             xmlns:views="clr-namespace:SportsCashier.Views.PlayersPayment"
+             xmlns:converter="clr-namespace:SportsCashier.ValueConverters"
+             x:Class="SportsCashier.Views.PlayersPayment.PlayerView"
+             x:Name="playerview"
+             Visual="Material">
+
+
+    <ContentView.Content>
+
+            <StackLayout>
+
+
+            <StackLayout  Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+
+                <Entry x:Name="entry" Placeholder="الاسم" HorizontalOptions="FillAndExpand"  Text="{Binding PlayerName}" />
+                <Label  TextColor="Black" FontSize="Medium" HorizontalOptions="End" Text="اللاعب" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <views:SportsListView x:Name="sportsList" BindingContext="{Binding ListViewModel}"   
+                                                  HorizontalOptions="FillAndExpand"/>
+
+            <Label x:Name="payment" Text="{Binding Source={x:Reference sportsList}, Path=BindingContext.SportsTotalPayments, StringFormat='{0:D2}'}" HorizontalTextAlignment="Start" Margin="0,0,10,0" Padding="0" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="20"/>
+
+
+        </StackLayout>
+
+    </ContentView.Content>
+</ContentView>

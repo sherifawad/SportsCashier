@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SportsCashier.Views.MembersListView"
+             xmlns:local="clr-namespace:SportsCashier"
+             local:ViewModelLocator.AutoWireViewModel="True"
+             x:Name="view"
+             Visual="Material">
+
+    <Grid Margin="0,20,0,5">
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Color="LightGreen" HorizontalOptions="Center" />
+        <StackLayout  >
+
+                <FlexLayout Wrap="Wrap" BindableLayout.ItemsSource="{Binding Members}"
+                                Direction="Row"
+                                JustifyContent="Center"
+                                AlignItems="Center"
+                                AlignContent="SpaceAround">
+                <BindableLayout.EmptyView>
+                    <Label Text="No Members Add Any" TextColor="Black"/>
+                </BindableLayout.EmptyView>
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Frame HasShadow="True" CornerRadius="20" BorderColor="Silver" Margin="10">
+                        <SwipeView BackgroundColor="White" >
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Delete"
+                       BackgroundColor="LightPink"
+                       Command="{Binding BindingContext.DeleteCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
+                                    <SwipeItem Text="Edit"
+                       BackgroundColor="LightGreen"
+                       Command="{Binding BindingContext.EditCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="QR Code"
+                       BackgroundColor="LightYellow"
+                       Command="{Binding BindingContext.QRGenerationCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                                <!--<FlexLayout Wrap="Wrap" 
+                                Direction="Row"
+                                JustifyContent="Center"
+                                AlignItems="Center"
+                                AlignContent="SpaceBetween">-->
+                                <StackLayout Orientation="Horizontal"> 
+                                    <!--<Label Text="&#xf433;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>-->
+                                    <Label Text="&#xf0a5;" FontFamily="RegularAwesome"  TextColor="DarkCyan" FontSize="Large"/>
+                                    <Label Text="&#xf434;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>
+                                    <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding MemberShipCode}" Font="Bold, Italic" FontSize="Title" TextColor="Black"/>
+                                            <Span Text=" / " Font="Bold, Italic" FontSize="Title" TextColor="Black" />
+                                            <Span Text="{Binding MemberShipYear}" Font="Bold, Italic" FontSize="Title" TextColor="Black" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                    <Label Text="&#xf45f;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>
+                                    <Label Text="&#xf0a4;" FontFamily="RegularAwesome"  TextColor="DarkCyan" FontSize="Large"/>
+                                    <!--<Label Text="&#xf1e3;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>-->
+                                </StackLayout>
+                                <!--</FlexLayout>-->
+
+                        </SwipeView>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+            <Button Text="Add" HorizontalOptions="Center"
+                    Command="{Binding AddCommand}" />
+        </StackLayout>
+    </Grid>
+</local:BasePage>

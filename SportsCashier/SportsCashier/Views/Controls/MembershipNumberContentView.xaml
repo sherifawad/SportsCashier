@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SportsCashier.Views.Controls.MembershipNumberContentView">
+    
+        <Frame CornerRadius="10" BorderColor="Silver" HasShadow="True">
+
+            <Grid Grid.Column="1" ColumnDefinitions="Auto, *, Auto" >
+                <StackLayout  Orientation="Horizontal" HorizontalOptions="Fill" Grid.ColumnSpan="2">
+                    <Entry Text="{Binding MemberShipCode}" Placeholder="الكود" Keyboard="Numeric" MaxLength="4" TextColor="Black" HorizontalOptions="FillAndExpand"  />
+
+                    <Label Text="/"  VerticalOptions="Center" FontSize="Large" TextColor="Black"/>
+                    <Entry Text="{Binding MemberShipYear}" Placeholder="السنة" Keyboard="Numeric" MaxLength="4" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+                <Label Grid.Column="2" TextColor="Black" FontSize="Subtitle" FontAttributes="Bold" HorizontalOptions="End" Text="رقم العضوية" VerticalOptions="Center"   />
+            </Grid>
+        </Frame>
+</ContentView>

@@ -11,7 +11,7 @@ using ZXing.Mobile;
 
 namespace SportsCashier.ViewModels
 {
-    public class ScannViewModel : BaseViewModel
+    public class ScanViewModel : BaseViewModel
     {
         #region Public Properties
 
@@ -29,38 +29,49 @@ namespace SportsCashier.ViewModels
 
         #region Constructor
 
-        public ScannViewModel()
+        public ScanViewModel()
         {
+            IsScanning = true;
+            IsAnalyzing = true;
             ScannerOptions = new MobileBarcodeScanningOptions
             {
-                AutoRotate = false,
+                AutoRotate = true,
                 PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE },
+                DisableAutofocus = false,
                 TryHarder = true
             };
 
-            IsScanning = true;
-            IsAnalyzing = true;
-
-            ScanResultCommand = new RelayCommand(() =>  ScanResultAsync());
+            ScanResultCommand = new RelayCommand( async () =>   await ScanResultAsync());
         }
 
         #endregion
 
         #region Command Methods
 
-        private  void ScanResultAsync()
+        private  async Task ScanResultAsync()
         {
-            IsAnalyzing = false;
-            IsScanning = false;
-             Device.BeginInvokeOnMainThread(
-                async () =>
-                {
-                    IsAnalyzing = false;
+            await RunCommandAsync(() => IsBusy, async () => { 
+                IsScanning = false;
+                Device.BeginInvokeOnMainThread(
+                    async () =>
+                    {
+                        IsAnalyzing = false;
+                        await _navigationService.PushAsync<NewPaymentViewModel>($"member={Result.Text}");
+                    });
+            });
+        }
 
-                    await _navigationService.PushAsync<NewPaymentViewModel> ($"member={Result.Text}");
-                });
+        #endregion
+
+        #region Private Methods
+
+        public override Task UninitializeAsync()
+        {
+            IsScanning = false;
+            return base.UninitializeAsync();    
         }
 
         #endregion
     }
+
 }

@@ -20,7 +20,7 @@ namespace SportsCashier
 
             Routing.RegisterRoute("NewPaymentViewModel", typeof(NewPaymentView));
             Routing.RegisterRoute("MembersListViewModel", typeof(MembersListView));
-            Routing.RegisterRoute("ScannViewModel", typeof(ScanView));
+            Routing.RegisterRoute("ScanViewModel", typeof(ScanView));
         }
     }
 }

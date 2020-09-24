@@ -1,17 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:converter="clr-namespace:SportsCashier.ValueConverters"
              xmlns:local="clr-namespace:SportsCashier"
                 xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms" 
-                xmlns:zxingcommon="clr-namespace:ZXing.Common;assembly=zxing"
              local:ViewModelLocator.AutoWireViewModel="True"
              x:Class="SportsCashier.Views.ScanView">
-        <StackLayout>
-        <zxing:ZXingScannerView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" 
-                                IsScanning="{Binding IsScanning}"
+
+    <Grid VerticalOptions="CenterAndExpand"
+              HorizontalOptions="CenterAndExpand">
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Color="DarkBlue" />
+        <zxing:ZXingScannerView IsVisible="{Binding IsBusy,Converter={converter:BooleanInvertConverter}}"
+                                
+                                  IsScanning="{Binding IsScanning}"
+                                IsAnalyzing="{Binding IsAnalyzing}"
+                                Result="{Binding Result, Mode=TwoWay}"
+                                ScanResultCommand="{Binding ScanResultCommand}"
+                                Options="{Binding ScannerOptions}"/>
+        <zxing:ZXingDefaultOverlay TopText="Align the barcode within the frame"/>
+    </Grid>
+
+    <!--<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <zxing:ZXingScannerView  Grid.Column="0" Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                  IsScanning="{Binding IsScanning}"
                                 IsAnalyzing="{Binding IsAnalyzing}"
                                 Result="{Binding Result, Mode=TwoWay}"
                                 ScanResultCommand="{Binding ScanResultCommand}"
                                 Options="{Binding ScannerOptions}" />
-    </StackLayout>
+
+
+        <zxing:ZXingDefaultOverlay Grid.Column="0" Grid.Row="0"
+                                   TopText="Some title"
+                                   ShowFlashButton="False"
+                                   BottomText="Some bottom text"
+                                   Opacity="0.9"/>
+    </Grid>-->
 </local:BasePage>

@@ -45,7 +45,7 @@ namespace SportsCashier.ViewModels
                 {
                     IconText = "\uf0e2",
                     Name = "Scann",
-                    ViewModel = typeof(ScannViewModel)
+                    ViewModel = typeof(ScanViewModel)
                 },
 
             };

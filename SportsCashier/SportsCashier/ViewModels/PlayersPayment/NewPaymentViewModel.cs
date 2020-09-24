@@ -278,6 +278,7 @@ namespace SportsCashier.ViewModels.PlayersPayment
                 else
                     _sport = new Sport
                     {
+                        Id = 0,
                         SportName = sport.SportName,
                         SportCaegory = sport.SportCaegory,
                         Players = new List<PlayerModel>()
@@ -363,6 +364,7 @@ namespace SportsCashier.ViewModels.PlayersPayment
                         else
                             _sport = new Sport
                             {
+                                Id = 0,
                                 SportName = sport.SportName,
                                 SportCaegory = sport.SportCaegory,
                                 Players = new List<PlayerModel>()

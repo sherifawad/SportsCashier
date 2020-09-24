@@ -6,9 +6,11 @@
              local:ViewModelLocator.AutoWireViewModel="True"
              x:Name="view"
              Visual="Material">
-
-    <Grid Margin="0,20,0,5">
-        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Color="LightGreen" HorizontalOptions="Center" />
+    <AbsoluteLayout>
+    <Grid Margin="0,20,0,5"
+          AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All">
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Color="LightGreen"  />
         <StackLayout  >
 
                 <FlexLayout Wrap="Wrap" BindableLayout.ItemsSource="{Binding Members}"
@@ -74,4 +76,27 @@
                     Command="{Binding AddCommand}" />
         </StackLayout>
     </Grid>
+
+        <!--#region PopUp Area -->
+        <ContentView
+                    Padding="10,0"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All"
+                    BackgroundColor="#C0808080"
+                    IsVisible="{Binding popupVisibility}">
+
+            <Frame Padding="0, 0, 0, 0"
+                   VerticalOptions="CenterAndExpand"
+                   OutlineColor="Black"
+                   HasShadow="false">
+                <StackLayout>
+                <Image Source="{Binding QrCodeImage}"/>
+                    <Button HorizontalOptions="Center" Margin="0,0,0,5" Text="Done"  Command="{Binding DoneCommand}" />
+                </StackLayout>
+            </Frame>
+
+
+        </ContentView>
+        <!--#endregion-->
+    </AbsoluteLayout>
 </local:BasePage>

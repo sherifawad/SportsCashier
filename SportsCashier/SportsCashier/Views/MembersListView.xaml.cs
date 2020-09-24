@@ -1,5 +1,4 @@
-﻿using Autofac;
-using SportsCashier.ViewModels;
+﻿using SportsCashier.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

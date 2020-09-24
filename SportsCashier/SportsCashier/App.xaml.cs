@@ -1,5 +1,4 @@
-﻿using Autofac;
-using SportsCashier.DataBase;
+﻿using SportsCashier.DataBase;
 using SportsCashier.Models;
 using SportsCashier.Services.DialogService;
 using SportsCashier.Services.NavigationService;
@@ -16,7 +15,7 @@ namespace SportsCashier
 {
     public partial class App : Application
     {
-        public static IContainer Container;
+        //public static IContainer Container;
 
         public App()
         {

@@ -38,15 +38,12 @@
     </ContentPage.BindingContext>-->
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ActivityIndicator Color="LightGreen" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" 
-                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                    AbsoluteLayout.LayoutFlags="All" />
-            
+
             <Frame  Margin="5" HasShadow="True" CornerRadius="10" BorderColor="LightGray"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
             AbsoluteLayout.LayoutFlags="All"
             BindingContext="{Binding Source={x:Reference Payment_View}, Path=BindingContext}">
-                <Grid RowDefinitions="Auto, Auto">
+                <Grid RowDefinitions="Auto, *">
                     <controls:MembershipNumberContentView />
                     <StackLayout Grid.Row="1">
                     <ScrollView >

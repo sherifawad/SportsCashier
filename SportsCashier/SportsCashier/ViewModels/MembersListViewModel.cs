@@ -1,4 +1,6 @@
-﻿using SportsCashier.DataBase;
+﻿using Newtonsoft.Json;
+using QRCoder;
+using SportsCashier.DataBase;
 using SportsCashier.Extensions;
 using SportsCashier.Helpers;
 using SportsCashier.Models;
@@ -8,6 +10,8 @@ using SportsCashier.ViewModels.PlayersPayment;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,6 +27,10 @@ namespace SportsCashier.ViewModels
         #endregion
 
         #region Public Property
+
+        public ImageSource QrCodeImage { get; set; }
+
+        public bool popupVisibility { get; set; }
 
         public ObservableCollection<MemberModel> Members 
         {
@@ -46,6 +54,7 @@ namespace SportsCashier.ViewModels
         public ICommand DeleteCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand QRGenerationCommand { get; set; }
+        public ICommand DoneCommand => new RelayCommand(() => popupVisibility = false);
 
         #endregion
 
@@ -66,6 +75,7 @@ namespace SportsCashier.ViewModels
             AddCommand = new RelayCommand(async () => await AddAsync());
             DeleteCommand = new RelayCommand(async (parameter) => await DeleteAsync(parameter));
             EditCommand = new RelayCommand(async (parameter) => await EditAsync(parameter));
+            QRGenerationCommand = new RelayCommand(async (parameter) => await QRGenerationAsync(parameter));
         }
 
         private async Task EditAsync(object parameter)
@@ -81,6 +91,7 @@ namespace SportsCashier.ViewModels
             if (parameter != null && parameter is MemberModel member)
             {
                 await _membersRepository.Delete(member);
+                Members.Remove(member);
             }
         }
 
@@ -91,6 +102,37 @@ namespace SportsCashier.ViewModels
                 await _navigationService.PushAsync<NewPaymentViewModel>()
             );
 
+        }
+
+        private async Task QRGenerationAsync(object parameter)
+        {
+            if (parameter != null && parameter is MemberModel member)
+            {
+                await RunCommandAsync(() => IsBusy , async () => { 
+                    try
+                    {
+                        var memberwithPlayers = await _membersRepository.GetWithChildren(member.Id);
+                        var playerList = new List<PlayerModel>();
+                        foreach (var player in memberwithPlayers.MembershipNPlayers)
+                        {
+                            var p = await _playersRepository.GetWithChildren(player.Id);
+                            playerList.Add(p);
+                        }
+                        member.MembershipNPlayers = playerList;
+                        var serializedMember = JsonConvert.SerializeObject(member);
+                        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                        QRCodeData qrCodeData = qrGenerator.CreateQrCode(serializedMember, QRCodeGenerator.ECCLevel.H);
+                        PngByteQRCode qRCode = new PngByteQRCode(qrCodeData);
+                        byte[] qrCodeBytes = qRCode.GetGraphic(20);
+                        QrCodeImage = ImageSource.FromStream(() => new MemoryStream(qrCodeBytes));
+                        popupVisibility = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                });
+            }
         }
 
         #endregion

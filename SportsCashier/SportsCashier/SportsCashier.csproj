@@ -45,6 +45,9 @@
     <Compile Update="Views\Controls\PlayerListItemContentView.xaml.cs">
       <DependentUpon>PlayerListItemContentView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ScanView.xaml.cs">
+      <DependentUpon>ScanView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -75,7 +78,7 @@
     <EmbeddedResource Update="Views\Controls\SportListItemContentView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\EmptyView.xaml">
+    <EmbeddedResource Update="Views\ScanView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\HomeView.xaml">

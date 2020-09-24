@@ -14,7 +14,7 @@
            Direction="Row"
            JustifyContent="Start"
            AlignItems="Start"
-           AlignContent="Start"
+           AlignContent="Center"
            Padding="8">
             <BindableLayout.ItemTemplate>
                 <DataTemplate>

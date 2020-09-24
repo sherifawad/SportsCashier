@@ -44,21 +44,8 @@ namespace SportsCashier.ViewModels
                 new HomeItemsModel
                 {
                     IconText = "\uf0e2",
-                    Name = "Player View",
-                    ViewModel = typeof(PlayerViewModel)
-                },
-
-                new HomeItemsModel
-                {
-                    IconText = "\uf0e2",
-                    Name = "sports List",
-                    ViewModel = typeof(SportsListViewModel)
-                },
-                new HomeItemsModel
-                {
-                    IconText = "\uf0e2",
-                    Name = "Empty",
-                    ViewModel = typeof(EmptyViewModel)
+                    Name = "Scann",
+                    ViewModel = typeof(ScannViewModel)
                 },
 
             };

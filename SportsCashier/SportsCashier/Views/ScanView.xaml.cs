@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace SportsCashier.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EmptyView : BasePage
+    public partial class ScanView : BasePage
     {
-        public EmptyView()
+        public ScanView()
         {
             InitializeComponent();
         }

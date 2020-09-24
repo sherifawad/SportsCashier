@@ -1,4 +1,5 @@
-﻿using SportsCashier.DataBase;
+﻿using Newtonsoft.Json;
+using SportsCashier.DataBase;
 using SportsCashier.Extensions;
 using SportsCashier.Helpers;
 using SportsCashier.Models;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +21,7 @@ using Xamarin.Forms;
 namespace SportsCashier.ViewModels.PlayersPayment
 {
     [QueryProperty("Id", "id")]
+    [QueryProperty("Member", "member")]
     public class NewPaymentViewModel : BaseViewModel
     {
         #region Private Property
@@ -27,6 +30,7 @@ namespace SportsCashier.ViewModels.PlayersPayment
         private IList<Sport> SportsList;
 
         private string _id;
+        private string _member;
 
         #endregion
 
@@ -38,6 +42,14 @@ namespace SportsCashier.ViewModels.PlayersPayment
             set
             {
                 _id = Uri.UnescapeDataString(value);
+            }
+        }
+        public string Member
+        {
+            get => _member;
+            set
+            {
+                _member = Uri.UnescapeDataString(value);
             }
         }
 
@@ -266,7 +278,6 @@ namespace SportsCashier.ViewModels.PlayersPayment
                 else
                     _sport = new Sport
                     {
-                        Id = 0,
                         SportName = sport.SportName,
                         SportCaegory = sport.SportCaegory,
                         Players = new List<PlayerModel>()
@@ -306,22 +317,75 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
         public override async Task InitializeAsync()
         {
-            if (string.IsNullOrEmpty(Id) || !int.TryParse(Id, out int MemberId))
-                return;
+            MemberModel member = null;
 
-            var member = await _membersRepository.GetWithChildren(MemberId) ;
-
-
-            var MemberPlayers = member.MembershipNPlayers;
-
-            foreach (var player in MemberPlayers)
+            if (!string.IsNullOrEmpty(Id))
             {
-                var p = await _playersRepository.GetWithChildren(player.Id);
-                Players.Add(p);
-            }
-            MemberShipCode = member.MemberShipCode;
-            MemberShipYear = member.MemberShipYear;
+                if (!int.TryParse(Id, out int MemberId))
+                    await GoBackAsync();
 
+                member = await _membersRepository.GetWithChildren(MemberId);
+
+
+                var MemberPlayers = member.MembershipNPlayers;
+
+                foreach (var player in MemberPlayers)
+                {
+                    var p = await _playersRepository.GetWithChildren(player.Id);
+                    Players.Add(p);
+                }
+                MemberShipCode = member.MemberShipCode;
+                MemberShipYear = member.MemberShipYear;
+            }
+
+            if (!string.IsNullOrEmpty(Member))
+            {
+                try
+                {
+                    member = JsonConvert.DeserializeObject<MemberModel>(Member);
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    await GoBackAsync();
+                }
+
+                foreach (var player in member.MembershipNPlayers)
+                {
+                    foreach (var sport in player.Sports)
+                    {
+                        Sport _sport = null;
+                        // Check for Sport Is Existing In the data Base
+                        var dataBasesport = await _sportsRepository.Get(s => s.SportName == sport.SportName && s.SportType == sport.SportCaegory.SportType);
+                        if (dataBasesport != null)
+                            _sport = await _sportsRepository.GetWithChildren(dataBasesport.Id);
+                        else
+                            _sport = new Sport
+                            {
+                                SportName = sport.SportName,
+                                SportCaegory = sport.SportCaegory,
+                                Players = new List<PlayerModel>()
+                            };
+
+                        // Add The player to the sport
+                        _sport.Players.Add(new PlayerModel
+                        {
+                            PlayerName = player.PlayerName,
+                            PlayerPayment = player.PlayerPayment
+                        });
+
+                        // Add the sport to local Sports List
+                         SportsList.Add(_sport);
+                    }
+                }
+
+                Players = member.MembershipNPlayers.ToObservableCollection();
+                MemberShipCode = member.MemberShipCode;
+                MemberShipYear = member.MemberShipYear;
+
+
+            }
 
         }
 

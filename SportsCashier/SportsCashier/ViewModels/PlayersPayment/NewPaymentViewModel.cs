@@ -112,7 +112,21 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
                 foreach (var player in RemovePlayersList)
                 {
-                    await _playersRepository.Delete(player);
+                    try
+                    {
+                        await _playersRepository.Delete(player);
+                        await _playersRepository.Delete(player);
+                        var psRow = await _ps.Get(c => c.PlayerModelId == player.Id, c => c.Id);
+                        foreach (var row in psRow)
+                        {
+                            await _ps.Delete(row);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Debug.WriteLine(ex.Message);
+                    }
                 }
 
 
@@ -354,6 +368,7 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
                 foreach (var player in member.MembershipNPlayers)
                 {
+                    var playersport = new List<Sport>();
                     foreach (var sport in player.Sports)
                     {
                         Sport _sport = null;
@@ -363,8 +378,8 @@ namespace SportsCashier.ViewModels.PlayersPayment
                             _sport = await _sportsRepository.GetWithChildren(dataBasesport.Id);
                         else
                             _sport = new Sport
-                            {
-                                Id = 0,
+                            {                                
+                                Id = sport.Id = 0,
                                 SportName = sport.SportName,
                                 SportCaegory = sport.SportCaegory,
                                 Players = new List<PlayerModel>()
@@ -379,15 +394,23 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
                         // Add the sport to local Sports List
                          SportsList.Add(_sport);
+                        playersport.Add(_sport);
+
                     }
+
+                    Players.Add(new PlayerModel
+                    {
+                        PlayerName = player.PlayerName,
+                        PlayerPayment = player.PlayerPayment,
+                        Sports = playersport
+                    }) ;
                 }
 
-                Players = member.MembershipNPlayers.ToObservableCollection();
                 MemberShipCode = member.MemberShipCode;
                 MemberShipYear = member.MemberShipYear;
 
-
             }
+                CalculateTotalPayment();
 
         }
 

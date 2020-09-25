@@ -21,14 +21,14 @@ namespace SportsCashier.Droid
 {
     public class DownloadPath : IDownloadPath
     {
-        public async Task<string> Get()
+        public string Get()
         {
-            var status = await CheckAndRequestPermissionAsync(new Permissions.StorageWrite());
-            if (status != PermissionStatus.Granted)
-            {
-                // Notify user permission was denied
-                return string.Empty;
-            }
+            //var status = await CheckAndRequestPermissionAsync(new Permissions.StorageWrite());
+            //if (status != PermissionStatus.Granted)
+            //{
+            //    // Notify user permission was denied
+            //    return string.Empty;
+            //}
             return Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
         }
 

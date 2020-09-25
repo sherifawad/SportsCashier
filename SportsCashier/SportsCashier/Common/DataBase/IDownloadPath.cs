@@ -7,6 +7,6 @@ namespace SportsCashier.Common.DataBase
 {
     public interface IDownloadPath
     {
-        Task<string> Get();
+        string Get();
     }
 }

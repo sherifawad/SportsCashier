@@ -78,6 +78,10 @@ namespace SportsCashier.ViewModels
             QRGenerationCommand = new RelayCommand(async (parameter) => await QRGenerationAsync(parameter));
         }
 
+        #endregion
+
+        #region Commands Methods
+
         private async Task EditAsync(object parameter)
         {
             if (parameter != null && parameter is MemberModel member)
@@ -90,7 +94,17 @@ namespace SportsCashier.ViewModels
         {
             if (parameter != null && parameter is MemberModel member)
             {
-                await _membersRepository.Delete(member);
+                var memberInDataBase = await _membersRepository.GetWithChildren(member.Id);
+                foreach (var player in memberInDataBase.MembershipNPlayers)
+                {
+                    await _playersRepository.Delete(player);
+                    var psRow = await _ps.Get(c => c.PlayerModelId == player.Id, c => c.Id);
+                    foreach (var row in psRow)
+                    {
+                        await _ps.Delete(row);
+                    }
+                }
+                await _membersRepository.Delete(memberInDataBase);
                 Members.Remove(member);
             }
         }
@@ -108,7 +122,7 @@ namespace SportsCashier.ViewModels
         {
             if (parameter != null && parameter is MemberModel member)
             {
-                await RunCommandAsync(() => IsBusy , async () => { 
+                await RunCommandAsync(() => IsBusy, async () => {
                     try
                     {
                         var memberwithPlayers = await _membersRepository.GetWithChildren(member.Id);

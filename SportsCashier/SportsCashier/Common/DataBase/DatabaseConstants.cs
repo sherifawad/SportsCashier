@@ -24,9 +24,9 @@ namespace SportsCashier.DataBase
             get
             {
 
-                //var basePath = DependencyService.Get<IDownloadPath>().Get().Result;
+                var basePath = DependencyService.Get<IDownloadPath>().Get();
                 //var basePath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                var basePath = Xamarin.Essentials.FileSystem.AppDataDirectory;
+                //var basePath = Xamarin.Essentials.FileSystem.AppDataDirectory;
                 return Path.Combine(basePath, DatabaseFilename);
 
             }

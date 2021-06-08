@@ -1,102 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="SportsCashier.Views.MembersListView"
              xmlns:local="clr-namespace:SportsCashier"
              local:ViewModelLocator.AutoWireViewModel="True"
              x:Name="view"
              Visual="Material">
-    <AbsoluteLayout>
-    <Grid Margin="0,20,0,5"
-          AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                    AbsoluteLayout.LayoutFlags="All">
-        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Color="LightGreen"  />
-        <StackLayout  >
-
-                <FlexLayout Wrap="Wrap" BindableLayout.ItemsSource="{Binding Members}"
-                                Direction="Row"
-                                JustifyContent="Center"
-                                AlignItems="Center"
-                                AlignContent="SpaceAround">
-                <BindableLayout.EmptyView>
+        <StackLayout Margin="0,20,0,0">
+            <CollectionView  
+                ItemsSource="{Binding Members}" 
+                HeightRequest="{Binding CollectionViewHeight}" 
+                ItemSizingStrategy="MeasureFirstItem" 
+                SelectionMode="None" >
+                <CollectionView.EmptyView>
                     <Label Text="No Members Add Any" TextColor="Black"/>
-                </BindableLayout.EmptyView>
-
-                <BindableLayout.ItemTemplate>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame HasShadow="True" CornerRadius="20" BorderColor="Silver" Margin="10">
-                        <SwipeView BackgroundColor="White" >
-                            <SwipeView.LeftItems>
-                                <SwipeItems>
-                                    <SwipeItem Text="Delete"
-                       BackgroundColor="LightPink"
-                       Command="{Binding BindingContext.DeleteCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
-                                    <SwipeItem Text="Edit"
-                       BackgroundColor="LightGreen"
-                       Command="{Binding BindingContext.EditCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
-                                </SwipeItems>
-                            </SwipeView.LeftItems>
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItem Text="QR Code"
-                       BackgroundColor="LightYellow"
-                       Command="{Binding BindingContext.QRGenerationCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                                <!--<FlexLayout Wrap="Wrap" 
-                                Direction="Row"
-                                JustifyContent="Center"
-                                AlignItems="Center"
-                                AlignContent="SpaceBetween">-->
-                                <StackLayout Orientation="Horizontal"> 
-                                    <!--<Label Text="&#xf433;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>-->
-                                    <Label Text="&#xf0a5;" FontFamily="RegularAwesome"  TextColor="DarkCyan" FontSize="Large"/>
-                                    <Label Text="&#xf434;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>
-                                    <Label>
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding MemberShipCode}" Font="Bold, Italic" FontSize="Title" TextColor="Black"/>
-                                            <Span Text=" / " Font="Bold, Italic" FontSize="Title" TextColor="Black" />
-                                            <Span Text="{Binding MemberShipYear}" Font="Bold, Italic" FontSize="Title" TextColor="Black" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                    <Label Text="&#xf45f;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>
-                                    <Label Text="&#xf0a4;" FontFamily="RegularAwesome"  TextColor="DarkCyan" FontSize="Large"/>
-                                    <!--<Label Text="&#xf1e3;" FontFamily="SolidAwesome"  TextColor="DarkCyan" FontSize="Large"/>-->
-                                </StackLayout>
-                                <!--</FlexLayout>-->
-
-                        </SwipeView>
-                        </Frame>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
-            <Button Text="Add" HorizontalOptions="Center"
+                    <StackLayout>
+                        <Label xct:TouchEffect.NativeAnimation="True" 
+                               xct:TouchEffect.Command="{Binding BindingContext.EditCommand, Source={x:Reference view}}"
+                               xct:TouchEffect.LongPressCommand="{Binding BindingContext.DeleteCommand, Source={x:Reference view}}"
+                               xct:TouchEffect.LongPressCommandParameter="{Binding}"
+                               xct:TouchEffect.CommandParameter="{Binding}"
+                               BackgroundColor="Lavender"
+                               HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MemberShipCode}" Font="Bold, Italic" FontSize="Title" TextColor="Black"/>
+                                    <Span Text=" / " Font="Bold, Italic" FontSize="Title" TextColor="Black" />
+                                    <Span Text="{Binding MemberShipYear}" Font="Bold, Italic" FontSize="Title" TextColor="Black" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <BoxView HeightRequest="4" />
+                    </StackLayout>
+                </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        <Button  Text="Add" HorizontalOptions="Center"
                     Command="{Binding AddCommand}" />
-        </StackLayout>
-    </Grid>
-
-        <!--#region PopUp Area -->
-        <ContentView
-                    Padding="10,0"
-                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                    AbsoluteLayout.LayoutFlags="All"
-                    BackgroundColor="#C0808080"
-                    IsVisible="{Binding popupVisibility}">
-
-            <Frame Padding="0, 0, 0, 0"
-                   VerticalOptions="CenterAndExpand"
-                   OutlineColor="Black"
-                   HasShadow="false">
-                <StackLayout>
-                <Image Source="{Binding QrCodeImage}"/>
-                    <Button HorizontalOptions="Center" Margin="0,0,0,5" Text="Done"  Command="{Binding DoneCommand}" />
-                </StackLayout>
-            </Frame>
-
-
-        </ContentView>
-        <!--#endregion-->
-    </AbsoluteLayout>
+    </StackLayout>
 </local:BasePage>

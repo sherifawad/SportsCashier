@@ -38,7 +38,7 @@ namespace SportsCashier.DataBase
         public async Task<List<T>> GetItemsAsync() =>
             await AsQueryable().ToListAsync();
 
-        public async Task<List<T>> Get<TValue>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TValue>> orderBy = null)
+        public async Task<List<T>> Get(Expression<Func<T, bool>> predicate = null, Func<AsyncTableQuery<T>, AsyncTableQuery<T>> orderBy = null)
         {
             var query = Database.Table<T>();
 
@@ -46,7 +46,9 @@ namespace SportsCashier.DataBase
                 query = query.Where(predicate);
 
             if (orderBy != null)
-                query = query.OrderBy<TValue>(orderBy);
+            {
+                query = orderBy(query);
+            }
 
             return await query.ToListAsync();
         }
@@ -54,7 +56,7 @@ namespace SportsCashier.DataBase
         public async Task<T> GetItemByIdAsync(int id) =>
             await Database.FindAsync<T>(id);
 
-        public async Task<T> Get(Expression<Func<T, bool>> predicate) =>
+        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate) =>
              await Database.Table<T>().Where(predicate).FirstOrDefaultAsync();
 
         public async Task<int> SaveItemAsync(T entity, string value, string Propertyname)
@@ -94,6 +96,7 @@ namespace SportsCashier.DataBase
         public async Task UpdateWithChildren(T element) => await Database.UpdateWithChildrenAsync(element);
 
         public async Task<T> GetWithChildren(int id) => await Database.GetWithChildrenAsync<T>(id);
+        public async Task<List<T>> GetChildrens(Expression<Func<T, bool>> predicate = null) => await Database.GetAllWithChildrenAsync(predicate);
 
         public async Task<bool> RowExists(string value, string Propertyname)
         {
@@ -102,7 +105,7 @@ namespace SportsCashier.DataBase
             {
                 exists = await Task.FromResult(Database.ExecuteScalarAsync<bool>("SELECT EXISTS(SELECT 1 FROM " + typeof(T).Name + " WHERE " + Propertyname + "=?)", value).Result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Log database error
                 exists = true;
@@ -117,7 +120,7 @@ namespace SportsCashier.DataBase
             {
                 exists = await Task.FromResult(Database.ExecuteScalarAsync<bool>("SELECT EXISTS(SELECT 1 FROM " + typeof(T).Name + " WHERE " + Propertyname + "=?)", value).Result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Log database error
                 exists = true;
@@ -133,7 +136,7 @@ namespace SportsCashier.DataBase
             {
                 exists = await Task.FromResult(Database.ExecuteScalarAsync<bool>("DELETE FROM " + typeof(T).Name + " WHERE id <= (SELECT id FROM (SELECT id FROM " + typeof(T).Name + " ORDER BY id DESC LIMIT 1 OFFSET " + value + ") foo)").Result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Log database error
                 exists = true;

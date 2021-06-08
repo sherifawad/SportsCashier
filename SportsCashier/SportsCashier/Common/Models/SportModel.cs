@@ -1,9 +1,11 @@
 ﻿using SportsCashier.DataBase;
+using SportsCashier.Services.MessagingService;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace SportsCashier.Models
 {
@@ -11,6 +13,11 @@ namespace SportsCashier.Models
     {
         public string SportName { get; set; }
         public List<SportCaegory> Caegories { get; set; }
+    }
+    public class ChekedSport
+    {
+        public string SportName { get; set; }
+        public SportCaegory Category { get; set; }
     }
 
     public class SportCaegory
@@ -28,9 +35,12 @@ namespace SportsCashier.Models
         public string SportName { get; set; }
 
         [Ignore]
-        public SportCaegory SportCaegory 
+        public bool Checked { get; set; }
+
+        [Ignore]
+        public SportCaegory SportCaegory
         {
-            get 
+            get
             {
                 return sportCaegory = new SportCaegory
                 {
@@ -56,6 +66,8 @@ namespace SportsCashier.Models
         [ManyToMany(typeof(PlayerSport), CascadeOperations = CascadeOperation.CascadeRead, ReadOnly = true)]
         public List<PlayerModel> Players { get; set; }
 
+        [OneToMany(CascadeOperations = CascadeOperation.None)]
+        public List<Invoice> Invoices { get; set; }
     }
 
 }

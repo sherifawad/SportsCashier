@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -13,84 +14,56 @@ namespace SportsCashier.ViewModels.PlayersPayment
 {
     public class SportsListViewModel : BaseViewModel
     {
-        #region Private Properties
 
+        #region Private Property
+        private SportModel selectedSport;
         #endregion
 
         #region Public Property
 
         public ObservableCollection<Sport> Sports { get; set; }
 
+        public ICollection<Sport> SportsList;
 
-        public double SportsTotalPayments { get; set; }
+        public ICollection<SportCaegory> SportCaegoriesList { get; set; }
 
-        public SportPickerViewModel PickerViewModel { get; set; }
+        public SportCaegory SelectedCaegory { get; set; }
+
+        public SportModel SelectedSport
+        {
+            get => selectedSport;
+            set
+            {
+                selectedSport = value;
+                SportCaegoriesList = SportsList.Where(s => s.SportName == value.SportName).Select(x => x.SportCaegory).ToList();
+            }
+        }
+        #endregion
+
+
+        #region Public Commands
 
         public ICommand AddSportCommand { get; set; }
         public ICommand RemoveSportCommand { get; set; }
 
-
-
         #endregion
+
+
 
 
         #region Constructor
 
-        public SportsListViewModel(ObservableCollection<Sport> sports = null, double playerPayment = 0)
+        public SportsListViewModel()
         {
             Sports = new ObservableCollection<Sport>();
-            PickerViewModel = new SportPickerViewModel();
-
-
+            SportsList = new List<Sport>();
             AddSportCommand = new Command((parameter) => AddSport(parameter));
             RemoveSportCommand = new Command((parameter) => RemoveSport(parameter));
-
-            if (sports != null)
-            {
-                Sports = sports;
-                SportsTotalPayments = playerPayment;
-            }
-
-
         }
 
         #endregion
 
-        #region Private Method
-
-
-
-        private void CalculateTotalPayment()
-        {
-            var t = (double)default;
-
-            if (Sports != null && Sports.Count() > 0)
-            {
-                var priceList = Sports.Where(s => s?.SportCaegory?.SportPrice != null).OrderByDescending(p => p.SportCaegory.SportPrice).Select(s => s.SportCaegory.SportPrice).ToList();
-                var listCount = priceList.Count();
-                if (listCount >= 3)
-                {
-                    t = (priceList[0] * 0.8) + (priceList[1] * 0.9);
-                    for (int i = 2; i < priceList.Count(); i++)
-                    {
-                        t += priceList[i];
-                    }
-                }
-
-                else if (listCount == 2)
-                {
-                    t = (priceList[0] * 0.9) + priceList[1];
-                }
-                else
-                {
-                    t = priceList.Sum();
-                }
-
-            }
-
-            SportsTotalPayments = t;
-
-        }
+        #region Commands Methods
 
         private void RemoveSport(object parameter)
         {
@@ -99,8 +72,6 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
                 Sports.Remove(sport);
 
-                CalculateTotalPayment();
-
             }
 
         }
@@ -108,7 +79,7 @@ namespace SportsCashier.ViewModels.PlayersPayment
         private void AddSport(object parameter)
         {
             if (Sports == null)
-                return;
+                Sports = new ObservableCollection<Sport>();
 
             if (parameter != null && parameter is Sport sport)
             {
@@ -127,12 +98,19 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
                     }
 
-                    CalculateTotalPayment();
                 }
 
             }
         }
 
+        #endregion
+
+        #region Private Method
+
+        public override async Task InitializeAsync()
+        {
+            await _sportsRepository.GetItemsAsync();
+        }
 
         #endregion
     }

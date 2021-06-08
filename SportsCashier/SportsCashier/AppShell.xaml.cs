@@ -1,4 +1,5 @@
-﻿using SportsCashier.Views;
+﻿using SportsCashier.ViewModels.PlayersPayment;
+using SportsCashier.Views;
 using SportsCashier.Views.PlayersPayment;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,8 @@ namespace SportsCashier
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("NewPaymentViewModel", typeof(NewPaymentView));
-            Routing.RegisterRoute("MembersListViewModel", typeof(MembersListView));
-            Routing.RegisterRoute("ScanViewModel", typeof(ScanView));
+            Routing.RegisterRoute(nameof(NewPaymentViewModel), typeof(NewPaymentView));
+            Routing.RegisterRoute(nameof(PlayerViewModel), typeof(PlayerView));
         }
     }
 }

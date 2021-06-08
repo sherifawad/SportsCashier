@@ -2,6 +2,7 @@
 using SportsCashier.Helpers;
 using SportsCashier.Models;
 using SportsCashier.Services.DialogService;
+using SportsCashier.Services.MessagingService;
 using SportsCashier.Services.NavigationService;
 using System;
 using System.Collections.Generic;
@@ -35,11 +36,13 @@ namespace SportsCashier
 
         protected INavigationService _navigationService { get; }
         protected IDialogService _dialogService { get; }
+        protected IMessagingService _messagingService => DependencyService.Get<IMessagingService>();
         protected IGenericDbRepository<MemberModel> _membersRepository { get; }
         protected IGenericDbRepository<PlayerModel> _playersRepository { get; }
         protected IGenericDbRepository<Sport> _sportsRepository  { get; }
         protected IGenericDbRepository<PlayerSport> _ps  { get; }
         protected bool IsBusy { get; set; }
+        protected bool CommandRun { get; set; }
 
         #endregion
 
@@ -52,10 +55,11 @@ namespace SportsCashier
         {
             _navigationService = DependencyService.Get<INavigationService>();
             _dialogService = DependencyService.Get<IDialogService>();
-            _membersRepository = DependencyService.Get<IGenericDbRepository < MemberModel>>();
+            _membersRepository = DependencyService.Get<IGenericDbRepository <MemberModel>>();
             _playersRepository = DependencyService.Get<IGenericDbRepository<PlayerModel>>();
             _sportsRepository = DependencyService.Get<IGenericDbRepository<Sport>>();
             _ps = DependencyService.Get<IGenericDbRepository<PlayerSport>>();
+            DependencyService.Get<IGenericDbRepository<Invoice>>();
         }
 
 

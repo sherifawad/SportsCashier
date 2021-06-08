@@ -1,7 +1,9 @@
-﻿using SQLite;
+﻿using SportsCashier.Services.MessagingService;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace SportsCashier.DataBase
 {
@@ -9,5 +11,6 @@ namespace SportsCashier.DataBase
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+
     }
 }

@@ -1,32 +1,180 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SportsCashier" 
+             local:ViewModelLocator.AutoWireViewModel="True"
              xmlns:viewModel="clr-namespace:SportsCashier.ViewModels.PlayersPayment"
              xmlns:views="clr-namespace:SportsCashier.Views.PlayersPayment"
              xmlns:converter="clr-namespace:SportsCashier.ValueConverters"
+             xmlns:controls="clr-namespace:SportsCashier.Views.Controls"
              x:Class="SportsCashier.Views.PlayersPayment.PlayerView"
-             x:Name="playerview"
-             Visual="Material">
+             Padding="20,0,20,0"
+             x:Name="playerview">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CancelCommand}" />
+    </Shell.BackButtonBehavior>
+    
+    <local:BasePage.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="Button" x:Key="AddButton">
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="WidthRequest" Value="40" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="Text" Value="Add" />
+                <Setter Property="BackgroundColor" Value="LightGreen" />
+                <Setter Property="ImageSource">
+                    <Setter.Value>
+                        <FontImageSource Glyph="&#xf067;" FontFamily="SolidAwesome" Color="White" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Button" x:Key="RemoveButton">
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="WidthRequest" Value="40" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="Text" Value="remove" />
+                <Setter Property="BackgroundColor" Value="Red" />
+                <Setter Property="ImageSource">
+                    <Setter.Value>
+                        <FontImageSource Glyph="&#xf068;" FontFamily="SolidAwesome" Color="White" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Button" x:Key="LikeButton">
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="WidthRequest" Value="40" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="BackgroundColor" Value="LightGreen" />
+                <Setter Property="Text" Value="Save" />
+                <Setter Property="ImageSource">
+                    <Setter.Value>
+                        <FontImageSource Glyph="&#xf164;" FontFamily="SolidAwesome" Color="White"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Button" x:Key="DisLikeButton">
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="WidthRequest" Value="40" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="BackgroundColor" Value="Red" />
+                <Setter Property="Text" Value="Cancel" />
+                <Setter Property="ImageSource">
+                    <Setter.Value>
+                        <FontImageSource Glyph="&#xf165;" FontFamily="SolidAwesome" Color="White"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </local:BasePage.Resources>
+    
+    <local:BasePage.Content>
+            <StackLayout VerticalOptions="Center">
 
 
-    <ContentView.Content>
+                <StackLayout  Orientation="Horizontal" >
 
-            <StackLayout>
+                    <Entry x:Name="entry" 
+                           Placeholder="الاسم" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="FillAndExpand"
+                           HorizontalTextAlignment="Center"
+                           TextColor="Black" 
+                           PlaceholderColor="Black"  
+                           Text="{Binding PlayerName}" />
+                    <Label  TextColor="Black" FontSize="Medium" HorizontalOptions="End" Text="اللاعب" VerticalOptions="Center"/>
+                </StackLayout>
+                
+            <Frame  Margin="5" HasShadow="True" CornerRadius="10" BorderColor="LightGray" >
+                <!--<views:SportsListView x:Name="sportsList" HorizontalOptions="FillAndExpand"/>-->
 
 
-            <StackLayout  Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                <Grid RowDefinitions="Auto, Auto" >
 
-                <Entry x:Name="entry" Placeholder="الاسم" HorizontalOptions="FillAndExpand"  Text="{Binding PlayerName}" />
-                <Label  TextColor="Black" FontSize="Medium" HorizontalOptions="End" Text="اللاعب" VerticalOptions="Center"/>
+                    <!--#region Picker And Add Button -->
+
+                    <Grid ColumnDefinitions="Auto, *">
+                        <Button Margin="0,0,15,0" 
+                                Style="{StaticResource AddButton}"
+                                Command="{Binding AddSportCommand}"/>
+
+                        <Grid x:Name="picker" Grid.Column="1" HorizontalOptions="FillAndExpand" ColumnDefinitions="*,*" VerticalOptions="Center" >
+
+                            <Picker x:Name="typesport" Title="نوع اللعبة" HorizontalOptions="FillAndExpand" 
+                                    TitleColor="Black" TextColor="Black"
+                                    
+                    ItemsSource="{Binding SportCaegoriesList}"
+                    ItemDisplayBinding="{Binding SportType}"
+                    SelectedItem="{Binding SelectedCaegory}"/>
+
+                            <Picker 
+                                x:Name="namesport"
+                                Grid.Column="1"   
+                                Title="اسم اللعبة" 
+                                HorizontalOptions="FillAndExpand" 
+                                TitleColor="Black" 
+                                TextColor="Black" 
+                                ItemsSource="{Binding SportsList}"
+                                SelectedItem="{Binding SelectedSport}" />
+
+                        </Grid>
+
+                    </Grid>
+
+                    <!--#endregion-->
+
+                    <!--#region List With Remove Buttons -->
+                    <Frame Grid.Row="1" Margin="5" CornerRadius="10" BorderColor="Silver" HasShadow="True" >
+
+
+                        <ScrollView >
+                            <FlexLayout  Wrap="Wrap" BindableLayout.ItemsSource="{Binding Sports}"
+                                    
+                        Direction="Row"
+                        JustifyContent="Center"
+                        AlignItems="Center"
+                        AlignContent="Start">
+                                <BindableLayout.EmptyView>
+                                    <Label Text="اختر اللعبة ثم اضغط اضافة"
+                                           TextColor="Black"
+                                Margin="10,25,10,10"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalOptions="Fill"
+                                HorizontalTextAlignment="Center" />
+                                </BindableLayout.EmptyView>
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <controls:EditableSportListItemContentView />
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView >
+                    </Frame>
+
+                    <!--#endregion-->
+
+                </Grid>
+
+            </Frame>
+
+            <Grid ColumnDefinitions="*,*" VerticalOptions="End" >
+
+                <Button Grid.Column="0"                                    
+                                    Text="Player"
+                                    Style="{StaticResource LikeButton}"
+                                    Command="{Binding SavePlayerCommand}"
+                                    IsEnabled="{Binding SavePlayerButtonIsEnabled}" />
+                <Button Grid.Column="1"
+                                    Text="Player" 
+                                    Style="{StaticResource DisLikeButton}"
+                                        Command="{Binding CancelCommand}" />
+            </Grid>
+
+            <!--<Label x:Name="payment" Text="{Binding Source={x:Reference sportsList}, Path=BindingContext.SportsTotalPayments, StringFormat='{0:D2}'}" HorizontalTextAlignment="Start" Margin="0,0,10,0" Padding="0" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="20"/>-->
+
+
             </StackLayout>
-
-            <views:SportsListView x:Name="sportsList" BindingContext="{Binding ListViewModel}"   
-                                                  HorizontalOptions="FillAndExpand"/>
-
-            <Label x:Name="payment" Text="{Binding Source={x:Reference sportsList}, Path=BindingContext.SportsTotalPayments, StringFormat='{0:D2}'}" HorizontalTextAlignment="Start" Margin="0,0,10,0" Padding="0" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="20"/>
-
-
-        </StackLayout>
-
-    </ContentView.Content>
-</ContentView>
+    </local:BasePage.Content>
+</local:BasePage>

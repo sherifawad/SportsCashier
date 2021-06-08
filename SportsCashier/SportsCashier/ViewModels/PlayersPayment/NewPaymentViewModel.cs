@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using QRCoder;
 using SportsCashier.DataBase;
 using SportsCashier.Extensions;
 using SportsCashier.Helpers;
@@ -12,10 +13,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace SportsCashier.ViewModels.PlayersPayment
@@ -26,12 +29,9 @@ namespace SportsCashier.ViewModels.PlayersPayment
     {
         #region Private Property
 
-        private IList<PlayerModel> RemovePlayersList;
-        private IList<Sport> SportsList;
-
+        private MemberModel _Member;
         private string _id;
         private string _member;
-
         #endregion
 
         #region Public Property
@@ -44,6 +44,7 @@ namespace SportsCashier.ViewModels.PlayersPayment
                 _id = Uri.UnescapeDataString(value);
             }
         }
+
         public string Member
         {
             get => _member;
@@ -53,9 +54,11 @@ namespace SportsCashier.ViewModels.PlayersPayment
             }
         }
 
+        public bool CanSave { get; private set; }
+        public bool QrGeneraation { get; private set; }
+        public bool MemberShipCodeVisibility { get; private set; }
         public bool popupVisibility { get; set; }
-
-        public bool SavePlayerButtonIsEnabled { get; set; }
+        public ImageSource QrCodeImage { get; set; }
 
         public string MemberShipCode { get; set; }
 
@@ -65,17 +68,18 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
         public PlayerModel SelectedPlayer { get; set; }
 
-        public double Total { get; set; }
-
         public ObservableCollection<PlayerModel> Players { get; set; }
 
+        #endregion
+
+        #region Public Commands
         public ICommand AddPlayerCommand { get; set; }
-        public ICommand SavePlayerCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
         public ICommand RemovePlayerCommand { get; set; }
         public ICommand EditPlayerCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand BackCommand { get; set; }
+        public ICommand ShareCommand { get; set; }
+        public ICommand DoneCommand => new RelayCommand(() => popupVisibility = false);
 
         #endregion
 
@@ -86,119 +90,96 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
             Players = new ObservableCollection<PlayerModel>();
             NewPlayerViewModel = new PlayerViewModel();
-            RemovePlayersList = new List<PlayerModel>();
-            SportsList = new List<Sport>();
-
-            AddPlayerCommand = new RelayCommand(AddPlayer);
+            MemberShipCodeVisibility = true;
+            AddPlayerCommand = new RelayCommand(async () => await AddPlayerAsync());
             RemovePlayerCommand = new RelayCommand(async (parameter) => await RemovePlayerAsync(parameter));
-            CancelCommand = new RelayCommand(async () => await CancelAsync());
-            SavePlayerCommand = new RelayCommand(async () => await SavePlayerAsync());
             EditPlayerCommand = new RelayCommand(async (parameter) => await EditAsync(parameter));
             BackCommand = new RelayCommand(async () => await GoBackAsync());
             SaveCommand = new RelayCommand(async () => await SaveMemberAsync());
+            ShareCommand = new RelayCommand(async () => await ShareAsync());
+            //_messagingService.Subscribe(AppConstants.PopupStatus, z =>
+            //{
+            //    PlayerListRefresh().SafeFireAndForget(false);
+            //    //popupVisibility = false;
+            //});
         }
 
         #endregion
 
         #region Commands Methods
 
-
         private async Task SaveMemberAsync()
         {
-            if (string.IsNullOrEmpty(MemberShipCode) || string.IsNullOrEmpty(MemberShipYear) || Players?.Count == 0)
-                return;
-
-            await RunCommandAsync(() => IsBusy, async () => {
-
-                foreach (var player in RemovePlayersList)
+            await RunCommandAsync(() => CommandRun, async () =>
+            {
+                try
                 {
-                    try
+                    MemberModel memberExist = null;
+                    var code = MemberShipCode.Trim().ToLower();
+                    var year = MemberShipYear.Trim().ToLower();
+                    if (_Member == null)
                     {
-                        await _playersRepository.Delete(player);
-                        await _playersRepository.Delete(player);
-                        var psRow = await _ps.Get(c => c.PlayerModelId == player.Id, c => c.Id);
-                        foreach (var row in psRow)
+                        memberExist = await _membersRepository.GetFirstOrDefault(x =>
+                            x.MemberShipCode == code &&
+                            x.MemberShipYear == year);
+                    }
+                    else
+                    {
+                        memberExist = await _membersRepository.GetFirstOrDefault(x =>
+                            x.MemberShipCode == code &&
+                            x.MemberShipYear == year && x.Id != _Member.Id);
+                    }
+
+                    if (memberExist != null)
+                    {
+                        await _dialogService.DisplayAlert("Alert", "MemberShip Number Dublication", "Ok");
+                        return;
+                    }
+
+                    _Member = new MemberModel
+                    {
+                        MemberShipCode = code,
+                        MemberShipYear = year,
+                        MembershipNPlayers = new List<PlayerModel>()
+                    };
+
+                    if (_Member.Id == 0)
+                    {
+                        await _membersRepository.Insert(_Member);
+                        if (Players != null && Players.Count > 0)
                         {
-                            await _ps.Delete(row);
+                            Players.ToList().ForEach(x =>
+                            {
+                                x.MemberModelId = _Member.Id;
+                                _playersRepository.Insert(x);
+                            });
                         }
+
+                        CanSave = false;
+
                     }
-                    catch (Exception ex)
+                    else
                     {
-
-                        Debug.WriteLine(ex.Message);
+                        await _membersRepository.Update(_Member);
+                        Players.ToList().ForEach(x =>
+                        {
+                            x.MemberModelId = _Member.Id;
+                            _playersRepository.Update(x);
+                        });
                     }
+
+                    MemberShipCodeVisibility = false;
                 }
-
-
-
-                // Save Member to DataBase Without Players
-                var member = new MemberModel
+                catch (Exception ex)
                 {
-                    Id = string.IsNullOrEmpty(Id) ? 0 : int.Parse(Id),
-                    MemberShipCode = MemberShipCode,
-                    MemberShipYear = MemberShipYear,
-                    MembershipNPlayers = Players.ToList()
-                };
-                await _membersRepository.SaveWithChildrenAsync(member);
 
-
-                // save sport with children
-                foreach (var sport in SportsList)
-                {
-                    await _sportsRepository.SaveWithChildrenAsync(sport);
-                };
-
-                // Save each Member Player to DataBase without Sports
-                foreach (var player in Players)
-                {
-                    var intersect = SportsList.Where(x => player.Sports.Any(y => y.SportName == x.SportName) &&
-                    SportsList.Any(y => y.SportCaegory.SportType == x.SportCaegory.SportType)).ToList();
-
-                    //var sp = player.Sports.Intersect(SportsList).ToList();
-                    player.Sports = intersect;
-                    await _playersRepository.SaveWithChildrenAsync(player);
-                    //await _playersRepository.SaveWithChildrenAsync(new PlayerModel { 
-
-                    //    Id = player.Id == 0 ? 0 : player.Id,
-                    //    MemberModelId = member.Id,
-                    //    PlayerName = player.PlayerName,
-                    //    PlayerPayment = player.PlayerPayment,
-                    //    Sports = intersect
-                    //});
+                    await _dialogService.DisplayAlert("Error", $"{ex.Message}", "Ok");
                 }
-                //// Save Each Sport To DataBase
-                //foreach (var sport in Players.SelectMany(p => p.Sports))
-                //{
-                //    await _sportsRepository.SaveItemAsync(new Sport { 
-                //        Id = sport.Id == 0 ? 0 : sport.Id,
-                //        SportName = sport.SportName,
-                //        SportType = sport.SportCaegory.SportType,
-                //        SportPrice = sport.SportCaegory.SportPrice
-                //    });
-                //};
-
-                ////// Add Players to Member and save with children
-                ////member.MembershipNPlayers = Players.ToList();
-                ////await _membersRepository.SaveWithChildrenAsync(member);
-
-
-                //// Save with children
-                //foreach (var player in Players)
-                //{
-                //    await _playersRepository.SaveWithChildrenAsync(player);
-
-                //};
-
-
-
-
-
             });
 
-            await _navigationService.InsertAsRoot<HomeViewModel>();
+            //await _navigationService.InsertAsRoot<HomeViewModel>();
 
         }
-
         private async Task GoBackAsync()
         {
             var shouldGoBack = await _dialogService.DisplayAlert("Confirm",
@@ -209,122 +190,118 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
             }
         }
-
+        private async Task ShareAsync()
+        {
+            await RunCommandAsync(() => QrGeneraation, async () =>
+            {
+                if (CanSave)
+                    return;
+                try
+                {
+                    var exportMember = new MemberModel
+                    {
+                        MemberShipCode = MemberShipCode,
+                        MemberShipYear = MemberShipYear,
+                        MembershipNPlayers = new List<PlayerModel>()
+                    };
+                    foreach (var player in Players)
+                    {
+                        if (player.PlayerPayment <= 0)
+                            continue;
+                        player.Id = 0;
+                        var exportSports = new List<Sport>();
+                        foreach (var sport in player.Sports)
+                        {
+                            if (!sport.Checked)
+                                continue;
+                                sport.Id = 0;
+                                exportSports.Add(sport);
+                        }
+                        player.Sports = exportSports;
+                        exportMember.MembershipNPlayers.Add(player);
+                    }
+                    if (exportMember.MembershipNPlayers.Count <= 0)
+                        return;
+                    var serializedMember = JsonConvert.SerializeObject(exportMember);
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(serializedMember, QRCodeGenerator.ECCLevel.H);
+                    PngByteQRCode qRCode = new PngByteQRCode(qrCodeData);
+                    byte[] qrCodeBytes = qRCode.GetGraphic(20);
+                    QrCodeImage = ImageSource.FromStream(() => new MemoryStream(qrCodeBytes));
+                    popupVisibility = true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            });
+        }
         private async Task RemovePlayerAsync(object parameter)
         {
-
-            if (parameter != null && parameter is PlayerModel player)
+            await RunCommandAsync(() => CommandRun, async () =>
             {
-                var delete = await _dialogService.DisplayAlert("Confirm",
-                                    "Are you sure you want to Delete Player? Any unsaved changes will be lost.", "Ok", "Canel");
-                if (delete)
+                try
                 {
-                    Players.Remove(player);
-                    CalculateTotalPayment();
-                    RemovePlayersList.Add(player);
+                    if (parameter != null && parameter is PlayerModel player)
+                    {
+                        var delete = await _dialogService.DisplayAlert("Confirm",
+                                            "Are you sure you want to Delete Player? Can't undo", "Ok", "Canel");
+                        if (delete)
+                        {
+                            await _playersRepository.Delete(player);
+                            Players.Remove(player);
+                        }
+                    }
                 }
+                catch (Exception ex)
+                {
 
-            }
+                    await _dialogService.DisplayAlert("Error", $"{ex.Message}", "Ok");
+                }
+            });
+
         }
-
-        private void AddPlayer()
+        private async Task AddPlayerAsync()
         {
-            NewPlayerViewModel = new PlayerViewModel();
-            popupVisibility = true;
-            NewPlayerViewModel.PropertyChanged += NewPlayerViewModel_PropertyChanged;
-        }
+            await RunCommandAsync(() => CommandRun, async () =>
+            {
+                try
+                {
+                    if (_Member == null)
+                        return;
+                    await _navigationService.PushAsync<PlayerViewModel>($"mId={_Member.Id}");
 
+                    //_messagingService.SendMessage<int>(AppConstants.MemberId, _Member.Id);
+                    //popupVisibility = true;
+                }
+                catch (Exception ex)
+                {
+
+                    await _dialogService.DisplayAlert("Error", $"{ex.Message}", "Ok");
+                }
+            });
+        }
         private async Task EditAsync(object parameter)
         {
-            if (parameter != null && parameter is PlayerModel player)
+            await RunCommandAsync(() => CommandRun, async () =>
             {
-
-                //try
-                //{
-                NewPlayerViewModel = new PlayerViewModel(player);
-
-                //}
-                //catch (Exception e)
-                //{
-                //    if (e.InnerException != null)
-                //    {
-                //        string err = e.InnerException.Message;
-                //    }
-                //}
-                popupVisibility = true;
-                NewPlayerViewModel.PropertyChanged += NewPlayerViewModel_PropertyChanged;
-
-                await Task.CompletedTask;
-            }
-        }
-
-        private async Task SavePlayerAsync()
-        {
-            PlayerModel player = null;
-            if(SelectedPlayer.Id == 0)
-                player = Players.FirstOrDefault(p => p.PlayerName.ToLower() == SelectedPlayer.PlayerName.ToLower());
-            else
-                player = Players.FirstOrDefault(p => p.Id == SelectedPlayer.Id);
-
-            if (Players.IndexOf(player) == -1)
-                Players.Add(SelectedPlayer);
-            else
-                Players[Players.IndexOf(player)] = SelectedPlayer;
-
-            foreach (var sport in SelectedPlayer.Sports)
-            {
-                int sportIndex = 0;
-
-                Sport _sport = null;
-
-                // check for sport existance in the local list
-                foreach (var localsport in SportsList)
+                try
                 {
-                    _sport = SportsList.FirstOrDefault(s => s.SportName == sport.SportName && s.SportCaegory.SportType == sport.SportCaegory.SportType);
-                }
-
-                sportIndex = SportsList.IndexOf(_sport);
-
-            // Check for Sport Is Existing In the data Base
-            var dataBasesport = await _sportsRepository.Get(s => s.SportName == sport.SportName &&  s.SportType == sport.SportCaegory.SportType);
-                if (dataBasesport != null) 
-                    _sport = await _sportsRepository.GetWithChildren(dataBasesport.Id);
-                else
-                    _sport = new Sport
+                    if (parameter != null && parameter is PlayerModel player)
                     {
-                        Id = 0,
-                        SportName = sport.SportName,
-                        SportCaegory = sport.SportCaegory,
-                        Players = new List<PlayerModel>()
-                    };
+                        await _navigationService.PushAsync<PlayerViewModel>($"pId={player.Id}&mId={_Member.Id}");
+                        //_messagingService.SendMessage<int>(AppConstants.MemberId, _Member.Id);
+                        //_messagingService.SendMessage<int>(AppConstants.PlayerId, player.Id);
+                        //popupVisibility = true;
+                    }
+                }
+                catch (Exception ex)
+                {
 
-                // Add The player to the sport
-                _sport.Players.Add(new PlayerModel { 
-                    PlayerName = SelectedPlayer.PlayerName,
-                    PlayerPayment = SelectedPlayer.PlayerPayment
-                });
-
-                // Add the sport to local Sports List
-                if (sportIndex == -1)
-                    SportsList.Add(_sport);
-                else
-                    SportsList[sportIndex] = _sport;
-
-            }
-
-            NewPlayerViewModel.PropertyChanged -= NewPlayerViewModel_PropertyChanged;
-            popupVisibility = false;
-            CalculateTotalPayment();
-            await Task.CompletedTask;
+                    await _dialogService.DisplayAlert("Error", $"{ex.Message}", "Ok");
+                }
+            });
         }
-
-        private async Task CancelAsync()
-        {
-            NewPlayerViewModel.PropertyChanged -= NewPlayerViewModel_PropertyChanged;
-            popupVisibility = false;
-            await Task.CompletedTask;
-        }
-
 
         #endregion
 
@@ -332,112 +309,111 @@ namespace SportsCashier.ViewModels.PlayersPayment
 
         public override async Task InitializeAsync()
         {
-            MemberModel member = null;
 
-            if (!string.IsNullOrEmpty(Id))
+            try
             {
-                if (!int.TryParse(Id, out int MemberId))
-                    await GoBackAsync();
-
-                member = await _membersRepository.GetWithChildren(MemberId);
-
-
-                var MemberPlayers = member.MembershipNPlayers;
-
-                foreach (var player in MemberPlayers)
+                if (!string.IsNullOrEmpty(Id))
                 {
-                    var p = await _playersRepository.GetWithChildren(player.Id);
-                    Players.Add(p);
+                    MemberShipCodeVisibility = false;
+                    if (!int.TryParse(Id, out int MemberId))
+                        await GoBackAsync();
+
+                    _Member = await _membersRepository.GetItemByIdAsync(MemberId);
+
+                    await PlayerListRefresh();
+                    MemberShipCode = _Member.MemberShipCode;
+                    MemberShipYear = _Member.MemberShipYear;
                 }
-                MemberShipCode = member.MemberShipCode;
-                MemberShipYear = member.MemberShipYear;
-            }
-
-            if (!string.IsNullOrEmpty(Member))
-            {
-                try
+                if (!string.IsNullOrEmpty(Member))
                 {
-                    member = JsonConvert.DeserializeObject<MemberModel>(Member);
+                    MemberShipCodeVisibility = false;
 
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    await GoBackAsync();
-                }
+                    _Member = JsonConvert.DeserializeObject<MemberModel>(Member);
 
-                foreach (var player in member.MembershipNPlayers)
-                {
-                    var playersport = new List<Sport>();
-                    foreach (var sport in player.Sports)
+                    _Member.Id = 0;
+
+                    var memberDublication = await _membersRepository.GetFirstOrDefault(x =>
+                    x.MemberShipCode == _Member.MemberShipCode &&
+                    x.MemberShipYear == _Member.MemberShipYear);
+
+                    if (memberDublication != null)
                     {
-                        Sport _sport = null;
-                        // Check for Sport Is Existing In the data Base
-                        var dataBasesport = await _sportsRepository.Get(s => s.SportName == sport.SportName && s.SportType == sport.SportCaegory.SportType);
-                        if (dataBasesport != null)
-                            _sport = await _sportsRepository.GetWithChildren(dataBasesport.Id);
-                        else
-                            _sport = new Sport
-                            {                                
-                                Id = sport.Id = 0,
-                                SportName = sport.SportName,
-                                SportCaegory = sport.SportCaegory,
-                                Players = new List<PlayerModel>()
-                            };
-
-                        // Add The player to the sport
-                        _sport.Players.Add(new PlayerModel
-                        {
-                            PlayerName = player.PlayerName,
-                            PlayerPayment = player.PlayerPayment
-                        });
-
-                        // Add the sport to local Sports List
-                         SportsList.Add(_sport);
-                        playersport.Add(_sport);
-
+                        await _dialogService.DisplayAlert("Dublication", "MemberShip Dublication", "Ok");
+                        await _navigationService.GoBackAsync();
                     }
 
-                    Players.Add(new PlayerModel
+
+                    foreach (var player in _Member.MembershipNPlayers)
                     {
-                        PlayerName = player.PlayerName,
-                        PlayerPayment = player.PlayerPayment,
-                        Sports = playersport
-                    }) ;
+                        var playersport = new List<Sport>();
+                        foreach (var sport in player.Sports)
+                        {
+                            Sport _sport = null;
+                            // Check for Sport Is Existing In the data Base
+                            var dataBasesport = await _sportsRepository.GetFirstOrDefault(s => s.SportName == sport.SportName && s.SportType == sport.SportCaegory.SportType);
+                            if (dataBasesport != null)
+                                _sport = await _sportsRepository.GetWithChildren(dataBasesport.Id);
+                            else
+                                continue;
+
+                            // Add The player to the sport
+                            _sport.Players.Add(new PlayerModel
+                            {
+                                PlayerName = player.PlayerName,
+                                PlayerPayment = player.PlayerPayment
+                            });
+                            _sport.Checked = false;
+                            playersport.Add(_sport);
+
+                        }
+
+                        Players.Add(new PlayerModel
+                        {
+                            PlayerName = player.PlayerName,
+                            PlayerPayment = player.PlayerPayment,
+                            Sports = playersport
+                        });
+                    }
+
+                    MemberShipCode = _Member.MemberShipCode;
+                    MemberShipYear = _Member.MemberShipYear;
+
+                    CanSave = true;
+
                 }
-
-                MemberShipCode = member.MemberShipCode;
-                MemberShipYear = member.MemberShipYear;
-
+                else
+                    await PlayerListRefresh();
             }
-                CalculateTotalPayment();
-
-        }
-
-
-        private void NewPlayerViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var vm = sender as PlayerViewModel;
-            SelectedPlayer = vm.Player;
-            SavePlayerButtonIsEnabled = vm.IsEnabled;
-        }
-
-
-        private void CalculateTotalPayment()
-        {
-            var t = (double)default;
-            if (Players?.Count == 0)
-                return;
-            foreach (var player in Players)
+            catch (Exception ex)
             {
-                //t += player.Sports.SelectMany(s => s.Caegories).Select(c => c.SportPrice).Sum();
-                t += player.PlayerPayment;
+                Debug.WriteLine(ex.Message);
+                await _navigationService.GoBackAsync();
             }
-
-            Total = t;
         }
 
+        public override Task UninitializeAsync()
+        {
+            IsBusy = false;
+            return base.UninitializeAsync();
+        }
+        private async Task PlayerListRefresh()
+        {
+            try
+            {
+                if (_Member == null)
+                    return;
+                var playersList = await _playersRepository.GetChildrens(x => x.MemberModelId == _Member.Id);
+                if (playersList == null || playersList.Count <= 0)
+                    return;
+                Players.Clear();
+                playersList.ForEach(x => Players.Add(x));
+            }
+            catch (Exception ex)
+            {
 
+                await _dialogService.DisplayAlert("Error", $"{ex.Message}", "Ok");
+            }
+        }
 
         #endregion
 

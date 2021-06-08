@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SportsCashier" 
+             local:ViewModelLocator.AutoWireViewModel="True"
+             x:Class="SportsCashier.Views.SportsView">
+    <local:BasePage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="HeaderLabelStyle"
+                   TargetType="{x:Type Label}">
+                <Setter Property="BackgroundColor"
+                           Value="LawnGreen" />
+                <Setter Property="TextColor"
+                           Value="Black" />
+                <Setter Property="HorizontalTextAlignment"
+                           Value="Center" />
+                <Setter Property="VerticalTextAlignment"
+                           Value="Center" />
+                <Setter Property="FontSize"
+                           Value="Medium" />
+                <Setter Property="HorizontalOptions"
+                           Value="Fill" />
+                <Setter Property="FontAttributes"
+                           Value="Bold" />
+                <Setter Property="MaxLines"
+                           Value="1" />
+                <Setter Property="LineBreakMode"
+                           Value="WordWrap" />
+                <Setter Property="Margin"
+                           Value="1" />
+            </Style>
+
+            <Style x:Key="DataLabelStyle"
+                   TargetType="{x:Type Label}">
+                <Setter Property="BackgroundColor"
+                           Value="LawnGreen" />
+                <Setter Property="TextColor"
+                           Value="Black" />
+                <Setter Property="VerticalTextAlignment"
+                           Value="Center" />
+                <Setter Property="HorizontalTextAlignment"
+                           Value="Center" />
+                <Setter Property="FontSize"
+                           Value="Small" />
+                <Setter Property="HorizontalOptions"
+                           Value="Fill" />
+                <Setter Property="FontAttributes"
+                           Value="Bold" />
+                <Setter Property="Margin"
+                           Value="1" />
+                <Setter Property="MaxLines"
+                           Value="1" />
+            </Style>
+        </ResourceDictionary>
+    </local:BasePage.Resources>
+    <local:BasePage.Content>
+        
+            <ScrollView Orientation="Horizontal">
+            <Grid RowDefinitions="Auto,*">
+                <Grid Grid.Row="0" ColumnDefinitions="*, *, *" RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black">
+                    <Label Grid.Column="0" Text="Name" Style="{StaticResource HeaderLabelStyle}" />
+                    <Label Grid.Column="1" Text="Type" Style="{StaticResource HeaderLabelStyle}" />
+                    <Label Grid.Column="2" Text="Price" Style="{StaticResource HeaderLabelStyle}" />
+                </Grid>
+                <ListView Grid.Row="1" ItemsSource="{Binding Sports}" CachingStrategy="RecycleElement" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid ColumnDefinitions="*, *, *" RowSpacing="0" ColumnSpacing="0" BackgroundColor="Black">
+                                    <Label Grid.Column="0" Text="{Binding SportName}" Style="{StaticResource DataLabelStyle}" />
+                                    <Label Grid.Column="1" Text="{Binding SportType}" Style="{StaticResource DataLabelStyle}" />
+                                    <Label Grid.Column="2" Text="{Binding SportPrice}" Style="{StaticResource DataLabelStyle}" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </ScrollView>
+
+    </local:BasePage.Content>
+</local:BasePage>

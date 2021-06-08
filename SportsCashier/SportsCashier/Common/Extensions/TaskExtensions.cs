@@ -12,7 +12,7 @@ namespace SportsCashier.Extensions
         // communicating intent to fire and forget, and allow
         // handling of exceptions
         public static async void SafeFireAndForget(this Task task,
-            bool returnToCallingContext,
+            bool returnToCallingContext = false,
             Action<Exception> onException = null)
         {
             try

@@ -5,9 +5,46 @@
              x:Class="SportsCashier.AppShell"
        FlyoutBehavior="Disabled">
 
-    <ShellItem Route="HomeViewModel">
+        <Shell.Resources>
+            <Style x:Key="BaseStyle"
+               TargetType="Element">
+                <Setter Property="Shell.BackgroundColor"
+                    Value="#455A64" />
+                <Setter Property="Shell.ForegroundColor"
+                    Value="White" />
+                <Setter Property="Shell.TitleColor"
+                    Value="White" />
+                <Setter Property="Shell.DisabledColor"
+                    Value="#B4FFFFFF" />
+                <Setter Property="Shell.UnselectedColor"
+                    Value="#95FFFFFF" />
+            </Style>
+        </Shell.Resources>
+
+    <TabBar>
+        <Tab Title="Memberes" Style="{StaticResource BaseStyle}" >
+            <Tab.Icon>
+                <FontImageSource FontFamily="SolidAwesome" Glyph="&#xf0c0;" />
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:MembersListView}" />
+        </Tab>
+        <Tab Title="Sports" Style="{StaticResource BaseStyle}">
+            <Tab.Icon>
+                <FontImageSource FontFamily="SolidAwesome" Glyph="&#xf091;" />
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:SportsView}" />
+        </Tab>
+        <Tab Title="ScanView" Style="{StaticResource BaseStyle}">
+            <Tab.Icon>
+                <FontImageSource FontFamily="SolidAwesome" Glyph="&#xf029;" />
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:ScanView}" />
+        </Tab>
+    </TabBar>
+
+    <!--<ShellItem Route="HomeViewModel">
         <ShellContent ContentTemplate="{DataTemplate views:HomeView}" />
-    </ShellItem>
+    </ShellItem>-->
 
 
 </Shell>

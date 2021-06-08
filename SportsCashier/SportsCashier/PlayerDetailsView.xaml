@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SportsCashier.PlayerDetailsView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:PanCake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:Template="clr-namespace:SportsCashier.Views.Template"
+    xmlns:backgroundKit="http://xamarin.com/schemas/2014/forms/background"
+    xmlns:sh="http://sharpnado.com"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    BackgroundColor="{StaticResource OrangeColor}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <x:Double x:Key="TranslateEllipseAndLineY">270</x:Double>
+
+            <Style x:Key="BarLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource FontSize14}" />
+                <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+            </Style>
+            <Style x:Key="BarLaberStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource FontSize14}" />
+                <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+            </Style>
+            <Style x:Key="DivisionLineStyle" TargetType="Line">
+                <Setter Property="TranslationY" Value="{StaticResource TranslateEllipseAndLineY}" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="StrokeDashArray" Value="1,6" />
+                <Setter Property="X2" Value="320" />
+                <Setter Property="StrokeLineCap" Value="Square" />
+                <Setter Property="Stroke" Value="{StaticResource OrangeBrushColor}" />
+                <Setter Property="StrokeThickness" Value="3" />
+            </Style>
+            <Style x:Key="RoundedbordersStyle" TargetType="Ellipse">
+                <Setter Property="TranslationY" Value="{StaticResource TranslateEllipseAndLineY}" />
+                <Setter Property="Fill" Value="{StaticResource OrangeBrushColor}" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="HeightRequest" Value="45" />
+                <Setter Property="WidthRequest" Value="45" />
+                <Setter Property="Margin" Value="55,0" />
+            </Style>
+            <Style x:Key="CardStyle" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{StaticResource WhiteColor}" />
+                <Setter Property="CornerRadius" Value="30" />
+                <Setter Property="HasShadow" Value="True" />
+                <Setter Property="Margin" Value="80,0" />
+            </Style>
+            <DataTemplate x:Key="SportsTemplate">
+                <Template:PlayerDetailsSportsContentView />
+            </DataTemplate>
+            <DataTemplate x:Key="PlayerHistoryTemplate">
+                <Template:PlayerHistoryContentView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+
+        <Grid
+            HorizontalOptions="FillAndExpand"
+            RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
+            VerticalOptions="FillAndExpand">
+
+
+            <!--<BoxView
+                Grid.Row="0"
+                Grid.RowSpan="6"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                Color="Black" />
+            <Image
+                Grid.Row="0"
+                Grid.RowSpan="6"
+                Aspect="AspectFill"
+                HorizontalOptions="FillAndExpand"
+                Opacity=".6"
+                Source="BackgroundBubbles.webp"
+                VerticalOptions="FillAndExpand" />-->
+
+            <Label
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                Style="{StaticResource BarLabelStyle}"
+                Text="&lt;" />
+            <Label
+                Grid.Row="0"
+                HorizontalOptions="End"
+                Style="{StaticResource BarLabelStyle}"
+                Text="1988/55" />
+            <Label
+                Grid.Row="1"
+                HorizontalOptions="Center"
+                Style="{StaticResource BarLaberStyle}"
+                Text="Your Ticket" />
+            <Label
+                Grid.Row="2"
+                HorizontalOptions="Center"
+                Style="{StaticResource BarLaberStyle}"
+                Text="Save Your text blue" />
+
+            <!--<sh:Shadows
+                Grid.Row="3"
+                Margin="48,0"
+                CornerRadius="30"
+                Shades="{sh:SingleShade Offset='10, 10',
+                                        Opacity=0.4,
+                                        Color={StaticResource LightOrangeColor}}">
+                <Grid
+                    Padding="15,5"
+                    BackgroundColor="{StaticResource OrangeColor}"
+                    RowDefinitions="*">
+                    <Label
+                        Grid.Row="0"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        Text="OFFLINE"
+                        TextColor="White" />
+                </Grid>
+            </sh:Shadows>-->
+
+
+            <Frame
+                Grid.Row="3"
+                HeightRequest="400"
+                Style="{StaticResource CardStyle}">
+
+                <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+
+
+                    <!--  Profile Circle Image  -->
+
+                    <Grid Grid.Row="0">
+                        <Ellipse
+                            Grid.Row="0"
+                            Fill="{StaticResource WhiteBrushColor}"
+                            HeightRequest="120"
+                            HorizontalOptions="Center"
+                            Stroke="{StaticResource OrangeBrushColor}"
+                            StrokeThickness="4"
+                            VerticalOptions="Center"
+                            WidthRequest="120" />
+                        <Image
+                            Grid.Row="0"
+                            Aspect="Fill"
+                            HeightRequest="100"
+                            HorizontalOptions="Center"
+                            Source="BackgroundBubbles.webp"
+                            VerticalOptions="Center"
+                            WidthRequest="100">
+                            <Image.Clip>
+                                <EllipseGeometry
+                                    Center="50,50"
+                                    RadiusX="50"
+                                    RadiusY="50" />
+                            </Image.Clip>
+                        </Image>
+                    </Grid>
+
+                    <Label
+                        Grid.Row="1"
+                        FontAttributes="Bold"
+                        FontSize="{StaticResource FontSize20}"
+                        HorizontalOptions="Center"
+                        Text="{Binding MockPlayer.Name}"
+                        VerticalOptions="Center" />
+
+                    <!--  Bookmark  -->
+
+                    <Grid
+                        x:Name="bookmarkGrid"
+                        HorizontalOptions="End"
+                        RowSpacing="0"
+                        TranslationY="-23"
+                        VerticalOptions="Start">
+
+                        <Label
+                            FontFamily="SolidAwesome"
+                            FontSize="{StaticResource FontSize42}"
+                            HorizontalOptions="Center"
+                            Text="&#xf02e;"
+                            TextColor="{StaticResource OrangeColor}"
+                            VerticalOptions="StartAndExpand"
+                            VerticalTextAlignment="Start" />
+                        <Label
+                            Margin="0,5,0,0"
+                            FontSize="{StaticResource FontSize12}"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="12 Oct"
+                            TextColor="{StaticResource WhiteColor}"
+                            VerticalOptions="StartAndExpand"
+                            VerticalTextAlignment="Center"
+                            WidthRequest="40" />
+                    </Grid>
+
+                    <!--<StackLayout
+                        Grid.Row="2"
+                        Margin="0,10,0,0"
+                        HorizontalOptions="CenterAndExpand"
+                        Orientation="Horizontal">
+                        <Image
+                            Aspect="AspectFit"
+                            Source="location00.png"
+                            WidthRequest="20" />
+                        <Label
+                            FontSize="{StaticResource FontSize14}"
+                            Text="White Oak Hall"
+                            TextColor="{StaticResource OrangeColor}" />
+                    </StackLayout>-->
+
+                    <CollectionView
+                        Grid.Row="2"
+                        Margin="0,15,0,0"
+                        HeightRequest="150"
+                        ItemTemplate="{StaticResource SportsTemplate}"
+                        ItemsSource="{Binding MockPlayer.Sports}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="2" />
+                        </CollectionView.ItemsLayout>
+                    </CollectionView>
+
+                    <Image
+                        Grid.Row="3"
+                        Aspect="AspectFill"
+                        HeightRequest="30"
+                        Source="Barcode.png"
+                        VerticalOptions="Center" />
+
+
+                    <Grid
+                        x:Name="historyGrid"
+                        Grid.Row="0"
+                        Grid.RowSpan="5"
+                        Margin="0,-20,0,0"
+                        ColumnDefinitions="*,Auto,*"
+                        ColumnSpacing="0"
+                        HeightRequest="420"
+                        RowDefinitions="Auto,*"
+                        RowSpacing="0"
+                        VerticalOptions="StartAndExpand">
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource OrangeColor}"
+                            Clicked="historyBtn_Clicked"
+                            FontSize="{StaticResource FontSize12}"
+                            HeightRequest="40"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="History"
+                            TextColor="{StaticResource WhiteColor}"
+                            WidthRequest="90" />
+                        <Frame
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            BackgroundColor="{StaticResource OrangeColor}"
+                            BorderColor="{StaticResource DarkBlueColor}"
+                            HasShadow="True">
+                            <CollectionView ItemTemplate="{StaticResource PlayerHistoryTemplate}" ItemsSource="{Binding MockPlayer.Histories}" />
+                        </Frame>
+                    </Grid>
+                    <BoxView
+                        x:Name="CartPopupFade"
+                        Grid.Row="0"
+                        Grid.RowSpan="5"
+                        Margin="0,-27,0,0"
+                        BackgroundColor="#AA000000"
+                        HeightRequest="360"
+                        IsVisible="false"
+                        Opacity="0"
+                        TranslationY="45" />
+
+                </Grid>
+
+
+            </Frame>
+
+            <Ellipse
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                Style="{StaticResource RoundedbordersStyle}" />
+            <Ellipse
+                Grid.Row="0"
+                HorizontalOptions="End"
+                Style="{StaticResource RoundedbordersStyle}" />
+
+            <Line
+                Grid.Row="0"
+                Margin="15,0"
+                Style="{StaticResource DivisionLineStyle}" />
+
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>

@@ -12,8 +12,8 @@
                     VerticalOptions="CenterAndExpand" WidthRequest="30" HeightRequest="30" CornerRadius="15"
                     Command="{Binding Parent.BindingContext.RemoveSportCommand, Source={x:Reference view}}" CommandParameter="{Binding}" />
 
-                <Label Grid.Column="1" Text="{Binding SportCaegory.SportType}" LineBreakMode="WordWrap"  FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                <Label Grid.Column="2" Text="{Binding SportName}" LineBreakMode="WordWrap" FontAttributes="Bold"
+                <Label Grid.Column="1" Text="{Binding SportCaegory.SportType}" TextColor="Black" LineBreakMode="WordWrap"  FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+            <Label Grid.Column="2" Text="{Binding SportName}" LineBreakMode="WordWrap" FontAttributes="Bold" TextColor="Black"
                                                HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
 
 

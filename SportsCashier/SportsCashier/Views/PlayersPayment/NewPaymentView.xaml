@@ -7,8 +7,7 @@
              local:ViewModelLocator.AutoWireViewModel="True"
              x:Class="SportsCashier.Views.PlayersPayment.NewPaymentView"
              x:Name="Payment_View"
-             BackgroundColor="FloralWhite"
-             Visual="Material">
+             BackgroundColor="FloralWhite">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}" />
@@ -18,24 +17,57 @@
         <Color>#599653</Color>
     </Shell.BackgroundColor>
     <Shell.TitleView>
-        <Grid ColumnDefinitions="*,Auto">
-            <Label HorizontalTextAlignment="Center" Margin="0,0,10,0" Padding="0" VerticalTextAlignment="Center" TextColor="White" FontSize="20">
+        <Grid ColumnDefinitions="Auto, *,*">
+            <Label Grid.Column="0" TextColor="White" VerticalTextAlignment="Center">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="Total  " FontAttributes="Bold" TextTransform="Uppercase"/>
-                        <Span Text="{Binding Total, StringFormat='{0:D2}'}" Font="Bold, Italic" FontSize="Small" TextColor="Black" />
-                        <Span Text="  $" FontAttributes="Bold" />
+                        <Span Text="{Binding MemberShipCode}" FontAttributes="Bold" TextTransform="Uppercase" />
+                        <Span Text=" / " Font="Bold, Italic" FontSize="Small" />
+                        <Span Text="{Binding MemberShipYear}" FontAttributes="Bold"/>
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
-            <Button  Grid.Column="1" Text="Save" BackgroundColor="Transparent" Font="Bold, Italic" FontSize="Medium" TextColor="Black" Command="{Binding SaveCommand}" />
-        </Grid>
-    </Shell.TitleView>
-    
+            <Label 
+                Grid.Column="1"
+                x:Name="totalLabel"
+                VerticalTextAlignment="Center"
+                TextColor="Black"
+                Font="Bold, Italic" FontSize="Small"
+                HorizontalOptions="EndAndExpand"/>
 
-    <!--<ContentPage.BindingContext>
-        <viewModels:NewPaymentViewModel />
-    </ContentPage.BindingContext>-->
+            <Grid 
+                Grid.Column="2" 
+                Margin="0"
+                Padding="0"
+                HorizontalOptions="End">
+                
+                <Button 
+                IsVisible="{Binding CanSave}"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                HorizontalOptions="End"
+                Command="{Binding SaveCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="SolidAwesome" Glyph="&#xf0c7;" Size="Small"/>
+                    </Button.ImageSource>
+                </Button>
+                
+                <Button 
+                x:Name="sharebutton"
+                Margin="0"
+                Padding="0"
+                HorizontalOptions="End"
+                BackgroundColor="Transparent"
+                TextColor="White" 
+                Command="{Binding ShareCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="SolidAwesome" Glyph="&#xf1e0;" Size="Small"/>
+                    </Button.ImageSource>
+                </Button>
+            </Grid>
+        </Grid>
+
+    </Shell.TitleView>
     <ContentPage.Content>
         <AbsoluteLayout>
 
@@ -43,10 +75,9 @@
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
             AbsoluteLayout.LayoutFlags="All"
             BindingContext="{Binding Source={x:Reference Payment_View}, Path=BindingContext}">
-                <Grid RowDefinitions="Auto, *">
-                    <controls:MembershipNumberContentView />
-                    <StackLayout Grid.Row="1">
-                    <ScrollView >
+
+                    <StackLayout>
+                        <ScrollView >
                             <FlexLayout  Wrap="Wrap" BindableLayout.ItemsSource="{Binding Players}"
                                     
                         Direction="Row"
@@ -54,7 +85,7 @@
                         AlignItems="Center"
                         AlignContent="Start">
                                 <BindableLayout.ItemTemplate>
-                                <DataTemplate>
+                                    <DataTemplate>
 
 
                                         <!--#region Player Item -->
@@ -62,23 +93,73 @@
                                         <!--#endregion-->
 
                                     </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </FlexLayout>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
 
-                    </ScrollView>
+                        </ScrollView>
                         <Button  Text="Player"  
                                      Style="{StaticResource AddButton}"
                                      Command="{Binding AddPlayerCommand}" />
                     </StackLayout>
 
-                </Grid>
+            </Frame>
 
-        </Frame>
+            <!--#region MemberShipCode -->
 
+            <ContentView
+                    Padding="10,0"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All"
+                    BackgroundColor="#C0808080"
+                    IsVisible="{Binding MemberShipCodeVisibility}">
+
+
+                <Frame VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Margin="0,10,0,10"  CornerRadius="10" BorderColor="Silver" HasShadow="True" BackgroundColor="GhostWhite">
+                    <StackLayout>
+                        <controls:MembershipNumberContentView />
+
+                        <Button  Text="Save Number"  
+                                     Style="{StaticResource AddButton}"
+                                     Command="{Binding SaveCommand}" />
+                    </StackLayout>
+
+                </Frame>
+
+            </ContentView>
+
+            <!--#endregion-->
+
+            <BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"
+                BackgroundColor="Transparent"
+                InputTransparent="false"
+                IsVisible="{Binding QrGeneraation}" />
+            <ActivityIndicator Color="Aqua" IsRunning="{Binding QrGeneraation}" IsVisible="{Binding QrGeneraation}" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".5,.5,-1,-1" />
+
+            <!--#region QrCode Area -->
+            <ContentView
+                    Padding="10,0"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All"
+                    BackgroundColor="#C0808080"
+                    IsVisible="{Binding popupVisibility}">
+
+                <Frame Padding="0, 0, 0, 0"
+                   VerticalOptions="CenterAndExpand"
+                   OutlineColor="Black"
+                   HasShadow="false">
+                    <StackLayout>
+                        <Image Source="{Binding QrCodeImage}"/>
+                        <Button HorizontalOptions="Center" Margin="0,0,0,5" Text="Done"  Command="{Binding DoneCommand}" />
+                    </StackLayout>
+                </Frame>
+
+
+            </ContentView>
+            <!--#endregion-->
 
             <!--#region PopUp Area -->
 
-            <ContentView
+            <!--<ContentView
                     Padding="10,0"
                     AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                     AbsoluteLayout.LayoutFlags="All"
@@ -88,33 +169,22 @@
 
                 <Frame VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Margin="0,10,0,10"  CornerRadius="10" BorderColor="Silver" HasShadow="True" BackgroundColor="GhostWhite"
                   BindingContext="{Binding Source={x:Reference Payment_View}, Path=BindingContext}">
-                    
-                    
+
+
                     <StackLayout VerticalOptions="FillAndExpand">
-                      
-                        <views:PlayerView x:Name="NewplayerView" BindingContext="{Binding NewPlayerViewModel}" />
 
-                        <Grid ColumnDefinitions="*,*" VerticalOptions="EndAndExpand" >
+                        <views:PlayerView x:Name="NewplayerView" />
 
-                            <Button Grid.Column="0"                                    
-                                    Text="Player"
-                                    Style="{StaticResource LikeButton}"
-                                    Command="{Binding SavePlayerCommand}"
-                                    IsEnabled="{Binding SavePlayerButtonIsEnabled}" />
-                            <Button Grid.Column="1"
-                                    Text="Player" 
-                                    Style="{StaticResource DisLikeButton}"
-                                        Command="{Binding CancelCommand}" />
-                        </Grid>
                     </StackLayout>
-                    
-                    
+
+
                 </Frame>
 
-            </ContentView>
+            </ContentView>-->
 
 
             <!--#endregion-->
+
 
         </AbsoluteLayout>
     </ContentPage.Content>

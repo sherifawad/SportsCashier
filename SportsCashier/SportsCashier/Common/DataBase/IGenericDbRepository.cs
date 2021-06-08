@@ -11,8 +11,11 @@ namespace SportsCashier.DataBase
     {
         AsyncTableQuery<T> AsQueryable();
         Task<int> Delete(T entity);
-        Task<T> Get(Expression<Func<T, bool>> predicate);
-        Task<List<T>> Get<TValue>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TValue>> orderBy = null);
+        Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate);
+        Task<List<T>> Get(Expression<Func<T, bool>> predicate = null, Func<AsyncTableQuery<T>, AsyncTableQuery<T>> orderBy = null);
+
+        Task<List<T>> GetChildrens(Expression<Func<T, bool>> predicate = null);
+
         Task<T> GetItemByIdAsync(int id);
 
         Task<List<T>> GetItemsAsync();

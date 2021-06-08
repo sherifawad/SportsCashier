@@ -31,8 +31,9 @@ namespace SportsCashier.ViewModels
         public ImageSource QrCodeImage { get; set; }
 
         public bool popupVisibility { get; set; }
+        public bool QrGeneraation { get; set; }
 
-        public ObservableCollection<MemberModel> Members 
+        public ObservableCollection<MemberModel> Members
         {
             get => members;
             set
@@ -41,14 +42,12 @@ namespace SportsCashier.ViewModels
                 if (members == null)
                     return;
 
-                if (members.Count == 0)
-                    CollectionViewHeight = 0;
-                else
+                if (members.Count > 0)
                     CollectionViewHeight = members.Count * 85;
             }
         }
 
-        public int CollectionViewHeight { get; set; }
+        public double CollectionViewHeight { get; set; }
 
         public ICommand AddCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
@@ -92,21 +91,30 @@ namespace SportsCashier.ViewModels
 
         private async Task DeleteAsync(object parameter)
         {
-            if (parameter != null && parameter is MemberModel member)
+            await RunCommandAsync(() => IsBusy, async () =>
             {
-                var memberInDataBase = await _membersRepository.GetWithChildren(member.Id);
-                foreach (var player in memberInDataBase.MembershipNPlayers)
+
+                if (parameter != null && parameter is MemberModel member)
                 {
-                    await _playersRepository.Delete(player);
-                    var psRow = await _ps.Get(c => c.PlayerModelId == player.Id, c => c.Id);
-                    foreach (var row in psRow)
+                    var shouldDelete = await _dialogService.DisplayAlert("Confirm",
+                        "Are you sure you want to Delete? Can't undo.", "Ok", "Canel");
+                    if (shouldDelete)
                     {
-                        await _ps.Delete(row);
+                        var memberInDataBase = await _membersRepository.GetWithChildren(member.Id);
+                        foreach (var player in memberInDataBase.MembershipNPlayers)
+                        {
+                            await _playersRepository.Delete(player);
+                            var psRow = await _ps.Get(c => c.PlayerModelId == player.Id, c => c.OrderBy(y => y.Id));
+                            foreach (var row in psRow)
+                            {
+                                await _ps.Delete(row);
+                            }
+                        }
+                        await _membersRepository.Delete(memberInDataBase);
+                        Members.Remove(member);
                     }
                 }
-                await _membersRepository.Delete(memberInDataBase);
-                Members.Remove(member);
-            }
+            });
         }
 
         private async Task AddAsync()
@@ -120,11 +128,14 @@ namespace SportsCashier.ViewModels
 
         private async Task QRGenerationAsync(object parameter)
         {
-            if (parameter != null && parameter is MemberModel member)
+
+            await RunCommandAsync(() => QrGeneraation, async () =>
             {
-                await RunCommandAsync(() => IsBusy, async () => {
+                if (parameter != null && parameter is MemberModel member)
+                {
                     try
                     {
+
                         var memberwithPlayers = await _membersRepository.GetWithChildren(member.Id);
                         var playerList = new List<PlayerModel>();
                         foreach (var player in memberwithPlayers.MembershipNPlayers)
@@ -145,8 +156,9 @@ namespace SportsCashier.ViewModels
                     {
                         Debug.WriteLine(ex.Message);
                     }
-                });
-            }
+                }
+
+            });
         }
 
         #endregion
@@ -155,11 +167,14 @@ namespace SportsCashier.ViewModels
 
         public override async Task InitializeAsync()
         {
-            await RunCommandAsync(() => IsBusy, async () =>
-            {
-                Members = (await _membersRepository.GetItemsAsync()).ToObservableCollection() ?? new ObservableCollection<MemberModel>();
+            Members = (await _membersRepository.GetItemsAsync()).ToObservableCollection() ?? new ObservableCollection<MemberModel>();
 
-            });
+        }
+
+        public override Task UninitializeAsync()
+        {
+            IsBusy = false;
+            return base.UninitializeAsync();
         }
 
         #endregion

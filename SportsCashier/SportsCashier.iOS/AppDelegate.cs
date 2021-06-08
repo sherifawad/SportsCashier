@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using XamarinBackgroundKit.iOS;
 
 namespace SportsCashier.iOS
 {
@@ -23,6 +24,8 @@ namespace SportsCashier.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            Sharpnado.Shades.iOS.iOSShadowsRenderer.Initialize();
+            XamarinBackgroundKit.iOS.BackgroundKit.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

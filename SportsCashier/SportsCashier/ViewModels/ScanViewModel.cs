@@ -17,6 +17,7 @@ namespace SportsCashier.ViewModels
 
         public MobileBarcodeScanningOptions ScannerOptions { get; set; }
 
+        public bool ScanMember { get; set; }
         public bool IsScanning { get; set; }
 
         public bool IsAnalyzing { get; set; }
@@ -50,7 +51,9 @@ namespace SportsCashier.ViewModels
 
         private  async Task ScanResultAsync()
         {
-            await RunCommandAsync(() => IsBusy, async () => { 
+            IsBusy = false;
+
+            await RunCommandAsync(() => IsBusy, async() => { 
                 IsScanning = false;
                 Device.BeginInvokeOnMainThread(
                     async () =>
@@ -58,6 +61,7 @@ namespace SportsCashier.ViewModels
                         IsAnalyzing = false;
                         await _navigationService.PushAsync<NewPaymentViewModel>($"member={Result.Text}");
                     });
+                await Task.FromResult(true);
             });
         }
 
@@ -65,6 +69,19 @@ namespace SportsCashier.ViewModels
 
         #region Private Methods
 
+        public override Task InitializeAsync()
+        {
+            IsScanning = true;
+            IsAnalyzing = true;
+            ScannerOptions = new MobileBarcodeScanningOptions
+            {
+                AutoRotate = true,
+                PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE },
+                DisableAutofocus = false,
+                TryHarder = true
+            };
+            return base.InitializeAsync();
+        }
         public override Task UninitializeAsync()
         {
             IsScanning = false;

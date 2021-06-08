@@ -20,7 +20,7 @@ namespace SportsCashier.Views.PlayersPayment
         public SportsListView()
         {
             InitializeComponent();
-
+            BindingContext = new SportsListViewModel();
         }
 
     }

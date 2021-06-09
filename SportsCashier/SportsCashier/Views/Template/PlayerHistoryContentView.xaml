@@ -7,20 +7,40 @@
         <StackLayout>
             <Label
                 HorizontalOptions="CenterAndExpand"
-                Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}"
+                Text="{Binding Date, StringFormat='{0:MMMM yyyy}'}"
                 TextColor="{StaticResource DarkBlueColor}"
                 VerticalOptions="CenterAndExpand" />
-            <CollectionView ItemsSource="{Binding Histories}">
-                <CollectionView.ItemTemplate>
+            <ListView
+                HasUnevenRows="True"
+                HeightRequest="165"
+                ItemsSource="{Binding Sports}"
+                SeparatorColor="{StaticResource DarkBlackColor}">
+                <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Name}" />
-                            <Label Text="{Binding Price}" />
-                        </StackLayout>
+                        <ViewCell>
+                            <StackLayout Orientation="Vertical" Spacing="0">
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Name}" TextColor="{StaticResource OffWhiteColor}" />
+                                    <Label
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="{Binding Price, StringFormat='{0:c0}'}"
+                                        TextColor="{StaticResource OffWhiteColor}" />
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding ReceiteNumber, StringFormat='No: {0}'}" TextColor="{StaticResource PinkColor}" />
+                                    <Label
+                                        HorizontalOptions="EndAndExpand"
+                                        Text="{Binding ReceiteDate, StringFormat='D: {0:dd MMM}'}"
+                                        TextColor="{StaticResource PinkColor}" />
+                                </StackLayout>
+                            </StackLayout>
+
+                        </ViewCell>
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <!--<FlexLayout BindableLayout.ItemsSource="{Binding Histories}" Wrap="NoWrap">
+                </ListView.ItemTemplate>
+            </ListView>
+            <!--<FlexLayout BindableLayout.ItemsSource="{Binding Sports}" Wrap="NoWrap">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Orientation="Horizontal">

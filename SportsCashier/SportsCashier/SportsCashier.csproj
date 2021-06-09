@@ -44,6 +44,9 @@
     <Compile Update="Common\Styles\Fonts.xaml.cs">
       <DependentUpon>Fonts.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Template\PlayerDetailsContentView.xaml.cs">
+      <DependentUpon>PlayerDetailsContentView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Controls\EditableSportListItemContentView.xaml.cs">
       <DependentUpon>EditableSportListItemContentView.xaml</DependentUpon>
     </Compile>
@@ -74,7 +77,10 @@
     <EmbeddedResource Update="Common\Styles\ColorsStyle.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="PlayerDetailsView.xaml">
+    <EmbeddedResource Update="MembershipPlayersDetailView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Template\PlayerDetailsContentView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Controls\EditableSportListItemContentView.xaml">

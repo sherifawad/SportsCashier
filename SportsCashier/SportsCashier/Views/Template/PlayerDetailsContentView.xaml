@@ -1,44 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="SportsCashier.PlayerDetailsView"
+<ContentView
+    x:Class="SportsCashier.Views.Template.PlayerDetailsContentView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:PanCake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:Template="clr-namespace:SportsCashier.Views.Template"
     xmlns:backgroundKit="http://xamarin.com/schemas/2014/forms/background"
     xmlns:sh="http://sharpnado.com"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    BackgroundColor="{StaticResource OrangeColor}">
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
 
-    <ContentPage.Resources>
+    <ContentView.Resources>
         <ResourceDictionary>
 
-            <x:Double x:Key="TranslateEllipseAndLineY">270</x:Double>
+            <x:Double x:Key="TranslateEllipseAndLineY">160</x:Double>
 
             <Style x:Key="BarLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="{StaticResource FontSize14}" />
                 <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
             </Style>
+
             <Style x:Key="BarLaberStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="{StaticResource FontSize14}" />
                 <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
             </Style>
+
             <Style x:Key="DivisionLineStyle" TargetType="Line">
-                <Setter Property="TranslationY" Value="{StaticResource TranslateEllipseAndLineY}" />
-                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="TranslationY" Value="180" />
+                <Setter Property="VerticalOptions" Value="Start" />
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="StrokeDashArray" Value="1,6" />
-                <Setter Property="X2" Value="320" />
+                <Setter Property="X2" Value="220" />
                 <Setter Property="StrokeLineCap" Value="Square" />
                 <Setter Property="Stroke" Value="{StaticResource OrangeBrushColor}" />
                 <Setter Property="StrokeThickness" Value="3" />
             </Style>
             <Style x:Key="RoundedbordersStyle" TargetType="Ellipse">
-                <Setter Property="TranslationY" Value="{StaticResource TranslateEllipseAndLineY}" />
+                <Setter Property="TranslationY" Value="160" />
                 <Setter Property="Fill" Value="{StaticResource OrangeBrushColor}" />
                 <Setter Property="StrokeThickness" Value="0" />
                 <Setter Property="HeightRequest" Value="45" />
                 <Setter Property="WidthRequest" Value="45" />
+                <Setter Property="VerticalOptions" Value="Start" />
                 <Setter Property="Margin" Value="55,0" />
             </Style>
             <Style x:Key="CardStyle" TargetType="Frame">
@@ -54,12 +56,12 @@
                 <Template:PlayerHistoryContentView />
             </DataTemplate>
         </ResourceDictionary>
-    </ContentPage.Resources>
-    <ContentPage.Content>
+    </ContentView.Resources>
+    <ContentView.Content>
 
         <Grid
             HorizontalOptions="FillAndExpand"
-            RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
+            RowDefinitions="Auto"
             VerticalOptions="FillAndExpand">
 
 
@@ -77,27 +79,6 @@
                 Opacity=".6"
                 Source="BackgroundBubbles.webp"
                 VerticalOptions="FillAndExpand" />-->
-
-            <Label
-                Grid.Row="0"
-                HorizontalOptions="Start"
-                Style="{StaticResource BarLabelStyle}"
-                Text="&lt;" />
-            <Label
-                Grid.Row="0"
-                HorizontalOptions="End"
-                Style="{StaticResource BarLabelStyle}"
-                Text="1988/55" />
-            <Label
-                Grid.Row="1"
-                HorizontalOptions="Center"
-                Style="{StaticResource BarLaberStyle}"
-                Text="Your Ticket" />
-            <Label
-                Grid.Row="2"
-                HorizontalOptions="Center"
-                Style="{StaticResource BarLaberStyle}"
-                Text="Save Your text blue" />
 
             <!--<sh:Shadows
                 Grid.Row="3"
@@ -121,7 +102,9 @@
 
 
             <Frame
-                Grid.Row="3"
+                Grid.Row="0"
+                BorderColor="{StaticResource OrangeColor}"
+                HasShadow="True"
                 HeightRequest="400"
                 Style="{StaticResource CardStyle}">
 
@@ -157,12 +140,27 @@
                         </Image>
                     </Grid>
 
+                    <ImageButton
+                        Grid.Row="0"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="Center"
+                        TranslationX="-30"
+                        VerticalOptions="End">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                FontFamily="SolidAwesome"
+                                Glyph="&#xf044;"
+                                Size="{StaticResource FontSize20}"
+                                Color="{StaticResource SecondaryTextColor}" />
+                        </ImageButton.Source>
+                    </ImageButton>
+
                     <Label
                         Grid.Row="1"
                         FontAttributes="Bold"
                         FontSize="{StaticResource FontSize20}"
                         HorizontalOptions="Center"
-                        Text="{Binding MockPlayer.Name}"
+                        Text="{Binding Name}"
                         VerticalOptions="Center" />
 
                     <!--  Bookmark  -->
@@ -176,17 +174,19 @@
 
                         <Label
                             FontFamily="SolidAwesome"
-                            FontSize="{StaticResource FontSize42}"
+                            FontSize="{StaticResource FontSize48}"
                             HorizontalOptions="Center"
                             Text="&#xf02e;"
                             TextColor="{StaticResource OrangeColor}"
                             VerticalOptions="StartAndExpand"
                             VerticalTextAlignment="Start" />
                         <Label
-                            Margin="0,5,0,0"
-                            FontSize="{StaticResource FontSize12}"
+                            Margin="0,2,0,0"
+                            Padding="5"
+                            FontSize="{StaticResource FontSize13}"
                             HorizontalOptions="Center"
                             HorizontalTextAlignment="Center"
+                            LineBreakMode="CharacterWrap"
                             Text="12 Oct"
                             TextColor="{StaticResource WhiteColor}"
                             VerticalOptions="StartAndExpand"
@@ -214,7 +214,7 @@
                         Margin="0,15,0,0"
                         HeightRequest="150"
                         ItemTemplate="{StaticResource SportsTemplate}"
-                        ItemsSource="{Binding MockPlayer.Sports}">
+                        ItemsSource="{Binding Sports}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical" Span="2" />
                         </CollectionView.ItemsLayout>
@@ -238,6 +238,7 @@
                         HeightRequest="420"
                         RowDefinitions="Auto,*"
                         RowSpacing="0"
+                        TranslationY="400"
                         VerticalOptions="StartAndExpand">
                         <Button
                             Grid.Row="0"
@@ -257,7 +258,7 @@
                             BackgroundColor="{StaticResource OrangeColor}"
                             BorderColor="{StaticResource DarkBlueColor}"
                             HasShadow="True">
-                            <CollectionView ItemTemplate="{StaticResource PlayerHistoryTemplate}" ItemsSource="{Binding MockPlayer.Histories}" />
+                            <CollectionView ItemTemplate="{StaticResource PlayerHistoryTemplate}" ItemsSource="{Binding Histories}" />
                         </Frame>
                     </Grid>
                     <BoxView
@@ -280,6 +281,7 @@
                 Grid.Row="0"
                 HorizontalOptions="Start"
                 Style="{StaticResource RoundedbordersStyle}" />
+
             <Ellipse
                 Grid.Row="0"
                 HorizontalOptions="End"
@@ -293,5 +295,5 @@
 
         </Grid>
 
-    </ContentPage.Content>
-</ContentPage>
+    </ContentView.Content>
+</ContentView>

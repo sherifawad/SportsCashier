@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SportsCashier.MembershipPlayersDetailView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:SportsCashier.Views.Template"
+    BackgroundColor="{StaticResource OrangeColor}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BarLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource FontSize14}" />
+                <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+            </Style>
+            <DataTemplate x:Key="playerDetailsView">
+                <template:PlayerDetailsContentView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid
+            HorizontalOptions="FillAndExpand"
+            RowDefinitions="Auto, Auto, Auto, Auto"
+            VerticalOptions="FillAndExpand">
+            <Label
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                Style="{StaticResource BarLabelStyle}"
+                Text="&lt;" />
+            <Label
+                Grid.Row="0"
+                HorizontalOptions="End"
+                Style="{StaticResource BarLabelStyle}"
+                Text="1988/55" />
+            <Label
+                Grid.Row="1"
+                HorizontalOptions="Center"
+                Style="{StaticResource BarLabelStyle}"
+                Text="Your Ticket" />
+            <Label
+                Grid.Row="2"
+                HorizontalOptions="Center"
+                Style="{StaticResource BarLabelStyle}"
+                Text="Wooow" />
+
+            <CarouselView
+                Grid.Row="3"
+                IndicatorView="indicatorview"
+                ItemTemplate="{StaticResource playerDetailsView}"
+                ItemsSource="{Binding Players}">
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout
+                        ItemSpacing="0"
+                        Orientation="Horizontal"
+                        SnapPointsAlignment="Center"
+                        SnapPointsType="MandatorySingle" />
+                </CarouselView.ItemsLayout>
+
+            </CarouselView>
+
+            <IndicatorView
+                x:Name="indicatorview"
+                Grid.Row="3"
+                IndicatorColor="{StaticResource WhiteColor}"
+                IndicatorSize="{StaticResource FontSize12}"
+                SelectedIndicatorColor="{StaticResource DarkBlueColor}"
+                TranslationY="180"
+                VerticalOptions="CenterAndExpand" />
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>

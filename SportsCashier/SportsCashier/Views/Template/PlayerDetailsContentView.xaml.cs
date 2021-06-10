@@ -39,6 +39,11 @@ namespace SportsCashier.Views.Template
                 //CartPopupFade.IsVisible = false;
             }
         }
+
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

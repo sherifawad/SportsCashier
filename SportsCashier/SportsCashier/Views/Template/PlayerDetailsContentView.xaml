@@ -7,7 +7,8 @@
     xmlns:Template="clr-namespace:SportsCashier.Views.Template"
     xmlns:backgroundKit="http://xamarin.com/schemas/2014/forms/background"
     xmlns:sh="http://sharpnado.com"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="view">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -168,7 +169,28 @@
                         RowSpacing="0"
                         TranslationY="-23"
                         VerticalOptions="Start">
+                        <Grid.GestureRecognizers>
 
+                            <TapGestureRecognizer
+                                Command="{Binding Source={x:Reference view}, Path=BindingContext.BookmarkAlertCommand}"
+                                CommandParameter="{Binding AlertSport}"
+                                Tapped="TapGestureRecognizer_Tapped" />
+                        </Grid.GestureRecognizers>
+
+                        <!--<ImageButton
+                            BackgroundColor="Transparent"
+                            Command="{Binding BookmarkAlertCommand}"
+                            CommandParameter="{Binding AlertSport}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="StartAndExpand">
+                            <ImageButton.Source>
+                                <FontImageSource
+                                    FontFamily="SolidAwesome"
+                                    Glyph="&#xf02e;"
+                                    Size="{StaticResource FontSize48}"
+                                    Color="{StaticResource OrangeColor}" />
+                            </ImageButton.Source>
+                        </ImageButton>-->
                         <Label
                             FontFamily="SolidAwesome"
                             FontSize="{StaticResource FontSize48}"
@@ -184,7 +206,7 @@
                             HorizontalOptions="Center"
                             HorizontalTextAlignment="Center"
                             LineBreakMode="CharacterWrap"
-                            Text="12 Oct"
+                            Text="{Binding AlertSport.Alert, StringFormat='{0:dd MMM}'}"
                             TextColor="{StaticResource WhiteColor}"
                             VerticalOptions="StartAndExpand"
                             VerticalTextAlignment="Center"

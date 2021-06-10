@@ -40,10 +40,6 @@ namespace SportsCashier.Views.Template
             }
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-        {
-
-        }
     }
 
 }

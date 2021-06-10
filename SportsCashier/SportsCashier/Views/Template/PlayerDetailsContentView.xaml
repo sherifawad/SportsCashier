@@ -6,9 +6,9 @@
     xmlns:PanCake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:Template="clr-namespace:SportsCashier.Views.Template"
     xmlns:backgroundKit="http://xamarin.com/schemas/2014/forms/background"
+    xmlns:local="clr-namespace:SportsCashier"
     xmlns:sh="http://sharpnado.com"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    x:Name="view">
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -171,10 +171,7 @@
                         VerticalOptions="Start">
                         <Grid.GestureRecognizers>
 
-                            <TapGestureRecognizer
-                                Command="{Binding Source={x:Reference view}, Path=BindingContext.BookmarkAlertCommand}"
-                                CommandParameter="{Binding AlertSport}"
-                                Tapped="TapGestureRecognizer_Tapped" />
+                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type local:MembershipPlayersDetailView}}, Path=BindingContext.BookmarkAlertCommand}" CommandParameter="{Binding SportsToAlert}" />
                         </Grid.GestureRecognizers>
 
                         <!--<ImageButton

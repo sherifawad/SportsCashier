@@ -29,7 +29,7 @@
                 <Setter Property="VerticalOptions" Value="Start" />
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="StrokeDashArray" Value="1,6" />
-                <Setter Property="X2" Value="220" />
+                <Setter Property="X2" Value="520" />
                 <Setter Property="StrokeLineCap" Value="Square" />
                 <Setter Property="Stroke" Value="{StaticResource OrangeBrushColor}" />
                 <Setter Property="StrokeThickness" Value="3" />
@@ -41,13 +41,13 @@
                 <Setter Property="HeightRequest" Value="45" />
                 <Setter Property="WidthRequest" Value="45" />
                 <Setter Property="VerticalOptions" Value="Start" />
-                <Setter Property="Margin" Value="55,0" />
+                <Setter Property="Margin" Value="-7,0" />
             </Style>
             <Style x:Key="CardStyle" TargetType="Frame">
                 <Setter Property="BackgroundColor" Value="{StaticResource WhiteColor}" />
                 <Setter Property="CornerRadius" Value="30" />
                 <Setter Property="HasShadow" Value="True" />
-                <Setter Property="Margin" Value="80,0" />
+                <Setter Property="Margin" Value="20,0" />
             </Style>
             <DataTemplate x:Key="SportsTemplate">
                 <Template:PlayerDetailsSportsContentView />
@@ -59,10 +59,7 @@
     </ContentView.Resources>
     <ContentView.Content>
 
-        <Grid
-            HorizontalOptions="FillAndExpand"
-            RowDefinitions="Auto"
-            VerticalOptions="FillAndExpand">
+        <Grid RowDefinitions="Auto">
 
 
             <!--<BoxView

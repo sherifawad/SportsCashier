@@ -46,7 +46,9 @@
                 Grid.Row="3"
                 IndicatorView="indicatorview"
                 ItemTemplate="{StaticResource playerDetailsView}"
-                ItemsSource="{Binding Players}">
+                ItemsSource="{Binding Players}"
+                Loop="False"
+                PeekAreaInsets="50">
                 <CarouselView.ItemsLayout>
                     <LinearItemsLayout
                         ItemSpacing="0"
@@ -67,6 +69,5 @@
                 VerticalOptions="CenterAndExpand" />
 
         </Grid>
-
     </ContentPage.Content>
 </ContentPage>

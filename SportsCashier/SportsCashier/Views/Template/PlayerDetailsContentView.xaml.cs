@@ -13,6 +13,8 @@ namespace SportsCashier.Views.Template
         public PlayerDetailsContentView()
         {
             InitializeComponent();
+            // Close the swip on parent carousle view swipe
+            MessagingCenter.Subscribe<string>("App", "Close", (x) => swipView.Close());
         }
 
         private void historyBtn_Clicked(object sender, EventArgs e)

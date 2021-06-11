@@ -44,6 +44,7 @@
 
             <CarouselView
                 Grid.Row="3"
+                CurrentItemChanged="OnCurrentItemChanged"
                 IndicatorView="indicatorview"
                 ItemTemplate="{StaticResource playerDetailsView}"
                 ItemsSource="{Binding Players}"

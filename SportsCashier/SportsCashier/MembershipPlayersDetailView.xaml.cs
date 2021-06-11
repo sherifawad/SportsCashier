@@ -253,6 +253,8 @@ namespace SportsCashier
             }
 
         };
+
+        private void OnCurrentItemChanged(object sender, CurrentItemChangedEventArgs e) => MessagingCenter.Send<string>("App", "Close");
     }
 
 

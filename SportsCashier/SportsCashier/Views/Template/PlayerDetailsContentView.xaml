@@ -50,6 +50,27 @@
                 <Setter Property="HasShadow" Value="True" />
                 <Setter Property="Margin" Value="20,0" />
             </Style>
+
+            <Style x:Key="CollectionSwipeSelectedStyle" TargetType="SwipeView">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStatesSwipe">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="LightGray" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+
             <DataTemplate x:Key="SportsTemplate">
                 <Template:PlayerDetailsSportsContentView />
             </DataTemplate>
@@ -58,12 +79,41 @@
             </DataTemplate>
         </ResourceDictionary>
     </ContentView.Resources>
+
+
     <ContentView.Content>
+        <SwipeView x:Name="swipView">
+            <SwipeView.TopItems>
+                <SwipeItems>
+                    <SwipeItemView>
+                        <StackLayout
+                            Margin="10"
+                            HorizontalOptions="CenterAndExpand"
+                            Orientation="Horizontal">
+                            <Button
+                                BackgroundColor="{StaticResource DarkBlueColor}"
+                                CornerRadius="20"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="Edit"
+                                TextColor="{StaticResource WhiteColor}" />
+                            <Button
+                                BackgroundColor="Red"
+                                CornerRadius="20"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="Hide"
+                                TextColor="{StaticResource WhiteColor}" />
 
-        <Grid RowDefinitions="Auto">
+                        </StackLayout>
+
+                    </SwipeItemView>
+                </SwipeItems>
+            </SwipeView.TopItems>
+            <Grid RowDefinitions="Auto">
 
 
-            <!--<BoxView
+                <!--<BoxView
                 Grid.Row="0"
                 Grid.RowSpan="6"
                 HorizontalOptions="FillAndExpand"
@@ -78,7 +128,7 @@
                 Source="BackgroundBubbles.webp"
                 VerticalOptions="FillAndExpand" />-->
 
-            <!--<sh:Shadows
+                <!--<sh:Shadows
                 Grid.Row="3"
                 Margin="48,0"
                 CornerRadius="30"
@@ -99,82 +149,82 @@
             </sh:Shadows>-->
 
 
-            <Frame
-                Grid.Row="0"
-                BorderColor="{StaticResource OrangeColor}"
-                HasShadow="True"
-                HeightRequest="400"
-                Style="{StaticResource CardStyle}">
+                <Frame
+                    Grid.Row="0"
+                    BorderColor="{StaticResource OrangeColor}"
+                    HasShadow="True"
+                    HeightRequest="400"
+                    Style="{StaticResource CardStyle}">
 
-                <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto">
 
 
-                    <!--  Profile Circle Image  -->
+                        <!--  Profile Circle Image  -->
 
-                    <Grid Grid.Row="0">
-                        <Ellipse
+                        <Grid Grid.Row="0">
+                            <Ellipse
+                                Grid.Row="0"
+                                Fill="{StaticResource WhiteBrushColor}"
+                                HeightRequest="120"
+                                HorizontalOptions="Center"
+                                Stroke="{StaticResource OrangeBrushColor}"
+                                StrokeThickness="4"
+                                VerticalOptions="Center"
+                                WidthRequest="120" />
+                            <Image
+                                Grid.Row="0"
+                                Aspect="Fill"
+                                HeightRequest="100"
+                                HorizontalOptions="Center"
+                                Source="BackgroundBubbles.webp"
+                                VerticalOptions="Center"
+                                WidthRequest="100">
+                                <Image.Clip>
+                                    <EllipseGeometry
+                                        Center="50,50"
+                                        RadiusX="50"
+                                        RadiusY="50" />
+                                </Image.Clip>
+                            </Image>
+                        </Grid>
+
+                        <ImageButton
                             Grid.Row="0"
-                            Fill="{StaticResource WhiteBrushColor}"
-                            HeightRequest="120"
+                            BackgroundColor="Transparent"
                             HorizontalOptions="Center"
-                            Stroke="{StaticResource OrangeBrushColor}"
-                            StrokeThickness="4"
-                            VerticalOptions="Center"
-                            WidthRequest="120" />
-                        <Image
-                            Grid.Row="0"
-                            Aspect="Fill"
-                            HeightRequest="100"
+                            TranslationX="-30"
+                            VerticalOptions="End">
+                            <ImageButton.Source>
+                                <FontImageSource
+                                    FontFamily="SolidAwesome"
+                                    Glyph="&#xf044;"
+                                    Size="{StaticResource FontSize20}"
+                                    Color="{StaticResource SecondaryTextColor}" />
+                            </ImageButton.Source>
+                        </ImageButton>
+
+                        <Label
+                            Grid.Row="1"
+                            FontAttributes="Bold"
+                            FontSize="{StaticResource FontSize20}"
                             HorizontalOptions="Center"
-                            Source="BackgroundBubbles.webp"
-                            VerticalOptions="Center"
-                            WidthRequest="100">
-                            <Image.Clip>
-                                <EllipseGeometry
-                                    Center="50,50"
-                                    RadiusX="50"
-                                    RadiusY="50" />
-                            </Image.Clip>
-                        </Image>
-                    </Grid>
+                            Text="{Binding Name}"
+                            VerticalOptions="Center" />
 
-                    <ImageButton
-                        Grid.Row="0"
-                        BackgroundColor="Transparent"
-                        HorizontalOptions="Center"
-                        TranslationX="-30"
-                        VerticalOptions="End">
-                        <ImageButton.Source>
-                            <FontImageSource
-                                FontFamily="SolidAwesome"
-                                Glyph="&#xf044;"
-                                Size="{StaticResource FontSize20}"
-                                Color="{StaticResource SecondaryTextColor}" />
-                        </ImageButton.Source>
-                    </ImageButton>
+                        <!--  Bookmark  -->
 
-                    <Label
-                        Grid.Row="1"
-                        FontAttributes="Bold"
-                        FontSize="{StaticResource FontSize20}"
-                        HorizontalOptions="Center"
-                        Text="{Binding Name}"
-                        VerticalOptions="Center" />
+                        <Grid
+                            x:Name="bookmarkGrid"
+                            HorizontalOptions="End"
+                            RowSpacing="0"
+                            TranslationY="-23"
+                            VerticalOptions="Start">
+                            <Grid.GestureRecognizers>
 
-                    <!--  Bookmark  -->
+                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type local:MembershipPlayersDetailView}}, Path=BindingContext.BookmarkAlertCommand}" CommandParameter="{Binding SportsToAlert}" />
+                            </Grid.GestureRecognizers>
 
-                    <Grid
-                        x:Name="bookmarkGrid"
-                        HorizontalOptions="End"
-                        RowSpacing="0"
-                        TranslationY="-23"
-                        VerticalOptions="Start">
-                        <Grid.GestureRecognizers>
-
-                            <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type local:MembershipPlayersDetailView}}, Path=BindingContext.BookmarkAlertCommand}" CommandParameter="{Binding SportsToAlert}" />
-                        </Grid.GestureRecognizers>
-
-                        <!--<ImageButton
+                            <!--<ImageButton
                             BackgroundColor="Transparent"
                             Command="{Binding BookmarkAlertCommand}"
                             CommandParameter="{Binding AlertSport}"
@@ -188,29 +238,29 @@
                                     Color="{StaticResource OrangeColor}" />
                             </ImageButton.Source>
                         </ImageButton>-->
-                        <Label
-                            FontFamily="SolidAwesome"
-                            FontSize="{StaticResource FontSize48}"
-                            HorizontalOptions="Center"
-                            Text="&#xf02e;"
-                            TextColor="{StaticResource OrangeColor}"
-                            VerticalOptions="StartAndExpand"
-                            VerticalTextAlignment="Start" />
-                        <Label
-                            Margin="0,2,0,0"
-                            Padding="5"
-                            FontSize="{StaticResource FontSize13}"
-                            HorizontalOptions="Center"
-                            HorizontalTextAlignment="Center"
-                            LineBreakMode="CharacterWrap"
-                            Text="{Binding AlertSport.Alert, StringFormat='{0:dd MMM}'}"
-                            TextColor="{StaticResource WhiteColor}"
-                            VerticalOptions="StartAndExpand"
-                            VerticalTextAlignment="Center"
-                            WidthRequest="40" />
-                    </Grid>
+                            <Label
+                                FontFamily="SolidAwesome"
+                                FontSize="{StaticResource FontSize48}"
+                                HorizontalOptions="Center"
+                                Text="&#xf02e;"
+                                TextColor="{StaticResource OrangeColor}"
+                                VerticalOptions="StartAndExpand"
+                                VerticalTextAlignment="Start" />
+                            <Label
+                                Margin="0,2,0,0"
+                                Padding="5"
+                                FontSize="{StaticResource FontSize13}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                LineBreakMode="CharacterWrap"
+                                Text="{Binding AlertSport.Alert, StringFormat='{0:dd MMM}'}"
+                                TextColor="{StaticResource WhiteColor}"
+                                VerticalOptions="StartAndExpand"
+                                VerticalTextAlignment="Center"
+                                WidthRequest="40" />
+                        </Grid>
 
-                    <!--<StackLayout
+                        <!--<StackLayout
                         Grid.Row="2"
                         Margin="0,10,0,0"
                         HorizontalOptions="CenterAndExpand"
@@ -225,91 +275,91 @@
                             TextColor="{StaticResource OrangeColor}" />
                     </StackLayout>-->
 
-                    <CollectionView
-                        Grid.Row="2"
-                        Margin="0,15,0,0"
-                        HeightRequest="150"
-                        ItemTemplate="{StaticResource SportsTemplate}"
-                        ItemsSource="{Binding Sports}">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical" Span="2" />
-                        </CollectionView.ItemsLayout>
-                    </CollectionView>
+                        <CollectionView
+                            Grid.Row="2"
+                            Margin="0,15,0,0"
+                            HeightRequest="150"
+                            ItemTemplate="{StaticResource SportsTemplate}"
+                            ItemsSource="{Binding Sports}">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="2" />
+                            </CollectionView.ItemsLayout>
+                        </CollectionView>
 
-                    <Image
-                        Grid.Row="3"
-                        Aspect="AspectFill"
-                        HeightRequest="30"
-                        Source="Barcode.png"
-                        VerticalOptions="Center" />
+                        <Image
+                            Grid.Row="3"
+                            Aspect="AspectFill"
+                            HeightRequest="30"
+                            Source="Barcode.png"
+                            VerticalOptions="Center" />
 
 
-                    <Grid
-                        x:Name="historyGrid"
-                        Grid.Row="0"
-                        Grid.RowSpan="5"
-                        Margin="0,-20,0,0"
-                        ColumnDefinitions="*,Auto,*"
-                        ColumnSpacing="0"
-                        HeightRequest="420"
-                        RowDefinitions="Auto,*"
-                        RowSpacing="0"
-                        TranslationY="400"
-                        VerticalOptions="StartAndExpand">
-                        <Button
+                        <Grid
+                            x:Name="historyGrid"
                             Grid.Row="0"
-                            Grid.Column="1"
-                            BackgroundColor="{StaticResource OrangeColor}"
-                            Clicked="historyBtn_Clicked"
-                            FontSize="{StaticResource FontSize12}"
-                            HeightRequest="40"
-                            HorizontalOptions="CenterAndExpand"
-                            Text="History"
-                            TextColor="{StaticResource WhiteColor}"
-                            WidthRequest="90" />
-                        <Frame
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            BackgroundColor="{StaticResource OrangeColor}"
-                            BorderColor="{StaticResource DarkBlueColor}"
-                            HasShadow="True">
-                            <CollectionView ItemTemplate="{StaticResource PlayerHistoryTemplate}" ItemsSource="{Binding Histories}" />
-                        </Frame>
+                            Grid.RowSpan="5"
+                            Margin="0,-20,0,0"
+                            ColumnDefinitions="*,Auto,*"
+                            ColumnSpacing="0"
+                            HeightRequest="420"
+                            RowDefinitions="Auto,*"
+                            RowSpacing="0"
+                            TranslationY="400"
+                            VerticalOptions="StartAndExpand">
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource OrangeColor}"
+                                Clicked="historyBtn_Clicked"
+                                FontSize="{StaticResource FontSize12}"
+                                HeightRequest="40"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="History"
+                                TextColor="{StaticResource WhiteColor}"
+                                WidthRequest="90" />
+                            <Frame
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                BackgroundColor="{StaticResource OrangeColor}"
+                                BorderColor="{StaticResource DarkBlueColor}"
+                                HasShadow="True">
+                                <CollectionView ItemTemplate="{StaticResource PlayerHistoryTemplate}" ItemsSource="{Binding Histories}" />
+                            </Frame>
+                        </Grid>
+                        <BoxView
+                            x:Name="CartPopupFade"
+                            Grid.Row="0"
+                            Grid.RowSpan="5"
+                            Margin="0,-27,0,0"
+                            BackgroundColor="#AA000000"
+                            HeightRequest="360"
+                            IsVisible="false"
+                            Opacity="0"
+                            TranslationY="45" />
+
                     </Grid>
-                    <BoxView
-                        x:Name="CartPopupFade"
-                        Grid.Row="0"
-                        Grid.RowSpan="5"
-                        Margin="0,-27,0,0"
-                        BackgroundColor="#AA000000"
-                        HeightRequest="360"
-                        IsVisible="false"
-                        Opacity="0"
-                        TranslationY="45" />
-
-                </Grid>
 
 
-            </Frame>
+                </Frame>
 
-            <Ellipse
-                Grid.Row="0"
-                HorizontalOptions="Start"
-                Style="{StaticResource RoundedbordersStyle}" />
+                <Ellipse
+                    Grid.Row="0"
+                    HorizontalOptions="Start"
+                    Style="{StaticResource RoundedbordersStyle}" />
 
-            <Ellipse
-                Grid.Row="0"
-                HorizontalOptions="End"
-                Style="{StaticResource RoundedbordersStyle}" />
+                <Ellipse
+                    Grid.Row="0"
+                    HorizontalOptions="End"
+                    Style="{StaticResource RoundedbordersStyle}" />
 
-            <Line
-                Grid.Row="0"
-                Margin="15,0"
-                Style="{StaticResource DivisionLineStyle}" />
+                <Line
+                    Grid.Row="0"
+                    Margin="15,0"
+                    Style="{StaticResource DivisionLineStyle}" />
 
 
-        </Grid>
-
+            </Grid>
+        </SwipeView>
     </ContentView.Content>
 </ContentView>

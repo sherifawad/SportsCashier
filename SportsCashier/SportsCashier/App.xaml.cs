@@ -13,9 +13,6 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-[assembly: ExportFont("fa-regular-400.ttf", Alias = "RegularAwesome")]
-[assembly: ExportFont("fa-solid-900.ttf", Alias = "SolidAwesome")]
-[assembly: ExportFont("fa-brands-400.ttf", Alias = "BrandsAwesome")]
 namespace SportsCashier
 {
     public partial class App : Application
@@ -37,7 +34,8 @@ namespace SportsCashier
             DependencyService.Register<IGenericDbRepository<PlayerSport>, GenericDbRepository<PlayerSport>>();
             DependencyService.Register<IGenericDbRepository<PlayerModel>, GenericDbRepository<PlayerModel>>();
             DependencyService.Register<IGenericDbRepository<Sport>, GenericDbRepository<Sport>>();
-            MainPage = new MembershipPlayersDetailView();
+            //MainPage = new MembershipPlayersDetailView();
+            MainPage = new EditPlayerDetailsView();
             //MainPage = new AppShell();
         }
         private async Task AddSports()

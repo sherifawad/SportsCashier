@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="SportsCashier.Views.Template.EditHistoryContentView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+
+    <ContentView.Content>
+        <!--<CollectionView
+            BackgroundColor="Red"
+            ItemsSource="{Binding MockPlayer.Histories}"
+            VerticalOptions="Start">-->
+        <!--<CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="12,12,12,0">
+                        <Label
+                            FontSize="Medium"
+                            Text="{Binding Date}"
+                            TextColor="{StaticResource BlackColor}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>-->
+        <!--<CollectionView.ItemTemplate>
+                <DataTemplate>-->
+
+        <!--  Content  -->
+
+        <Grid RowDefinitions="Auto,*">
+            <Label
+                FontAttributes="Bold"
+                FontSize="{StaticResource FontSize18}"
+                Text="{Binding Date, StringFormat='{0: MMMM yyyy}'}"
+                TextColor="{StaticResource DarkBlackColor}" />
+            <CollectionView
+                Grid.Row="1"
+                HeightRequest="380"
+                ItemsSource="{Binding Sports}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Padding="0"
+                            BorderColor="{StaticResource WhiteBlueColor}"
+                            CornerRadius="30"
+                            HasShadow="True">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem BackgroundColor="{StaticResource YellowColor}" Text="Edit">
+                                            <SwipeItem.IconImageSource>
+                                                <FontImageSource
+                                                    FontFamily="IconFont"
+                                                    Glyph="&#xeded;"
+                                                    Color="{StaticResource WhiteColor}" />
+                                            </SwipeItem.IconImageSource>
+                                        </SwipeItem>
+                                        <SwipeItem BackgroundColor="{StaticResource PinkColor}" Text="Delete">
+                                            <SwipeItem.IconImageSource>
+                                                <FontImageSource
+                                                    FontFamily="IconFont"
+                                                    Glyph="&#xec53;"
+                                                    Color="{StaticResource WhiteColor}" />
+                                            </SwipeItem.IconImageSource>
+                                        </SwipeItem>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Grid
+                                    Margin="0,5,0,5"
+                                    BackgroundColor="{StaticResource WhiteColor}"
+                                    ColumnDefinitions="*,*,*"
+                                    ColumnSpacing="0"
+                                    RowDefinitions="*,*,*"
+                                    RowSpacing="0">
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Aspect="AspectFit"
+                                        Source="location00.png" />
+
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="{StaticResource FontSize18}"
+                                        Text="{Binding Name}"
+                                        TextColor="{StaticResource DarkBlackColor}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        FontSize="{StaticResource FontSize16}"
+                                        Text="{Binding ReceiteNumber}"
+                                        TextColor="{StaticResource DarkBlueColor}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Text="{Binding ReceiteDate, StringFormat='{0: dd MMM}'}"
+                                        TextColor="{StaticResource SecondaryTextColor}" />
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="3"
+                                        FontAttributes="Bold"
+                                        FontSize="{StaticResource FontSize16}"
+                                        Text="{Binding Price, StringFormat='{0:c}'}"
+                                        TextColor="{StaticResource DarkBlueColor}" />
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.Column="3"
+                                        Text="{Binding Discount, StringFormat='Disc:{0}%'}"
+                                        TextColor="{StaticResource SecondaryTextColor}" />
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnFrameTapped" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </SwipeView>
+                        </Frame>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!--</DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
+    </ContentView.Content>
+</ContentView>

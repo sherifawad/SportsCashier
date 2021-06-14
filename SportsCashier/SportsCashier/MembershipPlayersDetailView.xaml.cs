@@ -337,6 +337,7 @@ namespace SportsCashier
         private DateTime receiteDate;
 
         public string Name { get; set; }
+        public double Discount { get; set; }
         public double Price { get; set; }
         public int ReceiteNumber { get; set; }
         public DateTime ReceiteDate
@@ -414,5 +415,14 @@ namespace SportsCashier
             }
         }
 
+    }
+
+    public class HistoryGroup
+    {
+        public HistoryGroup(List<History> histories)
+        {
+            Histories = histories;
+        }
+        public List<History> Histories { get; set; }
     }
 }

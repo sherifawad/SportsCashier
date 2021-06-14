@@ -3,11 +3,15 @@
     x:Class="SportsCashier.EditPlayerDetailsView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:template="clr-namespace:SportsCashier.Views.Template"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
 
     <ContentPage.Resources>
         <ResourceDictionary>
 
+            <DataTemplate x:Key="HistoryCollectionTemplate">
+                <template:EditHistoryContentView />
+            </DataTemplate>
             <ControlTemplate x:Key="TabItemTemplate">
                 <Grid
                     Padding="10"
@@ -30,6 +34,7 @@
                         IsVisible="{TemplateBinding IsSelected}"
                         VerticalOptions="FillAndExpand">
                         <Label
+                            Padding="-5"
                             FontAttributes="Bold"
                             FontSize="{StaticResource FontSize14}"
                             HorizontalOptions="Center"
@@ -149,12 +154,12 @@
                 <xct:TabViewItem
                     Margin="30,0,-15,0"
                     ControlTemplate="{StaticResource TabItemTemplate}"
-                    Text="Tab 1">
-                    <Grid BackgroundColor="LawnGreen">
-                        <Label
-                            HorizontalOptions="Center"
-                            Text="TabContent1"
-                            VerticalOptions="Center" />
+                    Text="Sports">
+                    <Grid BackgroundColor="{StaticResource WhiteColor}">
+                        <CollectionView
+                            Margin="30,0"
+                            ItemsSource="{Binding MockPlayer.Sports}"
+                            TranslationY="100" />
                     </Grid>
                 </xct:TabViewItem>
                 <!--<xct:TabViewItem
@@ -166,12 +171,13 @@
                 <xct:TabViewItem
                     Margin="-15,0,30,0"
                     ControlTemplate="{StaticResource TabItemTemplate}"
-                    Text="Tab 2">
-                    <Grid BackgroundColor="LightCoral">
-                        <Label
-                            HorizontalOptions="Center"
-                            Text="TabContent3"
-                            VerticalOptions="Center" />
+                    Text="Histories">
+                    <Grid BackgroundColor="{StaticResource WhiteBlueColor}">
+                        <CollectionView
+                            Margin="30,0"
+                            ItemTemplate="{StaticResource HistoryCollectionTemplate}"
+                            ItemsSource="{Binding MockPlayer.Histories}"
+                            TranslationY="100" />
                     </Grid>
                 </xct:TabViewItem>
             </xct:TabView>

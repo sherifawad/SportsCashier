@@ -14,13 +14,16 @@ namespace SportsCashier
     public partial class EditSportHistoryPopup : Popup<MockSportModel>, INotifyPropertyChanged
     {
         public MockSportModel MockSportModel { get; private set; }
-        public ObservableCollection<SportsData> items { get; set; } = new ObservableCollection<SportsData>();
-
         public EditSportHistoryPopup(MockSportModel mockSportModel)
         {
             InitializeComponent();
             MockSportModel = mockSportModel;
             BindingContext = this;
+            if (mockSportModel == default)
+                return;
+            var matchsport = SportsData.GetSpoertsData.FirstOrDefault(x => x.Code == mockSportModel.code);
+            if (matchsport != null)
+                dmSuggestBox.PlaceholderText = matchsport.NamePath;
         }
 
         private void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
@@ -87,7 +90,7 @@ namespace SportsCashier
 
         private void OnSuggestBoxTextChanged(object sender, AutoSuggestBoxTextChangedEventArgs e)
         {
-            if (e.CheckCurrent())
+            if (e.CheckCurrent() && (sender as AutoSuggestBox).Text.Length >= 3)
             {
                 var term = (sender as AutoSuggestBox).Text.ToLower();
                 var results = SportsData.GetSpoertsData.Where(i => i.Name.ToLower().Contains(term)).ToList();

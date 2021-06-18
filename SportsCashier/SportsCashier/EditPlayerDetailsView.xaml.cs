@@ -43,16 +43,16 @@ namespace SportsCashier
             Sports = new List<MockSportModel>
             {
                 new MockSportModel {
-                    Name = "FootBall", Price = 150
+                    Name = "FootBall", Price = 150, code = 5000300
                 } ,
                 new MockSportModel {
-                    Name = "HandBall", Price = 150
+                    Name = "HandBall", Price = 150, code = 5000900
                 } ,
                 new MockSportModel {
-                    Name = "Swimming", Price = 250
+                    Name = "Swimming", Price = 250, code = 5002103
                 } ,
                 new MockSportModel {
-                    Name = "BasketBall", Price = 150
+                    Name = "BasketBall", Price = 150, code = 5000500
                 }
             },
             Histories = new List<History>
@@ -63,16 +63,16 @@ namespace SportsCashier
                     Sports = new List<MockSportModel>
                     {
                         new MockSportModel {
-                            Name = "FootBall", Price = 135, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=1003
+                            Name = "FootBall", Price = 135, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=1003, code = 5000300, Discount = 10
                         } ,
                         new MockSportModel {
-                            Name = "HandBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=1004
+                            Name = "HandBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=1004, code = 5000900, Discount = 0
                         } ,
                         new MockSportModel {
-                            Name = "Swimming", Price = 200, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(1), ReceiteNumber=1500
+                            Name = "Swimming", Price = 200, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(1), ReceiteNumber=1500, code = 5002103, Discount = 20
                         } ,
                         new MockSportModel {
-                            Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1), ReceiteNumber=0023
+                            Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1), ReceiteNumber=0023, code = 5000500, Discount = 0
                         }
                     }
                 },
@@ -82,10 +82,10 @@ namespace SportsCashier
                     Sports = new List<MockSportModel>
                     {
                         new MockSportModel {
-                            Name = "Swimming", Price = 225, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=1523
+                            Name = "Swimming", Price = 225, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=1523, code = 5002102, Discount = 10
                         } ,
                         new MockSportModel {
-                            Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(9), ReceiteNumber=0003
+                            Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(9), ReceiteNumber=0003, code = 5000500, Discount = 0
                         }
                     }
                 },

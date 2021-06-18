@@ -1,8 +1,12 @@
-﻿using System;
+﻿using SportsCashier.Models;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -13,16 +17,23 @@ namespace SportsCashier
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditPlayerDetailsView : ContentPage
     {
-        public ObservableRangeCollection<Grouping<string, HistoryGroup>> Histories { get; set; }
-
+        public IAsyncCommand<MockSportModel> SportHistoryEditCommand { get;}
         public EditPlayerDetailsView()
         {
             InitializeComponent();
-            Histories = new ObservableRangeCollection<Grouping<string, HistoryGroup>>();
-            var pelPicks = new Grouping<string, HistoryGroup>("Date", new[] { new HistoryGroup(MockPlayer.Histories.OrderBy(x => x.Date).ToList()) });
-            Histories.Add(new[] { pelPicks });
+            //Histories = new ObservableRangeCollection<Grouping<string, HistoryGroup>>();
+            //var pelPicks = new Grouping<string, HistoryGroup>("Date", new[] { new HistoryGroup(MockPlayer.Histories.OrderBy(x => x.Date).ToList()) });
+            //Histories.Add(new[] { pelPicks });
             BindingContext = this;
+            SportHistoryEditCommand = new AsyncCommand<MockSportModel>(SportHistoryEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
         }
+
+        private async Task SportHistoryEditAsync(MockSportModel arg)
+        {
+            var sportHistoryPopup = new EditSportHistoryPopup(arg);
+            await Navigation.ShowPopupAsync(sportHistoryPopup);
+        }
+
         void OnFabTabTapped(object? sender, TabTappedEventArgs e) => DisplayAlert("FabTabGallery", "Tab Tapped.", "Ok");
 
 

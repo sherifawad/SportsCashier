@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    x:Class="SportsCashier.EditSportHistoryPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dm="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
+    xmlns:model="clr-namespace:SportsCashier.Models"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:TypeArguments="model:MockSportModel"
+    Size="300, 300">
+    <xct:Popup.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SportLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontSize" Value="{StaticResource FontSize16}" />
+                <Setter Property="TextColor" Value="{StaticResource DarkBlueColor}" />
+            </Style>
+
+            <Style x:Key="SportEntry" TargetType="Entry">
+                <Setter Property="FontSize" Value="{StaticResource FontSize16}" />
+                <Setter Property="TextColor" Value="{StaticResource SecondaryTextColor}" />
+            </Style>
+        </ResourceDictionary>
+    </xct:Popup.Resources>
+
+    <Grid
+        Padding="20,20,20,0"
+        BackgroundColor="{StaticResource WhiteColor}"
+        ColumnDefinitions="1*,2*"
+        ColumnSpacing="0"
+        HorizontalOptions="Center"
+        RowDefinitions="*,*,*,*,*,*">
+
+        <Image
+            Grid.Row="0"
+            Grid.Column="0"
+            Aspect="AspectFit"
+            HorizontalOptions="Start"
+            Source="location00.png" />
+
+        <dm:AutoSuggestBox
+            x:Name="dmSuggestBox"
+            Grid.Row="0"
+            Grid.Column="1"
+            DisplayMemberPath="NamePath"
+            Focused="OnSuggestBoxFocused"
+            PlaceholderText="Sport"
+            SuggestionChosen="OnSuggestBoxSuggestionChosen"
+            TextChanged="OnSuggestBoxTextChanged"
+            TextMemberPath="Name" />
+
+        <!--<Entry
+            Grid.Row="0"
+            Grid.Column="1"
+            Style="{StaticResource SportEntry}"
+            Text="{Binding MockSportModel.Name}" />-->
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource SportLabel}"
+            Text="Receite Number" />
+        <Entry
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource SportEntry}"
+            Text="{Binding MockSportModel.ReceiteNumber}" />
+
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Style="{StaticResource SportLabel}"
+            Text="Receite Date" />
+        <DatePicker
+            Grid.Row="2"
+            Grid.Column="1"
+            Date="{Binding MockSportModel.ReceiteDate, StringFormat='{0: dd MMM}'}"
+            HorizontalOptions="FillAndExpand"
+            TextColor="{StaticResource SecondaryTextColor}" />
+
+        <Label
+            Grid.Row="3"
+            Grid.Column="0"
+            Style="{StaticResource SportLabel}"
+            Text="Price" />
+        <Entry
+            Grid.Row="3"
+            Grid.Column="1"
+            Style="{StaticResource SportEntry}"
+            Text="{Binding MockSportModel.Price}" />
+
+        <Label
+            Grid.Row="4"
+            Grid.Column="0"
+            Style="{StaticResource SportLabel}"
+            Text="{Binding Source={x:Reference discountSlider}, Path=Value, StringFormat='Discount: {0}%'}" />
+        <Slider
+            x:Name="discountSlider"
+            Grid.Row="4"
+            Grid.Column="1"
+            HorizontalOptions="FillAndExpand"
+            Maximum="20"
+            MaximumTrackColor="{StaticResource SecondaryTextColor}"
+            Minimum="0"
+            MinimumTrackColor="{StaticResource DarkBlueColor}"
+            ValueChanged="OnSliderValueChanged"
+            Value="{Binding MockSportModel.Discount}" />
+
+        <Button
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Clicked="OnSaveBtnClicked"
+            HorizontalOptions="Center"
+            Text="Save"
+            TextColor="{StaticResource BlackColor}" />
+    </Grid>
+</xct:Popup>

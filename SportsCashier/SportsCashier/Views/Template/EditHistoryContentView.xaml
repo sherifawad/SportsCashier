@@ -2,7 +2,9 @@
 <ContentView
     x:Class="SportsCashier.Views.Template.EditHistoryContentView"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
+    xmlns:local="clr-namespace:SportsCashier">
 
 
     <ContentView.Content>
@@ -32,6 +34,7 @@
                 Text="{Binding Date, StringFormat='{0: MMMM yyyy}'}"
                 TextColor="{StaticResource DarkBlackColor}" />
             <CollectionView
+                x:Name="sportsCollectionView"
                 Grid.Row="1"
                 HeightRequest="380"
                 ItemsSource="{Binding Sports}">
@@ -48,11 +51,15 @@
                             <SwipeView>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
-                                        <SwipeItem BackgroundColor="{StaticResource YellowColor}" Text="Edit">
+                                        <SwipeItem
+                                            BackgroundColor="{StaticResource YellowColor}"
+                                            Command="{Binding Source={x:RelativeSource AncestorType={x:Type local:EditPlayerDetailsView}}, Path=BindingContext.SportHistoryEditCommand}"
+                                            CommandParameter="{Binding .}"
+                                            Text="Edit">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource
                                                     FontFamily="IconFont"
-                                                    Glyph="&#xeded;"
+                                                    Glyph="{x:Static helpers:IconFont.IcofontUiEdit}"
                                                     Color="{StaticResource WhiteColor}" />
                                             </SwipeItem.IconImageSource>
                                         </SwipeItem>
@@ -60,7 +67,7 @@
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource
                                                     FontFamily="IconFont"
-                                                    Glyph="&#xec53;"
+                                                    Glyph="{x:Static helpers:IconFont.IcofontUiDelete}"
                                                     Color="{StaticResource WhiteColor}" />
                                             </SwipeItem.IconImageSource>
                                         </SwipeItem>

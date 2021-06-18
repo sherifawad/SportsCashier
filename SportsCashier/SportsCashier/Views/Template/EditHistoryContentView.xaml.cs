@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -23,5 +24,6 @@ namespace SportsCashier.Views.Template
             if(parent is SwipeView swipeView)
                 swipeView.Open(OpenSwipeItem.RightItems);
         }
+
     }
 }

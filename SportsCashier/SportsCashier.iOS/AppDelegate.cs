@@ -25,6 +25,7 @@ namespace SportsCashier.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             Sharpnado.Shades.iOS.iOSShadowsRenderer.Initialize();
+            Xamarin.RisePlugin.AutoCompleteTextView.iOS.AutoCompleteTextViewRenderer.Init();
             XamarinBackgroundKit.iOS.BackgroundKit.Init();
             LoadApplication(new App());
 

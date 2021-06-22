@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace SportsCashier.Models
@@ -6,8 +8,8 @@ namespace SportsCashier.Models
     public class MockPlayerData
     {
         public string Name { get; set; }
-        public List<MockSportModel> Sports { get; set; } = new List<MockSportModel>();
-        public List<History> Histories { get; set; } = new List<History>();
+        public ObservableCollection<MockSportModel> Sports { get; set; } = new ObservableCollection<MockSportModel>();
+        public ObservableCollection<History> Histories { get; set; } = new ObservableCollection<History>();
 
         public List<MockSportModel> SportsToAlert
         {
@@ -50,6 +52,8 @@ namespace SportsCashier.Models
         }
 
         public MockSportModel? AlertSport { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
         //public MockSportModel? AlertSport
         //{
         //    get

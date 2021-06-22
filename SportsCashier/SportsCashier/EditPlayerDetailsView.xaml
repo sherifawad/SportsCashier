@@ -3,11 +3,27 @@
     x:Class="SportsCashier.EditPlayerDetailsView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dm="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
+    xmlns:f="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
     xmlns:template="clr-namespace:SportsCashier.Views.Template"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+
+            <x:Double x:Key="ImageDimension">40</x:Double>
+            <x:Double x:Key="ImageClip">20</x:Double>
+            <f:Point x:Key="ImageEllipseGeometryCenter">20,20</f:Point>
+
+
+            <DataTemplate x:Key="NoramlSportTemplate">
+                <template:NormalSportContentView />
+            </DataTemplate>
+
+            <DataTemplate x:Key="EditSportTemplate">
+                <template:EditSportContentView />
+            </DataTemplate>
 
             <DataTemplate x:Key="HistoryCollectionTemplate">
                 <template:EditHistoryContentView />
@@ -125,6 +141,12 @@
                 <Setter Property="TabStripPlacement" Value="Top" />
             </Style>
 
+
+            <template:SportDataTemplateSelector
+                x:Key="SportDataTemplateSelector"
+                EditSportTemplate="{StaticResource EditSportTemplate}"
+                NoramlSportTemplate="{StaticResource NoramlSportTemplate}" />
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -155,12 +177,37 @@
                     Margin="30,0,-15,0"
                     ControlTemplate="{StaticResource TabItemTemplate}"
                     Text="Sports">
-                    <Grid BackgroundColor="{StaticResource WhiteColor}">
-                        <CollectionView
+                    <ScrollView x:Name="sportsScrollView">
+                        <Grid
+                            x:Name="sportsGridView"
                             Margin="30,0"
-                            ItemsSource="{Binding MockPlayer.Sports}"
-                            TranslationY="100" />
-                    </Grid>
+                            BackgroundColor="{StaticResource WhiteColor}"
+                            RowDefinitions="Auto, *"
+                            TranslationY="100">
+                            <CollectionView
+                                x:Name="sportsListView"
+                                Grid.Row="0"
+                                HeightRequest="500"
+                                ItemTemplate="{StaticResource SportDataTemplateSelector}"
+                                ItemsSource="{Binding Sports}"
+                                SelectionMode="None" />
+
+                            <Frame
+                                Grid.Row="1"
+                                Padding="0"
+                                BorderColor="{StaticResource OrangeColor}"
+                                CornerRadius="20"
+                                HasShadow="True"
+                                VerticalOptions="Start">
+                                <Button
+                                    BackgroundColor="{StaticResource OrangeColor}"
+                                    Command="{Binding BindingContext.AddSportCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    FontSize="{StaticResource FontSize18}"
+                                    Text="Add"
+                                    TextColor="{StaticResource WhiteColor}" />
+                            </Frame>
+                        </Grid>
+                    </ScrollView>
                 </xct:TabViewItem>
                 <!--<xct:TabViewItem
                     ControlTemplate="{StaticResource FabTabItemTemplate}"
@@ -176,7 +223,7 @@
                         <CollectionView
                             Margin="30,0"
                             ItemTemplate="{StaticResource HistoryCollectionTemplate}"
-                            ItemsSource="{Binding MockPlayer.Histories}"
+                            ItemsSource="{Binding Histories}"
                             TranslationY="100" />
                     </Grid>
                 </xct:TabViewItem>

@@ -37,11 +37,11 @@ namespace SportsCashier
 
             BookmarkAlertCommand = new Command<List<MockSportModel>>(OnAlertBookmark);
         }
-        public ObservableCollection<MockPlayerData> Players => new ObservableCollection<MockPlayerData>
+        public List<MockPlayerData> Players => new List<MockPlayerData>
         {
             new MockPlayerData{
                 Name = "Sherif",
-                Sports = new List<MockSportModel>
+                Sports = new ObservableCollection<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "FootBall", Price = 150
@@ -56,7 +56,7 @@ namespace SportsCashier
                         Name = "BasketBall", Price = 150
                     }
                 },
-                Histories = new List<History>
+                Histories = new ObservableCollection<History>
                 {
                     new History
                     {
@@ -94,7 +94,7 @@ namespace SportsCashier
             },
             new MockPlayerData{
                 Name = "Ahmed",
-                Sports = new List<MockSportModel>
+                Sports = new ObservableCollection<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "Jodo", Price = 150
@@ -103,7 +103,7 @@ namespace SportsCashier
                         Name = "Swimming", Price = 250
                     }
                 },
-                Histories = new List<History>
+                Histories = new ObservableCollection<History>
                 {
                     new History
                     {
@@ -135,7 +135,7 @@ namespace SportsCashier
             },
             new MockPlayerData{
                 Name = "Aya",
-                Sports = new List<MockSportModel>
+                Sports = new ObservableCollection<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "Jumanastic", Price = 180
@@ -147,7 +147,7 @@ namespace SportsCashier
                         Name = "VollyBall", Price = 150
                     }
                 },
-                Histories = new List<History>
+                Histories = new ObservableCollection<History>
                 {
                     new History
                     {
@@ -182,10 +182,10 @@ namespace SportsCashier
             }
         };
 
-        public MockPlayerData MockPlayer => new MockPlayerData
+        public MockPlayerData MockPlayer { get; set; } = new MockPlayerData
         {
             Name = "Sherif",
-            Sports = new List<MockSportModel>
+            Sports = new ObservableCollection<MockSportModel>
             {
                 new MockSportModel {
                     Name = "FootBall", Price = 150
@@ -200,7 +200,7 @@ namespace SportsCashier
                     Name = "BasketBall", Price = 150
                 }
             },
-            Histories = new List<History>
+            Histories = new ObservableCollection<History>
             {
                 new History
                 {

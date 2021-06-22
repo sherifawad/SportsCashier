@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="SportsCashier.Views.Template.NormalSportContentView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+
+
+    <StackLayout Margin="0,20" Orientation="Horizontal">
+        <!--  Sport Image  -->
+
+        <Image
+            Aspect="Fill"
+            HeightRequest="{StaticResource ImageDimension}"
+            VerticalOptions="Center"
+            WidthRequest="{StaticResource ImageDimension}">
+            <Image.Source>
+                <FontImageSource
+                    FontFamily="IconFont"
+                    Glyph="{x:Static helpers:IconFont.IcofontFootball}"
+                    Color="{StaticResource BlackColor}" />
+            </Image.Source>
+            <Image.Clip>
+                <EllipseGeometry
+                    Center="{StaticResource ImageEllipseGeometryCenter}"
+                    RadiusX="{StaticResource ImageClip}"
+                    RadiusY="{StaticResource ImageClip}" />
+            </Image.Clip>
+        </Image>
+
+        <Label
+            Margin="20,0,0,0"
+            FontAttributes="Bold"
+            FontSize="{StaticResource FontSize20}"
+            Text="{Binding Name}"
+            TextColor="{StaticResource DarkBlueColor}"
+            VerticalOptions="Center" />
+
+        <Frame
+            Padding="0,0,1,1"
+            CornerRadius="30"
+            HasShadow="True"
+            HorizontalOptions="EndAndExpand"
+            VerticalOptions="Center">
+            <Frame
+                Padding="4"
+                xct:TouchEffect.NativeAnimation="True"
+                CornerRadius="30"
+                HasShadow="True">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BindingContext.SportEditCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}" CommandParameter="{Binding .}" />
+                </Frame.GestureRecognizers>
+                <Label Text="Details" TextColor="{StaticResource DarkBlackColor}" />
+
+            </Frame>
+        </Frame>
+    </StackLayout>
+</ContentView>

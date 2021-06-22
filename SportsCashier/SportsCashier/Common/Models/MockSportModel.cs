@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace SportsCashier.Models
 {
@@ -10,7 +11,8 @@ namespace SportsCashier.Models
         public double Discount { get; set; }
         public double Price { get; set; }
         public int ReceiteNumber { get; set; }
-        public int code { get; set; }
+        public int Code { get; set; }
+        public bool EditMode { get; set; }
         public DateTime ReceiteDate
         {
             get => receiteDate;
@@ -21,5 +23,6 @@ namespace SportsCashier.Models
             }
         }
         public DateTime Alert { get; set; }
+
     }
 }

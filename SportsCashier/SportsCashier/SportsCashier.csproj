@@ -25,7 +25,7 @@
     <PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.4" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="QRCoder" Version="1.4.1" />
     <PackageReference Include="Sharpnado.Shadows" Version="1.2.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
@@ -48,6 +48,12 @@
     </Compile>
     <Compile Update="Views\Template\EditHistoryContentView.xaml.cs">
       <DependentUpon>EditHistoryContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Template\EditSportContentView.xaml.cs">
+      <DependentUpon>EditSportContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Template\NormalSportContentView.xaml.cs">
+      <DependentUpon>NormalSportContentView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Template\PlayerDetailsContentView.xaml.cs">
       <DependentUpon>PlayerDetailsContentView.xaml</DependentUpon>
@@ -92,6 +98,12 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Template\EditHistoryContentView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Template\EditSportContentView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Template\NormalSportContentView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Template\PlayerDetailsContentView.xaml">

@@ -1,53 +1,90 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:f="http://xamarin.com/schemas/2014/forms/design">
 
-    <Style TargetType="Button" x:Key="BaseButton">
+
+
+    <Style x:Key="BaseButton" TargetType="Button">
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="WidthRequest" Value="40" />
         <Setter Property="HeightRequest" Value="40" />
     </Style>
-    <Style TargetType="Button" x:Key="AddButton" BasedOn="{StaticResource BaseButton}">
+    <Style
+        x:Key="AddButton"
+        BasedOn="{StaticResource BaseButton}"
+        TargetType="Button">
         <Setter Property="Text" Value="Add" />
         <Setter Property="BackgroundColor" Value="LightGreen" />
         <Setter Property="ImageSource">
             <Setter.Value>
-                <FontImageSource Glyph="&#xf067;" FontFamily="SolidAwesome" Color="White" />
+                <FontImageSource
+                    FontFamily="SolidAwesome"
+                    Glyph="&#xf067;"
+                    Color="White" />
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="Button" x:Key="RemoveButton" BasedOn="{StaticResource BaseButton}">
+    <Style
+        x:Key="RemoveButton"
+        BasedOn="{StaticResource BaseButton}"
+        TargetType="Button">
         <Setter Property="Text" Value="remove" />
         <Setter Property="BackgroundColor" Value="Red" />
         <Setter Property="ImageSource">
             <Setter.Value>
-                <FontImageSource Glyph="&#xf068;" FontFamily="SolidAwesome" Color="White" Size="Subtitle" />
+                <FontImageSource
+                    FontFamily="SolidAwesome"
+                    Glyph="&#xf068;"
+                    Size="Subtitle"
+                    Color="White" />
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="Button" x:Key="EditButton" BasedOn="{StaticResource BaseButton}">
+    <Style
+        x:Key="EditButton"
+        BasedOn="{StaticResource BaseButton}"
+        TargetType="Button">
         <Setter Property="Text" Value="Edit" />
         <Setter Property="ImageSource">
             <Setter.Value>
-                <FontImageSource Glyph="&#xf044;" FontFamily="SolidAwesome" Color="White" Size="Subtitle" />
+                <FontImageSource
+                    FontFamily="SolidAwesome"
+                    Glyph="&#xf044;"
+                    Size="Subtitle"
+                    Color="White" />
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="Button" x:Key="LikeButton" BasedOn="{StaticResource AddButton}">
+    <Style
+        x:Key="LikeButton"
+        BasedOn="{StaticResource AddButton}"
+        TargetType="Button">
         <Setter Property="Text" Value="Save" />
         <Setter Property="ImageSource">
             <Setter.Value>
-                <FontImageSource Glyph="&#xf164;" FontFamily="SolidAwesome" Color="White"/>
+                <FontImageSource
+                    FontFamily="SolidAwesome"
+                    Glyph="&#xf164;"
+                    Color="White" />
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="Button" x:Key="DisLikeButton" BasedOn="{StaticResource RemoveButton}">
+    <Style
+        x:Key="DisLikeButton"
+        BasedOn="{StaticResource RemoveButton}"
+        TargetType="Button">
         <Setter Property="Text" Value="Cancel" />
         <Setter Property="ImageSource">
             <Setter.Value>
-                <FontImageSource Glyph="&#xf165;" FontFamily="SolidAwesome" Color="White" Size="Subtitle" />
+                <FontImageSource
+                    FontFamily="SolidAwesome"
+                    Glyph="&#xf165;"
+                    Size="Subtitle"
+                    Color="White" />
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>

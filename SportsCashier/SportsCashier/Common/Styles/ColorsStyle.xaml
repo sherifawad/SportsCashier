@@ -19,6 +19,7 @@
     <Color x:Key="YellowColor">#F1EC16</Color>
     <Color x:Key="DarkBlueColor">#31328E</Color>
     <Color x:Key="WhiteBlueColor">#F0F3FD</Color>
+    <Color x:Key="RedColor">#FF0000</Color>
 
     <!--  Solid Brush Colores  -->
     <SolidColorBrush x:Key="OrangeBrushColor" Color="{StaticResource OrangeColor}" />

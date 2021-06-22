@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using KeyboardOverlap.Forms.Plugin.iOSUnified;
 using UIKit;
 using XamarinBackgroundKit.iOS;
 
@@ -25,7 +26,7 @@ namespace SportsCashier.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             Sharpnado.Shades.iOS.iOSShadowsRenderer.Initialize();
-            Xamarin.RisePlugin.AutoCompleteTextView.iOS.AutoCompleteTextViewRenderer.Init();
+            KeyboardOverlapRenderer.Init();
             XamarinBackgroundKit.iOS.BackgroundKit.Init();
             LoadApplication(new App());
 

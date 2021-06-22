@@ -62,7 +62,6 @@ namespace SportsCashier
             DependencyService.Get<IGenericDbRepository<Invoice>>();
         }
 
-
         public virtual Task InitializeAsync() => Task.CompletedTask;
 
         public virtual Task UninitializeAsync() => Task.CompletedTask;

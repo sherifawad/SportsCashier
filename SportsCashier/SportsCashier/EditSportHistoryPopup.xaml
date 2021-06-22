@@ -46,7 +46,7 @@
             Focused="OnSuggestBoxFocused"
             SuggestionChosen="OnSuggestBoxSuggestionChosen"
             TextChanged="OnSuggestBoxTextChanged"
-            TextMemberPath="Name" />
+            TextMemberPath="NamePath" />
 
         <!--<Entry
             Grid.Row="0"

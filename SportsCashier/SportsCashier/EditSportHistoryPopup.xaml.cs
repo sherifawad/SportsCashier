@@ -14,6 +14,12 @@ namespace SportsCashier
     public partial class EditSportHistoryPopup : Popup<MockSportModel>, INotifyPropertyChanged
     {
         public MockSportModel MockSportModel { get; private set; }
+
+        public EditSportHistoryPopup()
+        {
+            InitializeComponent();
+            MockSportModel = new MockSportModel();
+        }
         public EditSportHistoryPopup(MockSportModel mockSportModel)
         {
             InitializeComponent();
@@ -21,7 +27,7 @@ namespace SportsCashier
             BindingContext = this;
             if (mockSportModel == default)
                 return;
-            var matchsport = SportsData.GetSpoertsData.FirstOrDefault(x => x.Code == mockSportModel.code);
+            var matchsport = SportsData.GetSpoertsData.FirstOrDefault(x => x.Code == mockSportModel.Code);
             if (matchsport != null)
                 dmSuggestBox.PlaceholderText = matchsport.NamePath;
         }
@@ -75,7 +81,7 @@ namespace SportsCashier
                 if (value != null)
                 {
                     MockSportModel.Name = value.Name;
-                    MockSportModel.code = value.Code;
+                    MockSportModel.Code = value.Code;
 
                 }
             }

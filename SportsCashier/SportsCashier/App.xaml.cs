@@ -34,8 +34,8 @@ namespace SportsCashier
             DependencyService.Register<IGenericDbRepository<PlayerSport>, GenericDbRepository<PlayerSport>>();
             DependencyService.Register<IGenericDbRepository<PlayerModel>, GenericDbRepository<PlayerModel>>();
             DependencyService.Register<IGenericDbRepository<Sport>, GenericDbRepository<Sport>>();
-            //MainPage = new MembershipPlayersDetailView();
-            MainPage = new EditPlayerDetailsView();
+            MainPage = new MembershipPlayersDetailView();
+            //MainPage = new EditPlayerDetailsView();
             //MainPage = new AppShell();
         }
         private async Task AddSports()

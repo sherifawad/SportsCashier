@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="SportsCashier.Views.Template.EditSportContentView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dm="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
+    xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+
+    <Grid Margin="0,20" ColumnDefinitions="Auto, *, Auto">
+        <!--  Sport Image  -->
+
+        <Image
+            Grid.Column="0"
+            Aspect="Fill"
+            HeightRequest="{StaticResource ImageDimension}"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="Center"
+            WidthRequest="{StaticResource ImageDimension}">
+
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BindingContext.SportDeleteCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}" CommandParameter="{Binding .}" />
+            </Image.GestureRecognizers>
+            <Image.Source>
+                <FontImageSource
+                    FontFamily="IconFont"
+                    Glyph="{x:Static helpers:IconFont.IcofontDelete}"
+                    Color="{StaticResource RedColor}" />
+            </Image.Source>
+            <Image.Clip>
+                <EllipseGeometry
+                    Center="{StaticResource ImageEllipseGeometryCenter}"
+                    RadiusX="{StaticResource ImageClip}"
+                    RadiusY="{StaticResource ImageClip}" />
+            </Image.Clip>
+        </Image>
+
+
+        <dm:AutoSuggestBox
+            x:Name="dmSuggestBox"
+            Grid.Column="1"
+            Margin="20,0,0,0"
+            DisplayMemberPath="NamePath"
+            Focused="OnSuggestBoxFocused"
+            PlaceholderText="{Binding Name, Mode=TwoWay}"
+            SuggestionChosen="OnSuggestBoxSuggestionChosen"
+            TextChanged="OnSuggestBoxTextChanged"
+            TextMemberPath="NamePath" />
+
+        <Frame
+            Grid.Column="2"
+            Padding="0,0,1,1"
+            CornerRadius="30"
+            HasShadow="True"
+            HorizontalOptions="EndAndExpand"
+            VerticalOptions="Center"
+            WidthRequest="90">
+
+            <Frame
+                x:Name="xyFrame"
+                Padding="8,0,8,0"
+                CornerRadius="30"
+                HasShadow="True">
+                <Grid ColumnDefinitions="*, Auto,*">
+                    <Label
+                        Grid.Column="0"
+                        xct:TouchEffect.Command="{Binding BindingContext.SportEditSubmitCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                        xct:TouchEffect.CommandParameter="{Binding .}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="Green"
+                        FontAttributes="Bold"
+                        FontFamily="IconFont"
+                        FontSize="{StaticResource FontSize14}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        Text="{x:Static helpers:IconFont.IcofontCheck}"
+                        TextColor="Green"
+                        VerticalOptions="FillAndExpand"
+                        VerticalTextAlignment="Center">
+                        <!--<Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="" CommandParameter="" />
+                            </Label.GestureRecognizers>-->
+
+                        <!--<Button.Clip>
+                                                                <RectangleGeometry Rect="10,0,10,20" />
+                                                            </Button.Clip>-->
+
+                    </Label>
+
+                    <Line
+                        Grid.Column="1"
+                        Stroke="silver"
+                        StrokeThickness="4"
+                        Y2="20" />
+
+                    <Label
+                        Grid.Column="2"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="{StaticResource RedColor}"
+                        FontAttributes="Bold"
+                        FontSize="{StaticResource FontSize14}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        Text="X"
+                        TextColor="{StaticResource RedColor}"
+                        VerticalOptions="FillAndExpand">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.SportEditCancelCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}" CommandParameter="{Binding .}" />
+                        </Label.GestureRecognizers>
+                        <!--<Button.Clip>
+                                                                <RectangleGeometry Rect="0,0,10,20" />
+                                                            </Button.Clip>-->
+                    </Label>
+
+                </Grid>
+            </Frame>
+
+        </Frame>
+
+    </Grid>
+</ContentView>

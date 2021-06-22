@@ -13,18 +13,12 @@ namespace SportsCashier.ValueConverters
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ObservableCollection<Sport> sportssList)
+            if (parameter is List<MockSportModel> list)
             {
-                var c = sportssList?.Count();
-
-                if (c == null)
-                    return 0;
-                else
-                    return c;
-
+                return list.Count() * 90;
             }
 
-            return 0;
+            return value;
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

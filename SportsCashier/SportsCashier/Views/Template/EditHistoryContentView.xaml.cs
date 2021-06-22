@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SportsCashier.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +18,14 @@ namespace SportsCashier.Views.Template
         public EditHistoryContentView()
         {
             InitializeComponent();
+
         }
+
 
         private void OnFrameTapped(object sender, EventArgs e)
         {
             var parent = ((View)sender).Parent;
-            if(parent is SwipeView swipeView)
+            if (parent is SwipeView swipeView)
                 swipeView.Open(OpenSwipeItem.RightItems);
         }
 

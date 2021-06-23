@@ -1,4 +1,5 @@
 ﻿using dotMorten.Xamarin.Forms;
+using SportsCashier.Extensions;
 using SportsCashier.Models;
 using System;
 using System.Collections.Generic;
@@ -38,8 +39,8 @@ namespace SportsCashier
         {
             InitializeComponent();
             MockPlayer = mockPlayer;
-            Histories = mockPlayer.Histories;
-            Sports = mockPlayer.Sports;
+            Histories = mockPlayer.Histories.ToObservableCollection();
+            Sports = mockPlayer.Sports.ToObservableCollection();
             BindingContext = this;
             SportHistoryEditCommand = new AsyncCommand<MockSportModel>(SportHistoryEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             SportHistoryDeleteCommand = new AsyncCommand<MockSportModel>(SportHistoryDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
@@ -114,7 +115,7 @@ namespace SportsCashier
             MockPlayer = new MockPlayerData
             {
                 Name = "Sherif",
-                Sports = new ObservableCollection<MockSportModel>
+                Sports = new List<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "FootBall", Price = 150, Code = 5000300, EditMode = true
@@ -129,7 +130,7 @@ namespace SportsCashier
                         Name = "BasketBall", Price = 150, Code = 5000500
                     }
                 },
-                Histories = new ObservableCollection<History>
+                Histories = new List<History>
             {
                 new History
                 {
@@ -167,29 +168,38 @@ namespace SportsCashier
 
             };
 
-            Histories = MockPlayer.Histories;
-            Sports = MockPlayer.Sports;
+            Histories = MockPlayer.Histories.ToObservableCollection();
+            Sports = MockPlayer.Sports.ToObservableCollection();
         }
 
         private async Task SportHistoryDeleteAsync(MockSportModel arg)
         {
+            History currentHistory = null;
+            int historyIndex = -1;
             foreach (var history in Histories)
             {
                 var sport = history.Sports.FirstOrDefault(y => y.ReceiteDate == arg.ReceiteDate && arg.ReceiteNumber == y.ReceiteNumber);
                 if (sport != null)
                 {
                     history.Sports.Remove(sport);
+                    currentHistory = history;
+                    historyIndex = Histories.IndexOf(history);
+                    Histories.Remove(history);
                     break;
                 }
             }
+            Histories[historyIndex] = currentHistory;
             await Task.FromResult(true);
 
         }
 
         private async ValueTask AddSportAsync()
         {
+            var sportInEditMode = Sports?.FirstOrDefault(x => x.EditMode == true);
+            if (sportInEditMode != null)
+                return;
             var sports = Sports ?? new ObservableCollection<MockSportModel>();
-            sports.Add(new MockSportModel { EditMode = true });
+            sports.Add(new MockSportModel { EditMode = true, Name = "" });
 
             await Task.FromResult(true);
 
@@ -250,11 +260,49 @@ namespace SportsCashier
 
         private async Task SportHistoryEditAsync(MockSportModel arg)
         {
+            History currentHistory = null;
+            MockSportModel sport = null;
+            int histroryIndex = -1;
+            int sportIndex = -1;
+
             var sportHistoryPopup = new EditSportHistoryPopup(arg);
-            arg = await Navigation.ShowPopupAsync(sportHistoryPopup);
+
+            var popupResult = await Navigation.ShowPopupAsync(sportHistoryPopup);
+
+            if (popupResult == null)
+                return;
+
+            foreach (var history in Histories)
+            {
+                var result = history.Sports.FirstOrDefault(y => y.ReceiteDate == arg.ReceiteDate && arg.ReceiteNumber == y.ReceiteNumber);
+                if (result != null)
+                {
+                    histroryIndex = Histories.IndexOf(history);
+                    result = popupResult;
+                    currentHistory = history;
+                    Histories.Remove(history);
+                    //sportIndex = history.Sports.IndexOf(result);
+                    //sport = result;
+                    break;
+                }
+            };
+            Histories.Insert(histroryIndex, currentHistory);
+            //Histories[histroryIndex] = currentHistory;
+
+            //if (popupResult != null && histroryIndex > 0 && sportIndex > 0)
+            //{
+            //    Histories[histroryIndex].Sports.RemoveAt(sportIndex);
+            //    Histories[histroryIndex].Sports[sportIndex] = popupResult;
+            //}
+
+
         }
 
         void OnFabTabTapped(object? sender, TabTappedEventArgs e) => DisplayAlert("FabTabGallery", "Tab Tapped.", "Ok");
 
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
+        }
     }
 }

@@ -34,9 +34,16 @@
         <Image
             Grid.Row="0"
             Grid.Column="0"
-            Aspect="AspectFit"
-            HorizontalOptions="Start"
-            Source="location00.png" />
+            Aspect="Fill"
+            HorizontalOptions="Start">
+            <Image.Source>
+                <FontImageSource
+                    FontFamily="IconFont"
+                    Glyph="{Binding Icon}"
+                    Size="24"
+                    Color="Red" />
+            </Image.Source>
+        </Image>
 
         <dm:AutoSuggestBox
             x:Name="dmSuggestBox"

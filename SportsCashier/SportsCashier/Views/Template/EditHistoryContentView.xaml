@@ -86,7 +86,7 @@
                                     </SwipeView.RightItems>
                                     <Grid
                                         BackgroundColor="{StaticResource WhiteColor}"
-                                        ColumnDefinitions="*,*,*"
+                                        ColumnDefinitions="*,Auto,*"
                                         ColumnSpacing="0"
                                         RowDefinitions="*,*,*"
                                         RowSpacing="0">
@@ -119,7 +119,7 @@
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             FontAttributes="Bold"
-                                            FontSize="{StaticResource FontSize18}"
+                                            FontSize="{StaticResource FontSize16}"
                                             Text="{Binding Name}"
                                             TextColor="{StaticResource DarkBlackColor}"
                                             VerticalOptions="Center" />

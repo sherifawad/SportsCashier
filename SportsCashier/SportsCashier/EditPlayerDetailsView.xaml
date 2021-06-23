@@ -7,10 +7,16 @@
     xmlns:f="http://xamarin.com/schemas/2014/forms/design"
     xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
     xmlns:template="clr-namespace:SportsCashier.Views.Template"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    BackgroundColor="{StaticResource WhiteColor}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+
+            <x:Double x:Key="StriptranslatY">0</x:Double>
+            <x:Double x:Key="StripButtpntranslatY">5</x:Double>
+            <x:Double x:Key="TabViewContenttranslatY">10</x:Double>
+
 
             <x:Double x:Key="ImageDimension">40</x:Double>
             <x:Double x:Key="ImageClip">20</x:Double>
@@ -28,12 +34,24 @@
             <DataTemplate x:Key="HistoryCollectionTemplate">
                 <template:EditHistoryContentView />
             </DataTemplate>
+
+            <ContentView x:Key="TabViewStrip">
+                <Frame
+                    Padding="0"
+                    BackgroundColor="{StaticResource OrangeColor}"
+                    BorderColor="{StaticResource WhiteColor}"
+                    CornerRadius="20"
+                    HasShadow="True"
+                    HeightRequest="48"
+                    VerticalOptions="Start" />
+            </ContentView>
+
             <ControlTemplate x:Key="TabItemTemplate">
                 <Grid
-                    Padding="10"
-                    HeightRequest="38"
-                    TranslationY="10"
-                    VerticalOptions="FillAndExpand">
+                    Padding="5,0,5,0"
+                    HeightRequest="37"
+                    TranslationY="{StaticResource StripButtpntranslatY}"
+                    VerticalOptions="Start">
                     <Label
                         FontAttributes="Bold"
                         FontSize="{StaticResource FontSize14}"
@@ -62,8 +80,8 @@
                 </Grid>
             </ControlTemplate>
 
-            <ControlTemplate x:Key="TabItemContro;Template">
-                <Grid RowSpacing="0">
+            <ControlTemplate x:Key="TabItemControlTemplate">
+                <Grid HeightRequest="48" RowSpacing="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
@@ -137,8 +155,9 @@
             <Style x:Key="CustomTabStyle" TargetType="xct:TabView">
                 <Setter Property="IsTabTransitionEnabled" Value="True" />
                 <Setter Property="TabStripHeight" Value="48" />
-                <Setter Property="TabContentBackgroundColor" Value="#484848" />
+                <Setter Property="TabContentBackgroundColor" Value="Transparent" />
                 <Setter Property="TabStripPlacement" Value="Top" />
+                <Setter Property="Margin" Value="30,0" />
             </Style>
 
 
@@ -153,41 +172,85 @@
 
     <ContentPage.Content>
 
-        <Grid>
+        <StackLayout>
+
+            <!--  Player Information  -->
+            <StackLayout Margin="30,20,30,0" Orientation="Horizontal">
+
+                <Grid>
+                    <Ellipse
+                        Grid.Row="0"
+                        Fill="{StaticResource WhiteBrushColor}"
+                        HeightRequest="70"
+                        HorizontalOptions="Center"
+                        Stroke="{StaticResource OrangeBrushColor}"
+                        StrokeThickness="4"
+                        VerticalOptions="CenterAndExpand"
+                        WidthRequest="70" />
+                    <Image
+                        Grid.Row="0"
+                        Aspect="Fill"
+                        HeightRequest="50"
+                        HorizontalOptions="Center"
+                        Source="{Binding MockPlayer.Image}"
+                        VerticalOptions="Center"
+                        WidthRequest="50">
+                        <Image.Clip>
+                            <EllipseGeometry
+                                Center="25,25"
+                                RadiusX="25"
+                                RadiusY="25" />
+                        </Image.Clip>
+                    </Image>
+                    <ImageButton HorizontalOptions="Center" VerticalOptions="Center">
+                        <ImageButton.Source>
+                            <FontImageSource FontFamily="IconFont" Glyph="{x:Static helpers:IconFont.IcofontCamera}" />
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+
+                <Entry
+                    FontAttributes="Bold"
+                    HorizontalOptions="FillAndExpand"
+                    Text="{Binding MockPlayer.Name}"
+                    TextColor="{StaticResource LightBlackColor}"
+                    VerticalOptions="Center" />
+
+                <Button
+                    BackgroundColor="{StaticResource WhiteBlueColor}"
+                    Clicked="Button_Clicked"
+                    CornerRadius="50"
+                    HorizontalOptions="Center"
+                    Text="Done"
+                    TextColor="{StaticResource DarkBlueColor}"
+                    VerticalOptions="Center"
+                    WidthRequest="65" />
+            </StackLayout>
+
+            <!--  Tab View  -->
             <xct:TabView
                 Style="{StaticResource CustomTabStyle}"
-                TabContentBackgroundColor="{StaticResource WhiteColor}"
-                TabIndicatorPlacement="Top">
+                TabIndicatorPlacement="Top"
+                TabStripBackgroundView="{StaticResource TabViewStrip}">
                 <!--<xct:TabView.TabIndicatorView>
                     <BoxView BackgroundColor="Red" HorizontalOptions="CenterAndExpand" />
                 </xct:TabView.TabIndicatorView>-->
-                <xct:TabView.TabStripBackgroundView>
-                    <Frame
-                        Margin="30,0"
-                        Padding="0"
-                        BackgroundColor="{StaticResource OrangeColor}"
-                        BorderColor="{StaticResource WhiteColor}"
-                        CornerRadius="20"
-                        HasShadow="True"
-                        TranslationY="15"
-                        VerticalOptions="FillAndExpand" />
-                </xct:TabView.TabStripBackgroundView>
 
-                <xct:TabViewItem
-                    Margin="30,0,-15,0"
-                    ControlTemplate="{StaticResource TabItemTemplate}"
-                    Text="Sports">
-                    <ScrollView x:Name="sportsScrollView">
+                <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Text="Sports">
+                    <ScrollView
+                        x:Name="sportsScrollView"
+                        BackgroundColor="{StaticResource WhiteColor}"
+                        TranslationY="{StaticResource TabViewContenttranslatY}"
+                        VerticalOptions="StartAndExpand"
+                        VerticalScrollBarVisibility="Never">
                         <Grid
                             x:Name="sportsGridView"
-                            Margin="30,0"
-                            BackgroundColor="{StaticResource WhiteColor}"
-                            RowDefinitions="Auto, *"
-                            TranslationY="100">
+                            HorizontalOptions="FillAndExpand"
+                            RowDefinitions="Auto, Auto">
                             <CollectionView
                                 x:Name="sportsListView"
                                 Grid.Row="0"
-                                HeightRequest="500"
+                                HeightRequest="440"
                                 ItemTemplate="{StaticResource SportDataTemplateSelector}"
                                 ItemsSource="{Binding Sports}"
                                 SelectionMode="None" />
@@ -215,20 +278,13 @@
                     Style="{StaticResource TabItemStyle}"
                     TabTapped="OnFabTabTapped"
                     Text="Tab 2" />-->
-                <xct:TabViewItem
-                    Margin="-15,0,30,0"
-                    ControlTemplate="{StaticResource TabItemTemplate}"
-                    Text="Histories">
-                    <Grid BackgroundColor="{StaticResource WhiteBlueColor}">
-                        <CollectionView
-                            Margin="30,0"
-                            ItemTemplate="{StaticResource HistoryCollectionTemplate}"
-                            ItemsSource="{Binding Histories}"
-                            TranslationY="100" />
+                <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Text="Histories">
+                    <Grid BackgroundColor="{StaticResource WhiteColor}" TranslationY="{StaticResource TabViewContenttranslatY}">
+                        <CollectionView ItemTemplate="{StaticResource HistoryCollectionTemplate}" ItemsSource="{Binding Histories}" />
                     </Grid>
                 </xct:TabViewItem>
             </xct:TabView>
-        </Grid>
+        </StackLayout>
 
     </ContentPage.Content>
 </ContentPage>

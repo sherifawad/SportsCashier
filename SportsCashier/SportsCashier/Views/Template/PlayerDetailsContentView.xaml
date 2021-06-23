@@ -191,6 +191,8 @@
                         <ImageButton
                             Grid.Row="0"
                             BackgroundColor="Transparent"
+                            Command="{Binding BindingContext.EditPalyerCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                            CommandParameter="{Binding .}"
                             HorizontalOptions="Center"
                             TranslationX="-30"
                             VerticalOptions="End">

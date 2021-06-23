@@ -8,8 +8,9 @@ namespace SportsCashier.Models
     public class MockPlayerData
     {
         public string Name { get; set; }
-        public ObservableCollection<MockSportModel> Sports { get; set; } = new ObservableCollection<MockSportModel>();
-        public ObservableCollection<History> Histories { get; set; } = new ObservableCollection<History>();
+        public string Image { get; set; } = "BackgroundBubbles.webp";
+        public List<MockSportModel> Sports { get; set; } = new List<MockSportModel>();
+        public List<History> Histories { get; set; } = new List<History>();
 
         public List<MockSportModel> SportsToAlert
         {

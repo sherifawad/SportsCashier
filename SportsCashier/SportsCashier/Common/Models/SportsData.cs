@@ -12,6 +12,8 @@ namespace SportsCashier.Models
         public string Category { get; private set; }
         public double Price { get; private set; }
         public bool CanDiscounted { get; private set; }
+        public string Icon { get; private set; } = "\ue80e";
+
         public string NamePath => $"{Name} - {Category}";
 
         public SportsData(int code, string name, string category, double price, bool canDiscounted)
@@ -100,5 +102,6 @@ namespace SportsCashier.Models
                 };
             }
         }
+
     }
 }

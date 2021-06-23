@@ -14,6 +14,7 @@ namespace SportsCashier
     public partial class EditSportHistoryPopup : Popup<MockSportModel>, INotifyPropertyChanged
     {
         public MockSportModel MockSportModel { get; private set; }
+        public string Icon { get; private set; } = "\ue80e";
 
         public EditSportHistoryPopup()
         {
@@ -29,7 +30,10 @@ namespace SportsCashier
                 return;
             var matchsport = SportsData.GetSpoertsData.FirstOrDefault(x => x.Code == mockSportModel.Code);
             if (matchsport != null)
+            {
                 dmSuggestBox.PlaceholderText = matchsport.NamePath;
+                Icon = matchsport.Icon;
+            }
         }
 
         private void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
@@ -83,6 +87,7 @@ namespace SportsCashier
                     MockSportModel.Name = value.Name;
                     MockSportModel.Code = value.Code;
 
+                    (sender as AutoSuggestBox).PlaceholderText = value.NamePath;
                 }
             }
 

@@ -1,11 +1,14 @@
-﻿using SportsCashier.Models;
+﻿using SportsCashier.Common.Helpers.Commands;
+using SportsCashier.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,6 +18,7 @@ namespace SportsCashier
     public partial class MembershipPlayersDetailView : ContentPage, INotifyPropertyChanged
     {
         public ICommand BookmarkAlertCommand { get; set; }
+        public AsyncValueCommand<MockPlayerData> EditPalyerCommand { get; set; }
 
         private void OnAlertBookmark(List<MockSportModel> sports)
         {
@@ -36,12 +40,20 @@ namespace SportsCashier
             BindingContext = this;
 
             BookmarkAlertCommand = new Command<List<MockSportModel>>(OnAlertBookmark);
+            EditPalyerCommand = new AsyncValueCommand<MockPlayerData>(EditPalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+
         }
+
+        private async ValueTask EditPalyerAsync(MockPlayerData arg)
+        {
+            await Navigation.PushModalAsync(new EditPlayerDetailsView(arg));
+        }
+
         public List<MockPlayerData> Players => new List<MockPlayerData>
         {
             new MockPlayerData{
                 Name = "Sherif",
-                Sports = new ObservableCollection<MockSportModel>
+                Sports = new List<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "FootBall", Price = 150
@@ -56,7 +68,7 @@ namespace SportsCashier
                         Name = "BasketBall", Price = 150
                     }
                 },
-                Histories = new ObservableCollection<History>
+                Histories = new List<History>
                 {
                     new History
                     {
@@ -94,7 +106,7 @@ namespace SportsCashier
             },
             new MockPlayerData{
                 Name = "Ahmed",
-                Sports = new ObservableCollection<MockSportModel>
+                Sports = new List<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "Jodo", Price = 150
@@ -103,7 +115,7 @@ namespace SportsCashier
                         Name = "Swimming", Price = 250
                     }
                 },
-                Histories = new ObservableCollection<History>
+                Histories = new List<History>
                 {
                     new History
                     {
@@ -135,7 +147,7 @@ namespace SportsCashier
             },
             new MockPlayerData{
                 Name = "Aya",
-                Sports = new ObservableCollection<MockSportModel>
+                Sports = new List<MockSportModel>
                 {
                     new MockSportModel {
                         Name = "Jumanastic", Price = 180
@@ -147,7 +159,7 @@ namespace SportsCashier
                         Name = "VollyBall", Price = 150
                     }
                 },
-                Histories = new ObservableCollection<History>
+                Histories = new List<History>
                 {
                     new History
                     {
@@ -185,7 +197,7 @@ namespace SportsCashier
         public MockPlayerData MockPlayer { get; set; } = new MockPlayerData
         {
             Name = "Sherif",
-            Sports = new ObservableCollection<MockSportModel>
+            Sports = new List<MockSportModel>
             {
                 new MockSportModel {
                     Name = "FootBall", Price = 150
@@ -200,7 +212,7 @@ namespace SportsCashier
                     Name = "BasketBall", Price = 150
                 }
             },
-            Histories = new ObservableCollection<History>
+            Histories = new List<History>
             {
                 new History
                 {

@@ -1,27 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:SportsCashier.Views"
-             x:Class="SportsCashier.AppShell"
-       FlyoutBehavior="Disabled">
+<Shell
+    x:Class="SportsCashier.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SportsCashier"
+    xmlns:views="clr-namespace:SportsCashier.Views"
+    FlyoutBehavior="Disabled">
 
-        <Shell.Resources>
-            <Style x:Key="BaseStyle"
-               TargetType="Element">
-                <Setter Property="Shell.BackgroundColor"
-                    Value="#455A64" />
-                <Setter Property="Shell.ForegroundColor"
-                    Value="White" />
-                <Setter Property="Shell.TitleColor"
-                    Value="White" />
-                <Setter Property="Shell.DisabledColor"
-                    Value="#B4FFFFFF" />
-                <Setter Property="Shell.UnselectedColor"
-                    Value="#95FFFFFF" />
-            </Style>
-        </Shell.Resources>
+    <Shell.Resources>
+        <Style x:Key="BaseStyle" TargetType="Element">
+            <Setter Property="Shell.BackgroundColor" Value="#455A64" />
+            <Setter Property="Shell.ForegroundColor" Value="White" />
+            <Setter Property="Shell.TitleColor" Value="White" />
+            <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
+            <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
+        </Style>
+    </Shell.Resources>
 
-    <TabBar>
+    <!--<TabBar>
         <Tab Title="Memberes" Style="{StaticResource BaseStyle}" >
             <Tab.Icon>
                 <FontImageSource FontFamily="SolidAwesome" Glyph="&#xf0c0;" />
@@ -40,11 +36,11 @@
             </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:ScanView}" />
         </Tab>
-    </TabBar>
+    </TabBar>-->
 
-    <!--<ShellItem Route="HomeViewModel">
-        <ShellContent ContentTemplate="{DataTemplate views:HomeView}" />
-    </ShellItem>-->
+    <ShellItem Route="MembershipPlayersDetailViewModel">
+        <ShellContent ContentTemplate="{DataTemplate local:MembershipPlayersDetailView}" />
+    </ShellItem>
 
 
 </Shell>

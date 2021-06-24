@@ -1,4 +1,5 @@
-﻿using SportsCashier.ViewModels.PlayersPayment;
+﻿using SportsCashier.ViewModels;
+using SportsCashier.ViewModels.PlayersPayment;
 using SportsCashier.Views;
 using SportsCashier.Views.PlayersPayment;
 using System;
@@ -21,6 +22,8 @@ namespace SportsCashier
 
             Routing.RegisterRoute(nameof(NewPaymentViewModel), typeof(NewPaymentView));
             Routing.RegisterRoute(nameof(PlayerViewModel), typeof(PlayerView));
+            Routing.RegisterRoute(nameof(EditPlayerDetailsViewModel), typeof(EditPlayerDetailsView));
+            //Routing.RegisterRoute(nameof(MembershipPlayersDetailViewModel), typeof(MembershipPlayersDetailView));
         }
     }
 }

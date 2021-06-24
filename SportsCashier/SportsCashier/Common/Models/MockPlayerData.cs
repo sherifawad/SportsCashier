@@ -7,6 +7,7 @@ namespace SportsCashier.Models
 {
     public class MockPlayerData
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Image { get; set; } = "BackgroundBubbles.webp";
         public List<MockSportModel> Sports { get; set; } = new List<MockSportModel>();

@@ -8,7 +8,8 @@
     xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
     xmlns:template="clr-namespace:SportsCashier.Views.Template"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    BackgroundColor="{StaticResource WhiteColor}">
+    BackgroundColor="{StaticResource WhiteColor}"
+    Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>

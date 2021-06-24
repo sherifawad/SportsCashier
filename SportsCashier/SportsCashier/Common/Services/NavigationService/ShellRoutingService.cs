@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
+using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 
 namespace SportsCashier.Services.NavigationService
@@ -14,6 +16,11 @@ namespace SportsCashier.Services.NavigationService
         public void GoToMainFlow()
         {
             Application.Current.MainPage = new AppShell();
+        }
+
+        public async Task<T?> PopUp<T>(Popup<T?> popup)
+        {
+            return await Shell.Current.Navigation.ShowPopupAsync(popup);
         }
 
         public void GoToLoginFlow()
@@ -31,12 +38,12 @@ namespace SportsCashier.Services.NavigationService
             await Shell.Current.GoToAsync("..");
         }
 
-        public Task InsertAsRoot<TViewModel>(string parameters = null) where TViewModel : BaseViewModel
+        public Task InsertAsRoot<TViewModel>(string parameters = null) where TViewModel : class
         {
             return GoToAsync("//", typeof(TViewModel), parameters);
         }
 
-        public Task PushAsync<TViewModel>(string parameters = null) where TViewModel : BaseViewModel
+        public Task PushAsync<TViewModel>(string parameters = null) where TViewModel : class
         {
             return GoToAsync("", typeof(TViewModel), parameters);
         }

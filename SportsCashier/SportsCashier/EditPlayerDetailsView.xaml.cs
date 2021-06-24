@@ -261,41 +261,58 @@ namespace SportsCashier
         private async Task SportHistoryEditAsync(MockSportModel arg)
         {
             History currentHistory = null;
-            MockSportModel sport = null;
             int histroryIndex = -1;
-            int sportIndex = -1;
 
-            var sportHistoryPopup = new EditSportHistoryPopup(arg);
-
-            var popupResult = await Navigation.ShowPopupAsync(sportHistoryPopup);
-
-            if (popupResult == null)
-                return;
-
-            foreach (var history in Histories)
+            if(arg == null)
             {
-                var result = history.Sports.FirstOrDefault(y => y.ReceiteDate == arg.ReceiteDate && arg.ReceiteNumber == y.ReceiteNumber);
-                if (result != null)
+                var sportHistoryPopup = new EditSportHistoryPopup();
+
+                var popupResult = await Navigation.ShowPopupAsync(sportHistoryPopup);
+
+                if (popupResult == null)
+                    return;
+
+                var result = Histories.FirstOrDefault(x => x.Date.Year == popupResult.ReceiteDate.Year && x.Date.Month == popupResult.ReceiteDate.Month);
+
+                if(result == null)
                 {
-                    histroryIndex = Histories.IndexOf(history);
-                    result = popupResult;
-                    currentHistory = history;
-                    Histories.Remove(history);
-                    //sportIndex = history.Sports.IndexOf(result);
-                    //sport = result;
-                    break;
+                    Histories.Add(new History { Date = popupResult.ReceiteDate, Sports = new List<MockSportModel> { popupResult } });
                 }
-            };
-            Histories.Insert(histroryIndex, currentHistory);
-            //Histories[histroryIndex] = currentHistory;
+                else
+                {
+                    histroryIndex = Histories.IndexOf(result);
+                    result.Sports.Add(popupResult);
+                    currentHistory = result;
+                    Histories.Remove(result);
 
-            //if (popupResult != null && histroryIndex > 0 && sportIndex > 0)
-            //{
-            //    Histories[histroryIndex].Sports.RemoveAt(sportIndex);
-            //    Histories[histroryIndex].Sports[sportIndex] = popupResult;
-            //}
+                }
+            }
+            else
+            {
+                var sportHistoryPopup = new EditSportHistoryPopup(arg);
 
+                var popupResult = await Navigation.ShowPopupAsync(sportHistoryPopup);
 
+                if (popupResult == null)
+                    return;
+
+                foreach (var history in Histories)
+                {
+                    var result = history.Sports.FirstOrDefault(y => y.ReceiteDate == arg.ReceiteDate && arg.ReceiteNumber == y.ReceiteNumber);
+                    if (result != null)
+                    {
+                        histroryIndex = Histories.IndexOf(history);
+                        result = popupResult;
+                        currentHistory = history;
+                        Histories.Remove(history);
+                        //sportIndex = history.Sports.IndexOf(result);
+                        //sport = result;
+                        break;
+                    }
+                };
+            }
+            if (histroryIndex > 0)
+                Histories.Insert(histroryIndex, currentHistory);
         }
 
         void OnFabTabTapped(object? sender, TabTappedEventArgs e) => DisplayAlert("FabTabGallery", "Tab Tapped.", "Ok");
@@ -304,5 +321,13 @@ namespace SportsCashier
         {
             await Navigation.PopModalAsync();
         }
+
+        private async void OnAddHistory(object sender, EventArgs e)
+        {
+            var sportHistoryPopup = new EditSportHistoryPopup();
+
+            var popupResult = await Navigation.ShowPopupAsync(sportHistoryPopup);
+        }
+
     }
 }

@@ -79,7 +79,7 @@
         <DatePicker
             Grid.Row="2"
             Grid.Column="1"
-            Date="{Binding MockSportModel.ReceiteDate, StringFormat='{0: dd MMM}'}"
+            Date="{Binding MockSportModel.ReceiteDate}"
             HorizontalOptions="FillAndExpand"
             TextColor="{StaticResource SecondaryTextColor}" />
 

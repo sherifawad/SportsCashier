@@ -279,9 +279,18 @@
                     TabTapped="OnFabTabTapped"
                     Text="Tab 2" />-->
                 <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Text="Histories">
-                    <Grid BackgroundColor="{StaticResource WhiteColor}" TranslationY="{StaticResource TabViewContenttranslatY}">
+                    <StackLayout BackgroundColor="{StaticResource WhiteColor}" TranslationY="{StaticResource TabViewContenttranslatY}">
+
+                        <Button
+                            BackgroundColor="{StaticResource WhiteBlueColor}"
+                            Command="{Binding BindingContext.SportHistoryEditCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                            CornerRadius="50"
+                            HorizontalOptions="Center"
+                            Text="Add"
+                            TextColor="{StaticResource DarkBlueColor}"
+                            VerticalOptions="Center" />
                         <CollectionView ItemTemplate="{StaticResource HistoryCollectionTemplate}" ItemsSource="{Binding Histories}" />
-                    </Grid>
+                    </StackLayout>
                 </xct:TabViewItem>
             </xct:TabView>
         </StackLayout>

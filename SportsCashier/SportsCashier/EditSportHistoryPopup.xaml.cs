@@ -19,7 +19,9 @@ namespace SportsCashier
         public EditSportHistoryPopup()
         {
             InitializeComponent();
-            MockSportModel = new MockSportModel();
+            MockSportModel = new MockSportModel { ReceiteDate = DateTime.Now};
+            BindingContext = this;
+
         }
         public EditSportHistoryPopup(MockSportModel mockSportModel)
         {

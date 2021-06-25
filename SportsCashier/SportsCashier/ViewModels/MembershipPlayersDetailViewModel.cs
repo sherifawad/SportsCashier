@@ -29,6 +29,7 @@ namespace SportsCashier.ViewModels
         #region Public Command
         public IAsyncValueCommand<MockPlayerData> EditPalyerCommand { get; set; }
         public IAsyncValueCommand<List<MockSportModel>> BookmarkAlertCommand { get; set; }
+        public IAsyncValueCommand AddPlayerCommand { get; set; }
 
         #endregion
 
@@ -37,7 +38,10 @@ namespace SportsCashier.ViewModels
             Players = new ObservableCollection<MockPlayerData>();
             BookmarkAlertCommand = new AsyncValueCommand<List<MockSportModel>>(BookmarkAlertAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             EditPalyerCommand = new AsyncValueCommand<MockPlayerData>(EditPalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            AddPlayerCommand = new AsyncValueCommand(AddPlayerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
         }
+
+
 
         public override Task InitializeAsync()
         {
@@ -188,6 +192,15 @@ namespace SportsCashier.ViewModels
         }
 
         #region Commands Methods
+
+        private async ValueTask AddPlayerAsync()
+        {
+            var result = await _dialogService.DisplayPrompt("New Player", "Add Player Name", "OK", "Cancel");
+            if (string.IsNullOrWhiteSpace(result))
+                return;
+            Players.Add(new MockPlayerData { Name = result });
+        }
+
         private async ValueTask EditPalyerAsync(MockPlayerData arg)
         {
             await _navigationService.PushAsync<EditPlayerDetailsViewModel>($"{nameof(EditPlayerDetailsViewModel.PlayerId)}={arg.Id}");

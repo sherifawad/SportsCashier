@@ -219,7 +219,7 @@
 
                 <Button
                     BackgroundColor="{StaticResource WhiteBlueColor}"
-                    Clicked="Button_Clicked"
+                    Command="{Binding DoneCommand}"
                     CornerRadius="50"
                     HorizontalOptions="Center"
                     Text="Done"

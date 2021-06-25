@@ -22,26 +22,32 @@
             HorizontalOptions="FillAndExpand"
             RowDefinitions="Auto, Auto, Auto, Auto"
             VerticalOptions="FillAndExpand">
-            <Label
+            <Button
                 Grid.Row="0"
+                Margin="20,20,0,0"
+                BackgroundColor="{StaticResource BlackColor}"
+                Command="{Binding AddPlayerCommand}"
+                CornerRadius="20"
                 HorizontalOptions="Start"
-                Style="{StaticResource BarLabelStyle}"
-                Text="&lt;" />
+                Text="Add"
+                TextColor="{StaticResource WhiteColor}" />
+            <!--<Frame
+                Grid.Row="0"
+                Margin="0,20,20,0"
+                Padding="0"
+                BackgroundColor="{StaticResource BlackColor}"
+                CornerRadius="20"
+                HorizontalOptions="EndAndExpand">
+                <Label Text="1988/55" TextColor="{StaticResource WhiteColor}" />
+            </Frame>-->
             <Label
                 Grid.Row="0"
+                Margin="0,20,20,0"
+                FontAttributes="Bold"
+                FontSize="{StaticResource FontSize26}"
                 HorizontalOptions="End"
-                Style="{StaticResource BarLabelStyle}"
-                Text="1988/55" />
-            <Label
-                Grid.Row="1"
-                HorizontalOptions="Center"
-                Style="{StaticResource BarLabelStyle}"
-                Text="Your Ticket" />
-            <Label
-                Grid.Row="2"
-                HorizontalOptions="Center"
-                Style="{StaticResource BarLabelStyle}"
-                Text="Wooow" />
+                Text="1988/55"
+                TextColor="{StaticResource WhiteBlueColor}" />
 
             <CarouselView
                 Grid.Row="3"

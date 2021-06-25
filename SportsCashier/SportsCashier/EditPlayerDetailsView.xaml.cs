@@ -23,12 +23,7 @@ namespace SportsCashier
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditPlayerDetailsView : ContentPage, INotifyPropertyChanged
     {
-
-        private SportsData _selectedSportsData = null;
         private readonly EditPlayerDetailsViewModel _viewModel;
-
-        public MockPlayerData MockPlayer { get; private set; }
-
 
         public EditPlayerDetailsView()
         {
@@ -75,11 +70,6 @@ namespace SportsCashier
         }
 
         void OnFabTabTapped(object? sender, TabTappedEventArgs e) => DisplayAlert("FabTabGallery", "Tab Tapped.", "Ok");
-
-        private async void Button_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PopModalAsync();
-        }
 
 
     }

@@ -57,6 +57,7 @@ namespace SportsCashier.ViewModels
         public IAsyncValueCommand<MockSportModel> SportEditSubmitCommand { get; }
         public IAsyncValueCommand<MockSportModel> SportDeleteCommand { get; }
         public IAsyncValueCommand AddSportCommand { get; }
+        public IAsyncValueCommand DoneCommand { get; }
 
         #endregion
 
@@ -72,10 +73,13 @@ namespace SportsCashier.ViewModels
             SportEditCancelCommand = new AsyncValueCommand<MockSportModel>(SportEditCancelAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             SportEditSubmitCommand = new AsyncValueCommand<MockSportModel>(SportEditSubmitAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             AddSportCommand = new AsyncValueCommand(AddSportAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            DoneCommand = new AsyncValueCommand(DoneAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             SportDeleteCommand = new AsyncValueCommand<MockSportModel>(SportDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             MessagingCenter.Subscribe<string, SportsData>(AppConstants.App, AppConstants.SelectedSport, (s, e) => _selectedSportsData = e as SportsData);
 
         }
+
+
 
         public override Task InitializeAsync()
         {
@@ -144,6 +148,11 @@ namespace SportsCashier.ViewModels
         }
 
         #region Commands Methods
+
+        private async ValueTask DoneAsync()
+        {
+            await _navigationService.PopAsync();
+        }
 
         private async Task SportHistoryDeleteAsync(MockSportModel arg)
         {

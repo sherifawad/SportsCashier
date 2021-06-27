@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SportsCashier.ViewModels
@@ -21,19 +23,35 @@ namespace SportsCashier.ViewModels
         private ObservableCollection<History> histories;
         private ObservableCollection<MockSportModel> sports;
         private SportsData _selectedSportsData;
+        private string _Image;
+        private string _Name;
+        private MockPlayerData mockPlayer;
         #endregion
 
         #region Public Properties
+
+
 
         public ObservableCollection<History> Histories
         {
             get => histories;
             private set => SetProperty(ref histories, value);
         }
-        public ObservableCollection<MockSportModel> Sports 
+        public ObservableCollection<MockSportModel> Sports
         {
-            get => sports; 
+            get => sports;
             private set => SetProperty(ref sports, value);
+        }
+
+        public string Name
+        {
+            get => _Name;
+            set => SetProperty(ref _Name, value);
+        }
+        public string Image
+        {
+            get => _Image;
+            private set => SetProperty(ref _Image, value);
         }
 
 
@@ -58,6 +76,7 @@ namespace SportsCashier.ViewModels
         public IAsyncValueCommand<MockSportModel> SportDeleteCommand { get; }
         public IAsyncValueCommand AddSportCommand { get; }
         public IAsyncValueCommand DoneCommand { get; }
+        public IAsyncValueCommand ChangeImageCommand { get; }
 
         #endregion
 
@@ -65,7 +84,7 @@ namespace SportsCashier.ViewModels
         public EditPlayerDetailsViewModel()
         {
             Histories = new ObservableCollection<History>();
-            Sports = new ObservableCollection<MockSportModel>(); 
+            Sports = new ObservableCollection<MockSportModel>();
 
             SportHistoryEditCommand = new AsyncCommand<MockSportModel>(SportHistoryEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             SportHistoryDeleteCommand = new AsyncCommand<MockSportModel>(SportHistoryDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
@@ -74,83 +93,75 @@ namespace SportsCashier.ViewModels
             SportEditSubmitCommand = new AsyncValueCommand<MockSportModel>(SportEditSubmitAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             AddSportCommand = new AsyncValueCommand(AddSportAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             DoneCommand = new AsyncValueCommand(DoneAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            ChangeImageCommand = new AsyncValueCommand(ChangeImageAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             SportDeleteCommand = new AsyncValueCommand<MockSportModel>(SportDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             MessagingCenter.Subscribe<string, SportsData>(AppConstants.App, AppConstants.SelectedSport, (s, e) => _selectedSportsData = e as SportsData);
 
         }
 
 
-
-        public override Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
+            if (string.IsNullOrEmpty(PlayerId))
+                return;
+            mockPlayer = await _dataStore.GetItemAsync(PlayerId);
 
-            var mockPlayer = new MockPlayerData
-            {
-                Name = "Sherif",
-                Sports = new List<MockSportModel>
-                {
-                    new MockSportModel {
-                        Name = "FootBall", Price = 150, Code = 5000300, EditMode = true
-                    } ,
-                    new MockSportModel {
-                        Name = "HandBall", Price = 150, Code = 5000900
-                    } ,
-                    new MockSportModel {
-                        Name = "Swimming", Price = 250, Code = 5002103
-                    } ,
-                    new MockSportModel {
-                        Name = "BasketBall", Price = 150, Code = 5000500
-                    }
-                },
-                Histories = new List<History>
-            {
-                new History
-                {
-                    Date = DateTime.Now.AddMonths(1),
-                    Sports = new List<MockSportModel>
-                    {
-                        new MockSportModel {
-                            Name = "FootBall", Price = 135, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=1003, Code = 5000300, Discount = 10
-                        } ,
-                        new MockSportModel {
-                            Name = "HandBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=1004, Code = 5000900, Discount = 0
-                        } ,
-                        new MockSportModel {
-                            Name = "Swimming", Price = 200, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(1), ReceiteNumber=1500, Code = 5002103, Discount = 20
-                        } ,
-                        new MockSportModel {
-                            Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1), ReceiteNumber=0023, Code = 5000500, Discount = 0
-                        }
-                    }
-                },
-                new History
-                {
-                    Date = DateTime.Now.AddMonths(5),
-                    Sports = new List<MockSportModel>
-                    {
-                        new MockSportModel {
-                            Name = "Swimming", Price = 225, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=1523, Code = 5002102, Discount = 10
-                        } ,
-                        new MockSportModel {
-                            Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(9), ReceiteNumber=0003, Code = 5000500, Discount = 0
-                        }
-                    }
-                },
-            }
+            if (mockPlayer == null)
+                return;
 
-
-            };
-
-            Histories = mockPlayer.Histories.ToObservableCollection();
-            Sports = mockPlayer.Sports.ToObservableCollection();
-
-            return base.InitializeAsync();
+            Name = mockPlayer.Name;
+            Image = mockPlayer.Image;
+            if (mockPlayer.Histories != null)
+                Histories = mockPlayer.Histories.ToObservableCollection();
+            if (mockPlayer.Sports != null)
+                Sports = mockPlayer.Sports.ToObservableCollection();
         }
 
         #region Commands Methods
 
+
+        private async ValueTask ChangeImageAsync()
+        {
+            try
+            {
+                FileResult photo = null;
+                var choiceResult = await _dialogService.DisplayActionSheet("Change Image", "Cancel", null,  "Camera", "Gallery");
+                switch (choiceResult)
+                {
+                    case "Camera":
+                        photo = await MediaPicker.CapturePhotoAsync();
+                        break;
+                    case "Gallery":
+                        photo = await MediaPicker.PickPhotoAsync();
+                        break;
+                    default:
+                        return;
+                }
+                await LoadPhotoAsync(photo);
+                Console.WriteLine($"CapturePhotoAsync COMPLETED: {Image}");
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Feature is now supported on the device
+            }
+            catch (PermissionException pEx)
+            {
+                // Permissions not granted
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
+            }
+        }
+
         private async ValueTask DoneAsync()
         {
+            mockPlayer.Name = Name;
+            mockPlayer.Image = Image;
+            mockPlayer.Sports = sports.ToList();
+            mockPlayer.Histories = Histories.ToList();
+            await _dataStore.UpdateItemAsync(mockPlayer);
+            //TODO save To dataBase
             await _navigationService.PopAsync();
         }
 
@@ -295,6 +306,31 @@ namespace SportsCashier.ViewModels
             }
             if (histroryIndex > 0)
                 Histories.Insert(histroryIndex, currentHistory);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private async Task LoadPhotoAsync(FileResult photo)
+        {
+            // canceled
+            if (photo == null)
+            {
+                Image = null;
+                return;
+            }
+            // save the file into local storage
+            var newFile = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+            using (var stream = await photo.OpenReadAsync())
+            using (var newStream = File.OpenWrite(newFile))
+                await stream.CopyToAsync(newStream);
+
+            // Delete Previous Stored File
+            if (File.Exists(Image))
+                File.Delete(Image);
+
+            Image = newFile;
         }
 
         #endregion

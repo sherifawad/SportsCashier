@@ -28,17 +28,141 @@
 
         <!--  Content  -->
 
-        <Grid RowDefinitions="Auto,*">
+        <Grid Margin="0,0,0,30" RowDefinitions="Auto,*">
             <Label
                 FontAttributes="Bold"
                 FontSize="{StaticResource FontSize18}"
                 Text="{Binding Date, StringFormat='{0: MMMM yyyy}'}"
                 TextColor="{StaticResource DarkBlackColor}" />
-            <CollectionView
+            <FlexLayout
+                Grid.Row="1"
+                AlignItems="Stretch"
+                BindableLayout.ItemsSource="{Binding Sports}"
+                Direction="Column">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+
+                        <Frame
+                            Margin="0,0,0,10"
+                            Padding="0,0,0,3"
+                            BorderColor="{StaticResource WhiteBlueColor}"
+                            CornerRadius="50"
+                            HasShadow="True">
+                            <Frame
+                                Margin="0"
+                                Padding="0"
+                                CornerRadius="50"
+                                HasShadow="True">
+                                <SwipeView>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem
+                                                BackgroundColor="{StaticResource YellowColor}"
+                                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SportHistoryEditCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Text="Edit">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource
+                                                        FontFamily="IconFont"
+                                                        Glyph="{x:Static helpers:IconFont.IcofontUiEdit}"
+                                                        Color="{StaticResource WhiteColor}" />
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                            <SwipeItem
+                                                BackgroundColor="{StaticResource PinkColor}"
+                                                Command="{Binding Source={x:RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SportHistoryDeleteCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Text="Delete">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource
+                                                        FontFamily="IconFont"
+                                                        Glyph="{x:Static helpers:IconFont.IcofontUiDelete}"
+                                                        Color="{StaticResource WhiteColor}" />
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid
+                                        BackgroundColor="{StaticResource WhiteColor}"
+                                        ColumnDefinitions="*,Auto,*"
+                                        ColumnSpacing="0"
+                                        RowDefinitions="*,*,*"
+                                        RowSpacing="0">
+
+                                        <Image
+                                            Grid.Row="0"
+                                            Grid.RowSpan="3"
+                                            Grid.Column="0"
+                                            Aspect="Fill"
+                                            HeightRequest="{StaticResource ImageDimension}"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            WidthRequest="{StaticResource ImageDimension}">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="IconFont"
+                                                    Glyph="{x:Static helpers:IconFont.IcofontFootball}"
+                                                    Color="{StaticResource BlackColor}" />
+                                            </Image.Source>
+                                            <Image.Clip>
+                                                <EllipseGeometry
+                                                    Center="{StaticResource ImageEllipseGeometryCenter}"
+                                                    RadiusX="{StaticResource ImageClip}"
+                                                    RadiusY="{StaticResource ImageClip}" />
+                                            </Image.Clip>
+                                        </Image>
+
+
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            FontAttributes="Bold"
+                                            FontSize="{StaticResource FontSize16}"
+                                            Text="{Binding Name, Converter={converter:MaxStringLengthConverter MaxLength=20}}"
+                                            TextColor="{StaticResource DarkBlackColor}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            FontSize="{StaticResource FontSize16}"
+                                            Text="{Binding ReceiteNumber}"
+                                            TextColor="{StaticResource DarkBlueColor}" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Text="{Binding ReceiteDate, StringFormat='{0: dd MMM}'}"
+                                            TextColor="{StaticResource SecondaryTextColor}" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="3"
+                                            FontAttributes="Bold"
+                                            FontSize="{StaticResource FontSize16}"
+                                            Text="{Binding Price, StringFormat='{0:c}'}"
+                                            TextColor="{StaticResource DarkBlueColor}" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="3"
+                                            Text="{Binding Discount, StringFormat='Disc:{0}%'}"
+                                            TextColor="{StaticResource SecondaryTextColor}" />
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnFrameTapped" />
+                                        </Grid.GestureRecognizers>
+                                    </Grid>
+                                </SwipeView>
+                            </Frame>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+
+            <!--<CollectionView
                 x:Name="sportsCollectionView"
                 Grid.Row="1"
+                HeightRequest="300"
                 ItemsSource="{Binding Sports}">
-                <!--  HeightRequest="{Binding Path=HeightRequest, Source={RelativeSource Self}, Converter={converter:SportsListCountConverter}, ConverterParameter={Binding Path=ItemsSource, Source={RelativeSource Self}}}"  -->
+            -->
+            <!--  HeightRequest="{Binding Path=HeightRequest, Source={RelativeSource Self}, Converter={converter:SportsListCountConverter}, ConverterParameter={Binding Path=ItemsSource, Source={RelativeSource Self}}}"  -->
+            <!--
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
@@ -155,7 +279,7 @@
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            </CollectionView>
+            </CollectionView>-->
         </Grid>
 
         <!--</DataTemplate>

@@ -7,7 +7,7 @@
     xmlns:model="clr-namespace:SportsCashier.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:TypeArguments="model:MockSportModel"
-    Size="300, 300">
+    Size="330, 400">
     <xct:Popup.Resources>
         <ResourceDictionary>
             <Style x:Key="SportLabel" TargetType="Label">

@@ -92,6 +92,8 @@
                             Orientation="Horizontal">
                             <Button
                                 BackgroundColor="{StaticResource DarkBlueColor}"
+                                Command="{Binding BindingContext.EditPalyerCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                CommandParameter="{Binding .}"
                                 CornerRadius="20"
                                 FontAttributes="Bold"
                                 HorizontalOptions="Center"
@@ -99,17 +101,49 @@
                                 TextColor="{StaticResource WhiteColor}" />
                             <Button
                                 BackgroundColor="Red"
+                                Command="{Binding BindingContext.HidePalyerCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                CommandParameter="{Binding .}"
                                 CornerRadius="20"
                                 FontAttributes="Bold"
                                 HorizontalOptions="Center"
                                 Text="Hide"
-                                TextColor="{StaticResource WhiteColor}" />
+                                TextColor="{StaticResource WhiteColor}">
+                                <Button.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding Hide}"
+                                        TargetType="Button"
+                                        Value="True">
+                                        <Setter Property="Text" Value="Un-Hide" />
+                                    </DataTrigger>
+
+                                    <DataTrigger
+                                        Binding="{Binding Hide}"
+                                        TargetType="Button"
+                                        Value="False">
+                                        <Setter Property="Text" Value="Hide" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
 
                         </StackLayout>
 
                     </SwipeItemView>
                 </SwipeItems>
             </SwipeView.TopItems>
+            <SwipeView.Triggers>
+                <DataTrigger
+                    Binding="{Binding Hide}"
+                    TargetType="SwipeView"
+                    Value="True">
+                    <Setter Property="Opacity" Value="0.5" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding Hide}"
+                    TargetType="SwipeView"
+                    Value="False">
+                    <Setter Property="Opacity" Value="1" />
+                </DataTrigger>
+            </SwipeView.Triggers>
             <Grid RowDefinitions="Auto">
 
 
@@ -188,7 +222,7 @@
                             </Image>
                         </Grid>
 
-                        <ImageButton
+                        <!--<ImageButton
                             Grid.Row="0"
                             BackgroundColor="Transparent"
                             Command="{Binding BindingContext.EditPalyerCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
@@ -203,7 +237,7 @@
                                     Size="{StaticResource FontSize20}"
                                     Color="{StaticResource SecondaryTextColor}" />
                             </ImageButton.Source>
-                        </ImageButton>
+                        </ImageButton>-->
 
                         <Label
                             Grid.Row="1"

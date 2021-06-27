@@ -40,14 +40,53 @@
                 HorizontalOptions="EndAndExpand">
                 <Label Text="1988/55" TextColor="{StaticResource WhiteColor}" />
             </Frame>-->
+
             <Label
                 Grid.Row="0"
-                Margin="0,20,20,0"
+                Margin="20,20,20,0"
                 FontAttributes="Bold"
                 FontSize="{StaticResource FontSize26}"
-                HorizontalOptions="End"
+                HorizontalOptions="Center"
                 Text="1988/55"
-                TextColor="{StaticResource WhiteBlueColor}" />
+                TextColor="{StaticResource WhiteBlueColor}"
+                VerticalOptions="Center" />
+
+            <StackLayout
+                Grid.Row="0"
+                Margin="0,20,20,0"
+                HorizontalOptions="End"
+                Orientation="Horizontal"
+                Spacing="0">
+
+                <Switch
+                    x:Name="swBtn"
+                    IsToggled="{Binding FilterPlayers}"
+                    VerticalOptions="Center" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="{StaticResource FontSize16}"
+                    Text="Hide"
+                    TextColor="{StaticResource WhiteBlueColor}"
+                    VerticalOptions="Center">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding IsToggled, Source={x:Reference swBtn}}"
+                            TargetType="Label"
+                            Value="True">
+                            <Setter Property="Text" Value="Hide" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding IsToggled, Source={x:Reference swBtn}}"
+                            TargetType="Label"
+                            Value="False">
+                            <Setter Property="Text" Value="Un-Hide" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+            </StackLayout>
+
+
 
             <CarouselView
                 Grid.Row="3"

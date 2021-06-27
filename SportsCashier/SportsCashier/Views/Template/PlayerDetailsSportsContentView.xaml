@@ -2,10 +2,15 @@
 <ContentView
     x:Class="SportsCashier.Views.Template.PlayerDetailsSportsContentView"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:SportsCashier.ValueConverters"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <ContentView.Content>
         <StackLayout Margin="10,5,10,5">
-            <Label HorizontalOptions="Center" Text="{Binding Name}" TextColor="{StaticResource DarkBlueColor}" />
+            <Label
+                HorizontalOptions="Center"
+                Text="{Binding Name, Converter={converter:MaxStringLengthConverter MaxLength=13}}"
+                TextColor="{StaticResource DarkBlueColor}" />
             <Frame
                 Padding="0"
                 BackgroundColor="{StaticResource OffWhiteColor}"

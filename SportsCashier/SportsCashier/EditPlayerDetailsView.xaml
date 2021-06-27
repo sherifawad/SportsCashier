@@ -193,7 +193,7 @@
                         Aspect="Fill"
                         HeightRequest="50"
                         HorizontalOptions="Center"
-                        Source="{Binding MockPlayer.Image}"
+                        Source="{Binding Image}"
                         VerticalOptions="Center"
                         WidthRequest="50">
                         <Image.Clip>
@@ -203,7 +203,10 @@
                                 RadiusY="25" />
                         </Image.Clip>
                     </Image>
-                    <ImageButton HorizontalOptions="Center" VerticalOptions="Center">
+                    <ImageButton
+                        Command="{Binding BindingContext.ChangeImageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
                         <ImageButton.Source>
                             <FontImageSource FontFamily="IconFont" Glyph="{x:Static helpers:IconFont.IcofontCamera}" />
                         </ImageButton.Source>
@@ -213,7 +216,7 @@
                 <Entry
                     FontAttributes="Bold"
                     HorizontalOptions="FillAndExpand"
-                    Text="{Binding MockPlayer.Name}"
+                    Text="{Binding Name}"
                     TextColor="{StaticResource LightBlackColor}"
                     VerticalOptions="Center" />
 
@@ -225,7 +228,7 @@
                     Text="Done"
                     TextColor="{StaticResource DarkBlueColor}"
                     VerticalOptions="Center"
-                    WidthRequest="65" />
+                    WidthRequest="70" />
             </StackLayout>
 
             <!--  Tab View  -->

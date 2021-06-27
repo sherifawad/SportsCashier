@@ -1,4 +1,6 @@
-﻿using SportsCashier.Services.DialogService;
+﻿using SportsCashier.Common.Services;
+using SportsCashier.Models;
+using SportsCashier.Services.DialogService;
 using SportsCashier.Services.MessagingService;
 using SportsCashier.Services.NavigationService;
 using System;
@@ -17,6 +19,8 @@ namespace SportsCashier.Common
         protected INavigationService _navigationService { get; }
         protected IDialogService _dialogService { get; }
         protected IMessagingService _messagingService { get; }
+        protected IDataStore<MockPlayerData> _dataStore  { get; }
+
         //protected IGenericDbRepository<MemberModel> _membersRepository { get; }
         //protected IGenericDbRepository<PlayerModel> _playersRepository { get; }
         //protected IGenericDbRepository<Sport> _sportsRepository { get; }
@@ -31,6 +35,7 @@ namespace SportsCashier.Common
             _navigationService = DependencyService.Get<INavigationService>();
             _dialogService = DependencyService.Get<IDialogService>();
             _messagingService = DependencyService.Get<IMessagingService>();
+            _dataStore = DependencyService.Get<IDataStore<MockPlayerData>>();
         }
         public virtual Task InitializeAsync() => Task.CompletedTask;
 

@@ -3,6 +3,7 @@
     x:Class="SportsCashier.Views.Template.NormalSportContentView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:SportsCashier.ValueConverters"
     xmlns:helpers="clr-namespace:SportsCashier.Common.Helpers"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
 
@@ -33,7 +34,7 @@
             Margin="20,0,0,0"
             FontAttributes="Bold"
             FontSize="{StaticResource FontSize20}"
-            Text="{Binding Name}"
+            Text="{Binding Name, Converter={converter:MaxStringLengthConverter MaxLength=13}}"
             TextColor="{StaticResource DarkBlueColor}"
             VerticalOptions="Center" />
 

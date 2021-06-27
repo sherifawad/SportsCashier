@@ -1,4 +1,5 @@
 ﻿using SportsCashier.Common;
+using SportsCashier.Extensions;
 using SportsCashier.Models;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,19 @@ namespace SportsCashier.ViewModels
             set => SetProperty(ref _Players, value);
         }
 
+        private bool _FilterPlayers;
+        public bool FilterPlayers
+        {
+            get => _FilterPlayers; 
+            set => SetProperty(ref _FilterPlayers, value);
+        }
+
 
         #endregion
 
 
         #region Public Command
+        public IAsyncValueCommand<MockPlayerData> HidePalyerCommand { get; set; }
         public IAsyncValueCommand<MockPlayerData> EditPalyerCommand { get; set; }
         public IAsyncValueCommand<List<MockSportModel>> BookmarkAlertCommand { get; set; }
         public IAsyncValueCommand AddPlayerCommand { get; set; }
@@ -36,173 +45,43 @@ namespace SportsCashier.ViewModels
         public MembershipPlayersDetailViewModel()
         {
             Players = new ObservableCollection<MockPlayerData>();
+            FilterPlayers = true;
             BookmarkAlertCommand = new AsyncValueCommand<List<MockSportModel>>(BookmarkAlertAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            HidePalyerCommand = new AsyncValueCommand<MockPlayerData>(HidePalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             EditPalyerCommand = new AsyncValueCommand<MockPlayerData>(EditPalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             AddPlayerCommand = new AsyncValueCommand(AddPlayerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
         }
 
 
-
-        public override Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
-            Players = new ObservableCollection<MockPlayerData> {
-            new MockPlayerData{
-                Name = "Sherif",
-                Sports = new List<MockSportModel>
-                {
-                    new MockSportModel {
-                        Name = "FootBall", Price = 150
-                    } ,
-                    new MockSportModel {
-                        Name = "HandBall", Price = 150
-                    } ,
-                    new MockSportModel {
-                        Name = "Swimming", Price = 250
-                    } ,
-                    new MockSportModel {
-                        Name = "BasketBall", Price = 150
-                    }
-                },
-                Histories = new List<History>
-                {
-                    new History
-                    {
-                        Date = DateTime.Now.AddMonths(1),
-                        Sports = new List<MockSportModel>
-                        {
-                            new MockSportModel {
-                                Name = "FootBall", Price = 135, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=2500
-                            } ,
-                            new MockSportModel {
-                                Name = "HandBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(2), ReceiteNumber=100
-                            } ,
-                            new MockSportModel {
-                                Name = "Swimming", Price = 200, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(1), ReceiteNumber=50
-                            } ,
-                            new MockSportModel {
-                                Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(1).AddDays(1), ReceiteNumber=1
-                            }
-                        }
-                    },
-                    new History
-                    {
-                        Date = DateTime.Now.AddMonths(5),
-                        Sports = new List<MockSportModel>
-                        {
-                            new MockSportModel {
-                                Name = "Swimming", Price = 225, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=10
-                            } ,
-                            new MockSportModel {
-                                Name = "BasketBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=11
-                            }
-                        }
-                    },
-                }
-            },
-            new MockPlayerData{
-                Name = "Ahmed",
-                Sports = new List<MockSportModel>
-                {
-                    new MockSportModel {
-                        Name = "Jodo", Price = 150
-                    } ,
-                    new MockSportModel {
-                        Name = "Swimming", Price = 250
-                    }
-                },
-                Histories = new List<History>
-                {
-                    new History
-                    {
-                        Date = DateTime.Now.AddMonths(9),
-                        Sports = new List<MockSportModel>
-                        {
-                            new MockSportModel {
-                                Name = "Jodo", Price = 150, ReceiteDate = DateTime.Now.AddMonths(9).AddDays(2), ReceiteNumber=5000
-                            } ,
-                            new MockSportModel {
-                                Name = "Swimming", Price = 250, ReceiteDate = DateTime.Now.AddMonths(9).AddDays(9), ReceiteNumber=5100
-                            }
-                        }
-                    },
-                    new History
-                    {
-                        Date = DateTime.Now.AddMonths(5),
-                        Sports = new List<MockSportModel>
-                        {
-                            new MockSportModel {
-                                Name = "Jodo", Price = 150, ReceiteDate = DateTime.Now.AddMonths(5), ReceiteNumber=5023
-                            } ,
-                            new MockSportModel {
-                                Name = "Swimming", Price = 225, ReceiteDate = DateTime.Now.AddMonths(5), ReceiteNumber=0443
-                            }
-                        }
-                    },
-                }
-            },
-            new MockPlayerData{
-                Name = "Aya",
-                Sports = new List<MockSportModel>
-                {
-                    new MockSportModel {
-                        Name = "Jumanastic", Price = 180
-                    } ,
-                    new MockSportModel {
-                        Name = "Swimming", Price = 200
-                    } ,
-                    new MockSportModel {
-                        Name = "VollyBall", Price = 150
-                    }
-                },
-                Histories = new List<History>
-                {
-                    new History
-                    {
-                        Date = DateTime.Now.AddMonths(3),
-                        Sports = new List<MockSportModel>
-                        {
-                            new MockSportModel {
-                                Name = "Jumanastic", Price = 200, ReceiteDate = DateTime.Now.AddMonths(3).AddDays(2), ReceiteNumber=2500
-                            } ,
-                            new MockSportModel {
-                                Name = "Swimming", Price = 250, ReceiteDate = DateTime.Now.AddMonths(3).AddDays(2), ReceiteNumber=2500
-                            } ,
-                            new MockSportModel {
-                                Name = "VollyBall", Price = 150, ReceiteDate = DateTime.Now.AddMonths(3).AddDays(2), ReceiteNumber=2500
-                            }
-                        }
-                    },
-                    new History
-                    {
-                        Date = DateTime.Now.AddMonths(5),
-                        Sports = new List<MockSportModel>
-                        {
-                            new MockSportModel {
-                                Name = "Jumanastic", Price = 200, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=2500
-                            } ,
-                            new MockSportModel {
-                                Name = "Swimming", Price = 225, ReceiteDate = DateTime.Now.AddMonths(5).AddDays(2), ReceiteNumber=2500
-                            }
-                        }
-                    }
-                }
-            }
-            };
-            return base.InitializeAsync();
+            Players = (await _dataStore.GetItemsAsync()).ToObservableCollection();
         }
 
         #region Commands Methods
 
+        private async ValueTask HidePalyerAsync(MockPlayerData arg)
+        {
+           var indx = Players.IndexOf(arg);
+            arg.Hide = !arg.Hide;
+            var editedPlayer = arg;
+            Players[indx] = editedPlayer;
+            await Task.FromResult(true);
+        }
         private async ValueTask AddPlayerAsync()
         {
             var result = await _dialogService.DisplayPrompt("New Player", "Add Player Name", "OK", "Cancel");
             if (string.IsNullOrWhiteSpace(result))
                 return;
-            Players.Add(new MockPlayerData { Name = result });
+            var newPlayer = new MockPlayerData { Name = result };
+            await _dataStore.AddItemAsync(newPlayer);
+            Players.Add(newPlayer);
         }
 
         private async ValueTask EditPalyerAsync(MockPlayerData arg)
         {
+            if (string.IsNullOrEmpty(arg.Id))
+                return;
             await _navigationService.PushAsync<EditPlayerDetailsViewModel>($"{nameof(EditPlayerDetailsViewModel.PlayerId)}={arg.Id}");
         }
 

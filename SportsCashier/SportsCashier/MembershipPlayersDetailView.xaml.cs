@@ -19,7 +19,8 @@ namespace SportsCashier
     public partial class MembershipPlayersDetailView : ContentPage, INotifyPropertyChanged
     {
         private readonly MembershipPlayersDetailViewModel _viewModel;
-
+        const uint ExpandAnimationSpeed = 350;
+        const uint CollapseAnimationSpeed = 250;
 
         public MembershipPlayersDetailView()
         {
@@ -27,26 +28,37 @@ namespace SportsCashier
              
             BindingContext = _viewModel = new MembershipPlayersDetailViewModel();
 
+
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             if (_viewModel != null)
-                _viewModel.InitializeAsync();
+                await _viewModel.InitializeAsync();
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
             base.OnDisappearing();
             if (_viewModel != null)
-                _viewModel.UninitializeAsync();
+                await _viewModel.UninitializeAsync();
         }
 
         // Send message to close swipview
         private void OnCurrentItemChanged(object sender, CurrentItemChangedEventArgs e) 
         { 
             MessagingCenter.Send<string>("App", "Close"); 
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            var frameLength = -(sportsFrame.Width - sportListToggleBtn.Width);
+
+            if (sportsFrame.TranslationX == 0)
+                sportsFrame.TranslateTo(frameLength, 0, ExpandAnimationSpeed, Easing.SinInOut);
+            else
+                sportsFrame.TranslateTo(0, 0, CollapseAnimationSpeed, Easing.SinInOut);
         }
     }
 

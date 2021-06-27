@@ -55,18 +55,18 @@ namespace SportsCashier
 
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             if (_viewModel != null)
-                _viewModel.InitializeAsync();
+                await _viewModel.InitializeAsync();
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
             base.OnDisappearing();
             if (_viewModel != null)
-                _viewModel.UninitializeAsync();
+                await _viewModel.UninitializeAsync();
         }
 
         void OnFabTabTapped(object? sender, TabTappedEventArgs e) => DisplayAlert("FabTabGallery", "Tab Tapped.", "Ok");

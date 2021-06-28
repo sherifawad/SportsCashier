@@ -229,6 +229,7 @@ namespace SportsCashier.ViewModels
                 EditMode = false,
                 Alert = arg.Alert,
                 Code = _selectedSportsData.Code,
+                Icon = _selectedSportsData.Icon,
                 Discount = arg.Discount,
                 Price = arg.Price,
                 ReceiteDate = arg.ReceiteDate,

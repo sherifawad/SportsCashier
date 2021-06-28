@@ -125,24 +125,60 @@
                 HasShadow="True"
                 TranslationX="-370">
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
+                    <Frame
+                        Grid.Column="0"
+                        BorderColor="{StaticResource OrangeColor}"
+                        HasShadow="True">
 
-                    <ListView
-                        BackgroundColor="{StaticResource WhiteColor}"
-                        ItemsSource="{x:Static model:SportsData.GetSpoertsData}"
-                        SelectionMode="None">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ImageCell Detail="{Binding Price}" Text="{Binding NamePath}">
-                                    <ImageCell.ImageSource>
-                                        <FontImageSource
-                                            FontFamily="IconFont"
-                                            Glyph="{Binding Icon}"
-                                            Color="Black" />
-                                    </ImageCell.ImageSource>
-                                </ImageCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        <ListView
+                            BackgroundColor="{StaticResource WhiteColor}"
+                            HasUnevenRows="True"
+                            ItemsSource="{x:Static model:SportsData.GetSpoertsData}"
+                            SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <!--<ViewCell>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Image HorizontalOptions="StartAndExpand" VerticalOptions="Center">
+                                                <Image.Source>
+                                                    <FontImageSource
+                                                        FontFamily="IconFont"
+                                                        Glyph="{Binding Icon}"
+                                                        Size="{StaticResource FontSize40}"
+                                                        Color="{StaticResource OrangeColor}" />
+                                                </Image.Source>
+                                            </Image>
+                                            <Label
+                                                FontSize="{StaticResource FontSize18}"
+                                                HorizontalOptions="StartAndExpand"
+                                                Text="{Binding NamePath}"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                Margin="0,0,10,0"
+                                                FontSize="{StaticResource FontSize18}"
+                                                HorizontalOptions="EndAndExpand"
+                                                Text="{Binding Price}"
+                                                VerticalOptions="Center" />
+                                        </StackLayout>
+                                    </ViewCell>-->
+
+                                    <!--<TextCell Detail="{Binding Price}" Text="{Binding NamePath}" />-->
+
+                                    <ImageCell Detail="{Binding Price}" Text="{Binding NamePath}">
+                                        <ImageCell.ImageSource>
+                                            <FontImageSource
+                                                FontFamily="IconFont"
+                                                Glyph="{Binding Icon}"
+                                                Size="{StaticResource FontSize14}"
+                                                Color="{StaticResource OrangeColor}" />
+                                        </ImageCell.ImageSource>
+                                    </ImageCell>
+
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Frame>
 
                     <Button
                         x:Name="sportListToggleBtn"

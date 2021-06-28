@@ -8,6 +8,7 @@ namespace SportsCashier.Models
         private DateTime receiteDate;
 
         public string Name { get; set; }
+        public string Icon { get; set; }
         public double Discount { get; set; }
         public double Price { get; set; }
         public int ReceiteNumber { get; set; }

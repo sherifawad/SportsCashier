@@ -101,7 +101,7 @@
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="IconFont"
-                                                    Glyph="{x:Static helpers:IconFont.IcofontFootball}"
+                                                    Glyph="{Binding Icon}"
                                                     Color="{StaticResource BlackColor}" />
                                             </Image.Source>
                                             <Image.Clip>

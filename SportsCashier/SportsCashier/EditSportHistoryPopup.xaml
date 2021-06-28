@@ -39,7 +39,7 @@
             <Image.Source>
                 <FontImageSource
                     FontFamily="IconFont"
-                    Glyph="{Binding Icon}"
+                    Glyph="{Binding MockSportModel.Icon}"
                     Size="24"
                     Color="Red" />
             </Image.Source>
@@ -51,6 +51,7 @@
             Grid.Column="1"
             DisplayMemberPath="NamePath"
             Focused="OnSuggestBoxFocused"
+            PlaceholderText="{Binding MockSportModel.Name}"
             SuggestionChosen="OnSuggestBoxSuggestionChosen"
             TextChanged="OnSuggestBoxTextChanged"
             TextMemberPath="NamePath" />

@@ -1,4 +1,5 @@
 ﻿using DataBase.Models;
+using DataBase.Services;
 using DataBase.Services.Repository;
 using SportsCashier.Common.Services;
 using SportsCashier.Common.Services.UnitOfWork;
@@ -16,6 +17,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using AppContext = DataBase.Services.AppContext;
 
 namespace SportsCashier
 {
@@ -33,7 +35,9 @@ namespace SportsCashier
             DependencyService.Register<IDialogService, ShellDialogService>();
             DependencyService.Register<INavigationService, ShellRoutingService>();
             DependencyService.Register<IMessagingService, MessagingService>();
+            DependencyService.Register<IDatabaseContext, AppContext>();
             DependencyService.Register<IUnitOfWork, UnitOfWork>();
+
             //DependencyService.Register<IGenericDbRepository<Invoice>, GenericDbRepository<Invoice>>();
             //DependencyService.Register<IGenericDbRepository<MemberModel>, GenericDbRepository<MemberModel>>();
             //DependencyService.Register<IGenericDbRepository<PlayerSport>, GenericDbRepository<PlayerSport>>();

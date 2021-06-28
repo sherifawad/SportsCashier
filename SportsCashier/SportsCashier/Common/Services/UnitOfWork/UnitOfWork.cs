@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 using AppContext = DataBase.Services.AppContext;
 
 namespace SportsCashier.Common.Services.UnitOfWork
@@ -16,9 +17,13 @@ namespace SportsCashier.Common.Services.UnitOfWork
     {
         private readonly IDatabaseContext _databaseContext;
         private Hashtable _repositories;
-        public UnitOfWork(IDatabaseContext databaseContext)
+        //public UnitOfWork(IDatabaseContext databaseContext)
+        //{
+        //    _databaseContext = databaseContext;
+        //}
+        public UnitOfWork()
         {
-            _databaseContext = databaseContext;
+            _databaseContext = DependencyService.Get<IDatabaseContext>();
         }
         public void Dispose()
         {

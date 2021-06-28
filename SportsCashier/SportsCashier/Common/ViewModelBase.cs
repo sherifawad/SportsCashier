@@ -1,4 +1,6 @@
-﻿using SportsCashier.Common.Services;
+﻿using DataBase.Models;
+using SportsCashier.Common.Services;
+using SportsCashier.Common.Services.UnitOfWork;
 using SportsCashier.Models;
 using SportsCashier.Services.DialogService;
 using SportsCashier.Services.MessagingService;
@@ -20,13 +22,7 @@ namespace SportsCashier.Common
         protected IDialogService _dialogService { get; }
         protected IMessagingService _messagingService { get; }
         protected IDataStore<MockPlayerData> _dataStore  { get; }
-
-        //protected IGenericDbRepository<MemberModel> _membersRepository { get; }
-        //protected IGenericDbRepository<PlayerModel> _playersRepository { get; }
-        //protected IGenericDbRepository<Sport> _sportsRepository { get; }
-        //protected IGenericDbRepository<PlayerSport> _ps { get; }
-        //protected bool IsBusy { get; set; }
-        //protected bool CommandRun { get; set; }
+        protected IUnitOfWork _unitOfWork  { get; }
 
         #endregion
 
@@ -36,6 +32,7 @@ namespace SportsCashier.Common
             _dialogService = DependencyService.Get<IDialogService>();
             _messagingService = DependencyService.Get<IMessagingService>();
             _dataStore = DependencyService.Get<IDataStore<MockPlayerData>>();
+            _unitOfWork = DependencyService.Get<IUnitOfWork>();
         }
         public virtual Task InitializeAsync() => Task.CompletedTask;
 

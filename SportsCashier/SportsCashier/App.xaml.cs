@@ -1,4 +1,7 @@
-﻿using SportsCashier.Common.Services;
+﻿using DataBase.Models;
+using DataBase.Services.Repository;
+using SportsCashier.Common.Services;
+using SportsCashier.Common.Services.UnitOfWork;
 using SportsCashier.DataBase;
 using SportsCashier.Extensions;
 using SportsCashier.Models;
@@ -30,11 +33,12 @@ namespace SportsCashier
             DependencyService.Register<IDialogService, ShellDialogService>();
             DependencyService.Register<INavigationService, ShellRoutingService>();
             DependencyService.Register<IMessagingService, MessagingService>();
-            DependencyService.Register<IGenericDbRepository<Invoice>, GenericDbRepository<Invoice>>();
-            DependencyService.Register<IGenericDbRepository<MemberModel>, GenericDbRepository<MemberModel>>();
-            DependencyService.Register<IGenericDbRepository<PlayerSport>, GenericDbRepository<PlayerSport>>();
-            DependencyService.Register<IGenericDbRepository<PlayerModel>, GenericDbRepository<PlayerModel>>();
-            DependencyService.Register<IGenericDbRepository<Sport>, GenericDbRepository<Sport>>();
+            DependencyService.Register<IUnitOfWork, UnitOfWork>();
+            //DependencyService.Register<IGenericDbRepository<Invoice>, GenericDbRepository<Invoice>>();
+            //DependencyService.Register<IGenericDbRepository<MemberModel>, GenericDbRepository<MemberModel>>();
+            //DependencyService.Register<IGenericDbRepository<PlayerSport>, GenericDbRepository<PlayerSport>>();
+            //DependencyService.Register<IGenericDbRepository<PlayerModel>, GenericDbRepository<PlayerModel>>();
+            //DependencyService.Register<IGenericDbRepository<Sport>, GenericDbRepository<Sport>>();
             DependencyService.Register<IDataStore<MockPlayerData>, MockDataStore>();
             //MainPage = new MembershipPlayersDetailView();
             //MainPage = new EditPlayerDetailsView();

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace SportsCashier.Models
+namespace DataBase.Models
 {
-    public class MockSportModel
+    public class MockSportModel : BaseModel
     {
         private DateTime receiteDate;
 

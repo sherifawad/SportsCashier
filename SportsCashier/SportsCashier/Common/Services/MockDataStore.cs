@@ -1,4 +1,5 @@
-﻿using SportsCashier.Models;
+﻿using DataBase.Models;
+using SportsCashier.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace SportsCashier.Common.Services
             items = new List<MockPlayerData>()
             {
                 new MockPlayerData{
-                Id = Guid.NewGuid().ToString(),
+                Id = 1,
                 Name = "Sherif",
                 Hide = true,
                 Sports = new List<MockSportModel>
@@ -80,7 +81,7 @@ namespace SportsCashier.Common.Services
                 }
             },
             new MockPlayerData{
-                Id = Guid.NewGuid().ToString(),
+                Id = 2,
                 Name = "Ahmed",
                 Sports = new List<MockSportModel>
                 {
@@ -122,7 +123,7 @@ namespace SportsCashier.Common.Services
                 }
             },
             new MockPlayerData{
-                Id = Guid.NewGuid().ToString(),
+                Id = 3,
                 Name = "Aya",
                 Sports = new List<MockSportModel>
                 {
@@ -188,7 +189,7 @@ namespace SportsCashier.Common.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(int id)
         {
             var oldItem = items.Where((MockPlayerData arg) => arg.Id == id).FirstOrDefault();
             items.Remove(oldItem);
@@ -196,7 +197,7 @@ namespace SportsCashier.Common.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<MockPlayerData> GetItemAsync(string id)
+        public async Task<MockPlayerData> GetItemAsync(int id)
         {
             return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
         }

@@ -1,4 +1,5 @@
-﻿using SportsCashier.Models;
+﻿using DataBase.Models;
+using SportsCashier.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SportsCashier.Models
+namespace DataBase.Models
 {
-    public class History
+    public class History : BaseModel
     {
         public DateTime Date { get; set; }
         public List<MockSportModel> Sports { get; set; } = new List<MockSportModel>();

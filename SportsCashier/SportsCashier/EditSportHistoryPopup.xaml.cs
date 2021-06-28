@@ -1,4 +1,5 @@
-﻿using dotMorten.Xamarin.Forms;
+﻿using DataBase.Models;
+using dotMorten.Xamarin.Forms;
 using SportsCashier.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ namespace SportsCashier
         public EditSportHistoryPopup()
         {
             InitializeComponent();
-            MockSportModel = new MockSportModel { ReceiteDate = DateTime.Now};
+            MockSportModel = new MockSportModel { ReceiteDate = DateTime.Now };
             BindingContext = this;
 
         }
@@ -34,6 +35,8 @@ namespace SportsCashier
             //    dmSuggestBox.PlaceholderText = matchsport.NamePath;
             //}
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
         {

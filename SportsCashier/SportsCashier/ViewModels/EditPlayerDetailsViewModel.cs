@@ -1,4 +1,5 @@
-﻿using SportsCashier.Common;
+﻿using DataBase.Models;
+using SportsCashier.Common;
 using SportsCashier.Extensions;
 using SportsCashier.Models;
 using System;
@@ -104,7 +105,7 @@ namespace SportsCashier.ViewModels
         {
             if (string.IsNullOrEmpty(PlayerId))
                 return;
-            mockPlayer = await _dataStore.GetItemAsync(PlayerId);
+            mockPlayer = await _dataStore.GetItemAsync(int.Parse(PlayerId));
 
             if (mockPlayer == null)
                 return;

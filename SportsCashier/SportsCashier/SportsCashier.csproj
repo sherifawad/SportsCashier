@@ -40,11 +40,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DataBase\DataBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Common\Styles\Fonts.xaml.cs">
       <DependentUpon>Fonts.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="EditSportHistoryPopup.xaml.cs">
-      <DependentUpon>EditSportHistoryPopup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Template\EditHistoryContentView.xaml.cs">
       <DependentUpon>EditHistoryContentView.xaml</DependentUpon>
@@ -88,10 +89,10 @@
     <EmbeddedResource Update="Common\Styles\ColorsStyle.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="EditSportHistoryPopup.xaml">
+    <EmbeddedResource Update="EditPlayerDetailsView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="EditPlayerDetailsView.xaml">
+    <EmbeddedResource Update="EditSportHistoryPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="MembershipPlayersDetailView.xaml">

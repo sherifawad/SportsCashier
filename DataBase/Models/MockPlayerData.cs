@@ -3,11 +3,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
-namespace SportsCashier.Models
+namespace DataBase.Models
 {
-    public class MockPlayerData
+    public class MockPlayerData : BaseModel
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public bool Hide { get; set; }
         public string Image { get; set; } = "BackgroundBubbles.webp";

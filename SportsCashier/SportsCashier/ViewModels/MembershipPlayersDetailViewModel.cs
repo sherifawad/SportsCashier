@@ -1,6 +1,6 @@
-﻿using SportsCashier.Common;
+﻿using DataBase.Models;
+using SportsCashier.Common;
 using SportsCashier.Extensions;
-using SportsCashier.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -80,7 +80,7 @@ namespace SportsCashier.ViewModels
 
         private async ValueTask EditPalyerAsync(MockPlayerData arg)
         {
-            if (string.IsNullOrEmpty(arg.Id))
+            if (arg.Id <= 0)
                 return;
             await _navigationService.PushAsync<EditPlayerDetailsViewModel>($"{nameof(EditPlayerDetailsViewModel.PlayerId)}={arg.Id}");
         }

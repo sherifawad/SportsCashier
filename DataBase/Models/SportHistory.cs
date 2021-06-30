@@ -1,19 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataBase.Models
 {
-    public class MockSportModel : BaseModel
+    public class SportHistory : BaseModel
     {
         private DateTime receiteDate;
 
-        public string Name { get; set; }
-        public string Icon { get; set; }
         public double Discount { get; set; }
         public double Price { get; set; }
         public int ReceiteNumber { get; set; }
         public int Code { get; set; }
-        public bool EditMode { get; set; }
         public DateTime ReceiteDate
         {
             get => receiteDate;

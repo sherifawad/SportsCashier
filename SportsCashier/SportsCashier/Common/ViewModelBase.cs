@@ -21,7 +21,7 @@ namespace SportsCashier.Common
         protected INavigationService _navigationService { get; }
         protected IDialogService _dialogService { get; }
         protected IMessagingService _messagingService { get; }
-        protected IDataStore<MockPlayerData> _dataStore  { get; }
+        protected IDataStore<Player> _dataStore  { get; }
         protected IUnitOfWork _unitOfWork  { get; }
 
         #endregion
@@ -31,7 +31,7 @@ namespace SportsCashier.Common
             _navigationService = DependencyService.Get<INavigationService>();
             _dialogService = DependencyService.Get<IDialogService>();
             _messagingService = DependencyService.Get<IMessagingService>();
-            _dataStore = DependencyService.Get<IDataStore<MockPlayerData>>();
+            _dataStore = DependencyService.Get<IDataStore<Player>>();
             _unitOfWork = DependencyService.Get<IUnitOfWork>();
         }
         public virtual Task InitializeAsync() => Task.CompletedTask;

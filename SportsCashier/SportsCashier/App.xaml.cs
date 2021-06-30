@@ -30,12 +30,12 @@ namespace SportsCashier
             InitializeComponent();
             Sharpnado.Shades.Initializer.Initialize(loggerEnable: false);
 
-            AddSports().SafeFireAndForget(false);
+            //AddSports().SafeFireAndForget(false);
 
             DependencyService.Register<IDialogService, ShellDialogService>();
             DependencyService.Register<INavigationService, ShellRoutingService>();
             DependencyService.Register<IMessagingService, MessagingService>();
-            DependencyService.Register<IDatabaseContext, AppContext>();
+            //DependencyService.Register<IDatabaseContext, AppContext>();
             DependencyService.Register<IUnitOfWork, UnitOfWork>();
 
             //DependencyService.Register<IGenericDbRepository<Invoice>, GenericDbRepository<Invoice>>();
@@ -43,7 +43,7 @@ namespace SportsCashier
             //DependencyService.Register<IGenericDbRepository<PlayerSport>, GenericDbRepository<PlayerSport>>();
             //DependencyService.Register<IGenericDbRepository<PlayerModel>, GenericDbRepository<PlayerModel>>();
             //DependencyService.Register<IGenericDbRepository<Sport>, GenericDbRepository<Sport>>();
-            DependencyService.Register<IDataStore<MockPlayerData>, MockDataStore>();
+            DependencyService.Register<IDataStore<Player>, MockDataStore>();
             //MainPage = new MembershipPlayersDetailView();
             //MainPage = new EditPlayerDetailsView();
             MainPage = new AppShell();

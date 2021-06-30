@@ -14,7 +14,7 @@ namespace SportsCashier.ValueConverters
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter is List<MockSportModel> list)
+            if (parameter is List<SportHistory> list)
             {
                 return list.Count() * 90;
             }

@@ -1,5 +1,7 @@
 ﻿using DataBase.Models;
 using SportsCashier.Common;
+using SportsCashier.Common.Extensions;
+using SportsCashier.Common.Models;
 using SportsCashier.Extensions;
 using System;
 using System.Collections.Generic;
@@ -16,8 +18,8 @@ namespace SportsCashier.ViewModels
     {
         #region Public properties
 
-        private ObservableCollection<MockPlayerData> _Players;
-        public ObservableCollection<MockPlayerData> Players
+        private ObservableCollection<PlayerDto> _Players;
+        public ObservableCollection<PlayerDto> Players
         {
             get => _Players; 
             set => SetProperty(ref _Players, value);
@@ -35,32 +37,35 @@ namespace SportsCashier.ViewModels
 
 
         #region Public Command
-        public IAsyncValueCommand<MockPlayerData> HidePalyerCommand { get; set; }
-        public IAsyncValueCommand<MockPlayerData> EditPalyerCommand { get; set; }
-        public IAsyncValueCommand<List<MockSportModel>> BookmarkAlertCommand { get; set; }
+        public IAsyncValueCommand<PlayerDto> HidePalyerCommand { get; set; }
+        public IAsyncValueCommand<PlayerDto> EditPalyerCommand { get; set; }
+        public IAsyncValueCommand<List<SportHistoryDto>> BookmarkAlertCommand { get; set; }
         public IAsyncValueCommand AddPlayerCommand { get; set; }
 
         #endregion
 
         public MembershipPlayersDetailViewModel()
         {
-            Players = new ObservableCollection<MockPlayerData>();
+            Players = new ObservableCollection<PlayerDto>();
             FilterPlayers = true;
-            BookmarkAlertCommand = new AsyncValueCommand<List<MockSportModel>>(BookmarkAlertAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            HidePalyerCommand = new AsyncValueCommand<MockPlayerData>(HidePalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            EditPalyerCommand = new AsyncValueCommand<MockPlayerData>(EditPalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            BookmarkAlertCommand = new AsyncValueCommand<List<SportHistoryDto>>(BookmarkAlertAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            HidePalyerCommand = new AsyncValueCommand<PlayerDto>(HidePalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            EditPalyerCommand = new AsyncValueCommand<PlayerDto>(EditPalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             AddPlayerCommand = new AsyncValueCommand(AddPlayerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
         }
 
 
         public override async Task InitializeAsync()
         {
-            Players = (await _dataStore.GetItemsAsync()).ToObservableCollection();
+            var list = await _unitOfWork.Repository<Player>().GetAllAsync();
+            Players = list.ToPlayerDtoList().ToObservableCollection();
+            //Players = (await _unitOfWork.Repository<DataBasePlayer>().GetAllAsync()).ToObservableCollection();
+            //Players = (await _dataStore.GetItemsAsync()).ToObservableCollection();
         }
 
         #region Commands Methods
 
-        private async ValueTask HidePalyerAsync(MockPlayerData arg)
+        private async ValueTask HidePalyerAsync(PlayerDto arg)
         {
            var indx = Players.IndexOf(arg);
             arg.Hide = !arg.Hide;
@@ -73,19 +78,20 @@ namespace SportsCashier.ViewModels
             var result = await _dialogService.DisplayPrompt("New Player", "Add Player Name", "OK", "Cancel");
             if (string.IsNullOrWhiteSpace(result))
                 return;
-            var newPlayer = new MockPlayerData { Name = result };
-            await _dataStore.AddItemAsync(newPlayer);
-            Players.Add(newPlayer);
+            var newPlayer = new Player { Name = result };
+            await _unitOfWork.Repository<Player>().AddItemAsync(newPlayer, true);
+            //await _dataStore.AddItemAsync(newPlayer);
+            Players.Add(newPlayer.ToPlayerDto());
         }
 
-        private async ValueTask EditPalyerAsync(MockPlayerData arg)
+        private async ValueTask EditPalyerAsync(PlayerDto arg)
         {
             if (arg.Id <= 0)
                 return;
             await _navigationService.PushAsync<EditPlayerDetailsViewModel>($"{nameof(EditPlayerDetailsViewModel.PlayerId)}={arg.Id}");
         }
 
-        private async ValueTask BookmarkAlertAsync(List<MockSportModel> arg)
+        private async ValueTask BookmarkAlertAsync(List<SportHistoryDto> arg)
         {
             string message = string.Empty;
             if (arg != null && arg.Count > 0)

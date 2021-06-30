@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using AppContext = DataBase.Services.AppContext;
 
@@ -23,7 +24,18 @@ namespace SportsCashier.Common.Services.UnitOfWork
         //}
         public UnitOfWork()
         {
-            _databaseContext = DependencyService.Get<IDatabaseContext>();
+            //_databaseContext = DependencyService.Get<IDatabaseContext>();
+            //_databaseContext = new AppContext();
+            //var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Store.db3");
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "app.db3");
+            try
+            {
+                _databaseContext = new AppContext(dbPath);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
         public void Dispose()
         {

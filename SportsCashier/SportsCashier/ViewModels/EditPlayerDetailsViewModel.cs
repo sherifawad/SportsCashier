@@ -1,5 +1,6 @@
 ﻿using DataBase.Models;
 using SportsCashier.Common;
+using SportsCashier.Common.Models;
 using SportsCashier.Extensions;
 using SportsCashier.Models;
 using System;
@@ -8,11 +9,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using SportsCashier.Common.Extensions;
 
 namespace SportsCashier.ViewModels
 {
@@ -21,24 +22,23 @@ namespace SportsCashier.ViewModels
     {
         #region Private Properties
         private string _PlayerId;
-        private ObservableCollection<History> histories;
-        private ObservableCollection<MockSportModel> sports;
+        private ObservableCollection<HistoryDto> histories;
+        private ObservableCollection<PlayerSport> sports;
         private SportsData _selectedSportsData;
         private string _Image;
         private string _Name;
-        private MockPlayerData mockPlayer;
+        private PlayerDto mockPlayer;
+        private Player dataBasePlayer;
         #endregion
 
         #region Public Properties
 
-
-
-        public ObservableCollection<History> Histories
+        public ObservableCollection<HistoryDto> Histories
         {
             get => histories;
             private set => SetProperty(ref histories, value);
         }
-        public ObservableCollection<MockSportModel> Sports
+        public ObservableCollection<PlayerSport> Sports
         {
             get => sports;
             private set => SetProperty(ref sports, value);
@@ -69,12 +69,12 @@ namespace SportsCashier.ViewModels
 
         #region Public Commands
 
-        public IAsyncCommand<MockSportModel> SportHistoryDeleteCommand { get; }
-        public IAsyncCommand<MockSportModel> SportHistoryEditCommand { get; }
-        public IAsyncValueCommand<MockSportModel> SportEditCommand { get; }
-        public IAsyncValueCommand<MockSportModel> SportEditCancelCommand { get; }
-        public IAsyncValueCommand<MockSportModel> SportEditSubmitCommand { get; }
-        public IAsyncValueCommand<MockSportModel> SportDeleteCommand { get; }
+        public IAsyncCommand<SportHistoryDto> SportHistoryDeleteCommand { get; }
+        public IAsyncCommand<SportHistoryDto> SportHistoryEditCommand { get; }
+        public IAsyncValueCommand<PlayerSport> SportEditCommand { get; }
+        public IAsyncValueCommand<PlayerSport> SportEditCancelCommand { get; }
+        public IAsyncValueCommand<PlayerSport> SportEditSubmitCommand { get; }
+        public IAsyncValueCommand<PlayerSport> SportDeleteCommand { get; }
         public IAsyncValueCommand AddSportCommand { get; }
         public IAsyncValueCommand DoneCommand { get; }
         public IAsyncValueCommand ChangeImageCommand { get; }
@@ -84,18 +84,18 @@ namespace SportsCashier.ViewModels
 
         public EditPlayerDetailsViewModel()
         {
-            Histories = new ObservableCollection<History>();
-            Sports = new ObservableCollection<MockSportModel>();
+            Histories = new ObservableCollection<HistoryDto>();
+            Sports = new ObservableCollection<PlayerSport>();
 
-            SportHistoryEditCommand = new AsyncCommand<MockSportModel>(SportHistoryEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            SportHistoryDeleteCommand = new AsyncCommand<MockSportModel>(SportHistoryDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            SportEditCommand = new AsyncValueCommand<MockSportModel>(SportEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            SportEditCancelCommand = new AsyncValueCommand<MockSportModel>(SportEditCancelAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            SportEditSubmitCommand = new AsyncValueCommand<MockSportModel>(SportEditSubmitAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            SportHistoryEditCommand = new AsyncCommand<SportHistoryDto>(SportHistoryEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            SportHistoryDeleteCommand = new AsyncCommand<SportHistoryDto>(SportHistoryDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            SportEditCommand = new AsyncValueCommand<PlayerSport>(SportEditAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            SportEditCancelCommand = new AsyncValueCommand<PlayerSport>(SportEditCancelAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            SportEditSubmitCommand = new AsyncValueCommand<PlayerSport>(SportEditSubmitAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             AddSportCommand = new AsyncValueCommand(AddSportAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             DoneCommand = new AsyncValueCommand(DoneAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             ChangeImageCommand = new AsyncValueCommand(ChangeImageAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
-            SportDeleteCommand = new AsyncValueCommand<MockSportModel>(SportDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
+            SportDeleteCommand = new AsyncValueCommand<PlayerSport>(SportDeleteAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             MessagingCenter.Subscribe<string, SportsData>(AppConstants.App, AppConstants.SelectedSport, (s, e) => _selectedSportsData = e as SportsData);
 
         }
@@ -105,10 +105,13 @@ namespace SportsCashier.ViewModels
         {
             if (string.IsNullOrEmpty(PlayerId))
                 return;
-            mockPlayer = await _dataStore.GetItemAsync(int.Parse(PlayerId));
-
-            if (mockPlayer == null)
+            dataBasePlayer = await _dataStore.GetItemAsync(int.Parse(PlayerId));
+            if (dataBasePlayer == null)
                 return;
+
+            mockPlayer = dataBasePlayer.ToPlayerDto();
+
+
 
             Name = mockPlayer.Name;
             Image = mockPlayer.Image;
@@ -157,18 +160,23 @@ namespace SportsCashier.ViewModels
 
         private async ValueTask DoneAsync()
         {
-            mockPlayer.Name = Name;
-            mockPlayer.Image = Image;
-            mockPlayer.Sports = sports.ToList();
-            mockPlayer.Histories = Histories.ToList();
-            await _dataStore.UpdateItemAsync(mockPlayer);
-            //TODO save To dataBase
+            dataBasePlayer.Name = Name;
+            dataBasePlayer.Image = Image;
+            //await _dataStore.UpdateItemAsync(mockPlayer);
+            List<int> sports = new List<int>();
+            foreach (var item in Sports)
+            {
+                sports.Add(item.Code);
+            }
+            dataBasePlayer.Sports = sports;
+            dataBasePlayer.Histories = Histories.ToList().ToHistoryList();
+            await _unitOfWork.CommitAsync();
             await _navigationService.PopAsync();
         }
 
-        private async Task SportHistoryDeleteAsync(MockSportModel arg)
+        private async Task SportHistoryDeleteAsync(SportHistoryDto arg)
         {
-            History currentHistory = null;
+            HistoryDto currentHistory = null;
             int historyIndex = -1;
             foreach (var history in Histories)
             {
@@ -192,26 +200,25 @@ namespace SportsCashier.ViewModels
             var sportInEditMode = Sports?.FirstOrDefault(x => x.EditMode == true);
             if (sportInEditMode != null)
                 return;
-            var sports = Sports ?? new ObservableCollection<MockSportModel>();
-            sports.Add(new MockSportModel { EditMode = true, Name = "" });
+            var sports = Sports ?? new ObservableCollection<PlayerSport>();
+            sports.Add(new PlayerSport { EditMode = true });
 
             await Task.FromResult(true);
 
         }
 
-        private async ValueTask SportEditAsync(MockSportModel arg)
+        private async ValueTask SportEditAsync(PlayerSport arg)
         {
             arg.EditMode = true;
             var indx = Sports.IndexOf(arg);
             if (indx < 0)
                 return;
-
             Sports[indx] = arg;
             await Task.FromResult(true);
         }
 
 
-        private async ValueTask SportDeleteAsync(MockSportModel arg)
+        private async ValueTask SportDeleteAsync(PlayerSport arg)
         {
             //var sport = MockPlayer.Sports.FirstOrDefault(x => x.code == arg.code);
             //if (sport != null)
@@ -219,22 +226,14 @@ namespace SportsCashier.ViewModels
             await Task.FromResult(true);
         }
 
-        private async ValueTask SportEditSubmitAsync(MockSportModel arg)
+        private async ValueTask SportEditSubmitAsync(PlayerSport arg)
         {
             var indx = Sports.IndexOf(arg);
             if (indx < 0 || _selectedSportsData == null)
                 return;
-            var newSport = new MockSportModel
+            var newSport = new PlayerSport
             {
-                Name = _selectedSportsData.Name,
-                EditMode = false,
-                Alert = arg.Alert,
-                Code = _selectedSportsData.Code,
-                Icon = _selectedSportsData.Icon,
-                Discount = arg.Discount,
-                Price = arg.Price,
-                ReceiteDate = arg.ReceiteDate,
-                ReceiteNumber = arg.ReceiteNumber
+                Code = _selectedSportsData.Code
             };
             Sports[indx] = newSport;
             _selectedSportsData = null;
@@ -242,7 +241,7 @@ namespace SportsCashier.ViewModels
 
         }
 
-        private async ValueTask SportEditCancelAsync(MockSportModel arg)
+        private async ValueTask SportEditCancelAsync(PlayerSport arg)
         {
             var indx = Sports.IndexOf(arg);
             if (indx < 0 || string.IsNullOrEmpty(arg.Name))
@@ -253,10 +252,11 @@ namespace SportsCashier.ViewModels
 
         }
 
-        private async Task SportHistoryEditAsync(MockSportModel arg)
+        private async Task SportHistoryEditAsync(SportHistoryDto arg)
         {
-            History currentHistory = null;
+            HistoryDto currentHistory = null;
             int histroryIndex = -1;
+            
 
             if (arg == null)
             {
@@ -271,7 +271,7 @@ namespace SportsCashier.ViewModels
 
                 if (result == null)
                 {
-                    Histories.Add(new History { Date = popupResult.ReceiteDate, Sports = new List<MockSportModel> { popupResult } });
+                    Histories.Add(new HistoryDto { Date = popupResult.ReceiteDate, Sports = new List<SportHistoryDto> { popupResult } });
                 }
                 else
                 {

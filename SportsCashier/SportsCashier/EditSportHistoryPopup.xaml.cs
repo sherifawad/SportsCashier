@@ -1,5 +1,6 @@
 ﻿using DataBase.Models;
 using dotMorten.Xamarin.Forms;
+using SportsCashier.Common.Models;
 using SportsCashier.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -12,17 +13,17 @@ using Xamarin.Forms.Xaml;
 namespace SportsCashier
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EditSportHistoryPopup : Popup<MockSportModel>, INotifyPropertyChanged
+    public partial class EditSportHistoryPopup : Popup<SportHistoryDto>, INotifyPropertyChanged
     {
-        public MockSportModel MockSportModel { get; private set; }
+        public SportHistoryDto MockSportModel { get; private set; }
         public EditSportHistoryPopup()
         {
             InitializeComponent();
-            MockSportModel = new MockSportModel { ReceiteDate = DateTime.Now };
+            MockSportModel = new SportHistoryDto { ReceiteDate = DateTime.Now };
             BindingContext = this;
 
         }
-        public EditSportHistoryPopup(MockSportModel mockSportModel)
+        public EditSportHistoryPopup(SportHistoryDto mockSportModel)
         {
             InitializeComponent();
             MockSportModel = mockSportModel;
@@ -46,7 +47,7 @@ namespace SportsCashier
             ((Slider)sender).Value = newStep * step;
         }
 
-        protected override MockSportModel GetLightDismissResult()
+        protected override SportHistoryDto GetLightDismissResult()
         {
             return null;
         }

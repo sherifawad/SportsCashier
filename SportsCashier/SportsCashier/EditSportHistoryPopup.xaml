@@ -4,9 +4,9 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dm="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
-    xmlns:model="clr-namespace:DataBase.Models;assembly=DataBase"
+    xmlns:model="clr-namespace:SportsCashier.Common.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    x:TypeArguments="model:MockSportModel"
+    x:TypeArguments="model:SportHistoryDto"
     Size="330, 400">
     <xct:Popup.Resources>
         <ResourceDictionary>

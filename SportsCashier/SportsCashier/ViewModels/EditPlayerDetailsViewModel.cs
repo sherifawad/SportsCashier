@@ -105,7 +105,8 @@ namespace SportsCashier.ViewModels
         {
             if (string.IsNullOrEmpty(PlayerId))
                 return;
-            dataBasePlayer = await _dataStore.GetItemAsync(int.Parse(PlayerId));
+            dataBasePlayer = await _unitOfWork.Repository<Player>().FindAsync(int.Parse(PlayerId));
+            //dataBasePlayer = await _dataStore.GetItemAsync(int.Parse(PlayerId));
             if (dataBasePlayer == null)
                 return;
 

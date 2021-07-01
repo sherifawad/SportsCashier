@@ -69,6 +69,7 @@
         <Entry
             Grid.Row="1"
             Grid.Column="1"
+            Keyboard="Numeric"
             Style="{StaticResource SportEntry}"
             Text="{Binding MockSportModel.ReceiteNumber}" />
 
@@ -92,6 +93,7 @@
         <Entry
             Grid.Row="3"
             Grid.Column="1"
+            Keyboard="Numeric"
             Style="{StaticResource SportEntry}"
             Text="{Binding MockSportModel.Price}" />
 

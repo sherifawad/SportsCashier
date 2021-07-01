@@ -54,26 +54,34 @@ namespace SportsCashier
 
         private void OnSaveBtnClicked(object sender, EventArgs e)
         {
-            foreach (var property in MockSportModel.GetType().GetProperties())
-            {
-                object propertyObject = property.GetValue(MockSportModel);
-                if (propertyObject is string)
-                {
-                    if (string.IsNullOrEmpty((string)propertyObject))
-                        return;
-                }
-                else if (propertyObject is int)
-                {
-                    if ((int)propertyObject <= 0)
-                        return;
-                }
-                else if (propertyObject is double && property.Name != "Discount")
-                {
-                    if ((double)propertyObject <= 0)
-                        return;
-                }
+            if (string.IsNullOrEmpty(MockSportModel.Icon) ||
+                string.IsNullOrEmpty(MockSportModel.Name) ||
+                MockSportModel.Price <= 0 ||
+                MockSportModel.ReceiteDate == default ||
+                MockSportModel.Code <= 0 ||
+                MockSportModel.ReceiteNumber <= 0)
+                return;
 
-            }
+            //foreach (var property in MockSportModel.GetType().GetProperties())
+            //{
+            //    object propertyObject = property.GetValue(MockSportModel);
+            //    if (propertyObject is string)
+            //    {
+            //        if (string.IsNullOrEmpty((string)propertyObject))
+            //            return;
+            //    }
+            //    else if (propertyObject is int)
+            //    {
+            //        if ((int)propertyObject <= 0)
+            //            return;
+            //    }
+            //    else if (propertyObject is double && property.Name != "Discount")
+            //    {
+            //        if ((double)propertyObject <= 0)
+            //            return;
+            //    }
+
+            //}
             Dismiss(MockSportModel);
         }
 

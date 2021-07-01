@@ -28,10 +28,13 @@ namespace SportsCashier.ViewModels
         private bool _FilterPlayers;
         public bool FilterPlayers
         {
-            get => _FilterPlayers; 
-            set => SetProperty(ref _FilterPlayers, value);
+            get => _FilterPlayers;
+            set
+            {
+                SetProperty(ref _FilterPlayers, value);
+                GetPalyers();
+            }
         }
-
 
         #endregion
 
@@ -47,31 +50,37 @@ namespace SportsCashier.ViewModels
         public MembershipPlayersDetailViewModel()
         {
             Players = new ObservableCollection<PlayerDto>();
-            FilterPlayers = true;
             BookmarkAlertCommand = new AsyncValueCommand<List<SportHistoryDto>>(BookmarkAlertAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             HidePalyerCommand = new AsyncValueCommand<PlayerDto>(HidePalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             EditPalyerCommand = new AsyncValueCommand<PlayerDto>(EditPalyerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
             AddPlayerCommand = new AsyncValueCommand(AddPlayerAsync, onException: ex => Debug.WriteLine(ex), allowsMultipleExecutions: false);
         }
 
-
-        public override async Task InitializeAsync()
+        public override Task InitializeAsync()
         {
-            var list = await _unitOfWork.Repository<Player>().GetAllAsync();
-            Players = list.ToPlayerDtoList().ToObservableCollection();
-            //Players = (await _unitOfWork.Repository<DataBasePlayer>().GetAllAsync()).ToObservableCollection();
-            //Players = (await _dataStore.GetItemsAsync()).ToObservableCollection();
+            GetPalyers();
+            return base.InitializeAsync();
         }
+        //public override Task InitializeAsync()
+        //{
+        //    GetPalyers();
+        //    //var list = await _unitOfWork.Repository<Player>().Get(x => x.Hide == false);
+        //    //Players = list.ToPlayerDtoList().ToObservableCollection();
+        //    //Players = (await _unitOfWork.Repository<DataBasePlayer>().GetAllAsync()).ToObservableCollection();
+        //    //Players = (await _dataStore.GetItemsAsync()).ToObservableCollection();
+        //}
 
         #region Commands Methods
 
         private async ValueTask HidePalyerAsync(PlayerDto arg)
         {
-           var indx = Players.IndexOf(arg);
+            var dataBasePlayer = await _unitOfWork.Repository<Player>().FindAsync(arg.Id);
+            dataBasePlayer.Hide = !dataBasePlayer.Hide;
+            var indx = Players.IndexOf(arg);
             arg.Hide = !arg.Hide;
             var editedPlayer = arg;
             Players[indx] = editedPlayer;
-            await Task.FromResult(true);
+            await _unitOfWork.CommitAsync();
         }
         private async ValueTask AddPlayerAsync()
         {
@@ -105,6 +114,24 @@ namespace SportsCashier.ViewModels
 
         }
 
+        #endregion
+
+        #region Private Methods
+        private async void GetPalyers()
+        {
+            List<Player> list = null;
+            await Task.Delay(500);
+            if (FilterPlayers)
+                list = await _unitOfWork.Repository<Player>().Get(null, $"{nameof(Player.Histories)}.{nameof(History.Sports)}");
+            else
+                list = await _unitOfWork.Repository<Player>().Get(x => x.Hide == false, $"{nameof(Player.Histories)}.{nameof(History.Sports)}");
+
+            if(list != null)
+            {
+                Players.Clear();
+                Players = list.ToPlayerDtoList().ToObservableCollection();
+            }
+        }
         #endregion
     }
 }

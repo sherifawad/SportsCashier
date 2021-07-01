@@ -76,13 +76,13 @@
                             Binding="{Binding IsToggled, Source={x:Reference swBtn}}"
                             TargetType="Label"
                             Value="True">
-                            <Setter Property="Text" Value="Hide" />
+                            <Setter Property="Text" Value="All" />
                         </DataTrigger>
                         <DataTrigger
                             Binding="{Binding IsToggled, Source={x:Reference swBtn}}"
                             TargetType="Label"
                             Value="False">
-                            <Setter Property="Text" Value="Un-Hide" />
+                            <Setter Property="Text" Value="Filtered" />
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>

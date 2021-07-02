@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:model="clr-namespace:SportsCashier.Models"
     xmlns:template="clr-namespace:SportsCashier.Views.Template"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     BackgroundColor="{StaticResource OrangeColor}"
     Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
@@ -194,6 +195,78 @@
                         WidthRequest="40" />
                 </Grid>
             </Frame>
+
+            <Grid
+                Grid.Row="0"
+                Grid.RowSpan="4"
+                BackgroundColor="Beige"
+                RowDefinitions="Auto,*">
+                <StackLayout
+                    Padding="15"
+                    BackgroundColor="{StaticResource WhiteBlueColor}"
+                    Orientation="Horizontal">
+                    <Button
+                        BackgroundColor="{StaticResource BlackColor}"
+                        Command="{Binding PayCommand}"
+                        CornerRadius="20"
+                        Text="PDF"
+                        TextColor="{StaticResource WhiteColor}" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="{StaticResource FontSize20}"
+                        HorizontalOptions="CenterAndExpand"
+                        Text="{Binding Total}"
+                        TextColor="{StaticResource BlackColor}"
+                        VerticalOptions="Center" />
+                    <Button
+                        BackgroundColor="{StaticResource BlackColor}"
+                        CornerRadius="20"
+                        Text="Qr"
+                        TextColor="{StaticResource WhiteColor}" />
+                </StackLayout>
+
+                <CollectionView
+                    Grid.Row="1"
+                    ItemsSource="{Binding PlayersToPaid}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <CheckBox CheckedChanged="OnCheckBoxChanged" IsChecked="{Binding IsChecked}" />
+                                    <Label
+                                        FontSize="{StaticResource FontSize18}"
+                                        Text="{Binding Name, Converter={xct:TextCaseConverter Type=FirstUpperRestLower}}"
+                                        TextColor="{StaticResource BlackColor}"
+                                        VerticalOptions="Center" />
+                                </StackLayout>
+                                <ListView
+                                    Margin="20"
+                                    HasUnevenRows="True"
+                                    ItemsSource="{Binding Sports}"
+                                    SelectionMode="None"
+                                    VerticalOptions="FillAndExpand">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <CheckBox CheckedChanged="OnCheckBoxChanged" IsChecked="{Binding IsChecked}" />
+                                                    <Label
+                                                        HorizontalOptions="CenterAndExpand"
+                                                        Text="{Binding Name}"
+                                                        VerticalOptions="Center" />
+                                                    <Label Text="{Binding Price}" VerticalOptions="Center" />
+                                                </StackLayout>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackLayout>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
 
         </Grid>
     </ContentPage.Content>

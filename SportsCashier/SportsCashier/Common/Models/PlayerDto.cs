@@ -1,6 +1,7 @@
 ﻿using DataBase.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -8,10 +9,24 @@ namespace SportsCashier.Common.Models
 {
     public class PlayerDto
     {
+        private bool isChecked;
+
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Hide { get; set; }
         public string Image { get; set; }
+        public bool IsChecked 
+        {
+            get => isChecked;
+            set
+            {
+                isChecked = value;
+                foreach (var item in Sports)
+                {
+                    item.IsChecked = value;
+                }
+            }
+        }
         public List<PlayerSport> Sports { get; set; } = new List<PlayerSport>();
         public List<HistoryDto> Histories { get; set; } = new List<HistoryDto>();
         public List<SportHistoryDto> SportsToAlert

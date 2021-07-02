@@ -60,6 +60,13 @@ namespace SportsCashier
             else
                 sportsFrame.TranslateTo(0, 0, CollapseAnimationSpeed, Easing.SinInOut);
         }
+
+        private async void OnCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (_viewModel == null)
+                return;
+            await _viewModel.CalculateAsync();
+        }
     }
 
     //public class HistoryGroup

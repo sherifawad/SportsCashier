@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
+    <PackageReference Include="Forms9Patch" Version="2.4.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.4" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
@@ -30,9 +31,9 @@
     <PackageReference Include="Sharpnado.Shadows" Version="1.2.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.1.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
     <PackageReference Include="Xamarin.Forms.BackgroundKit" Version="2.0.8" />
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
     <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2012" />
@@ -46,6 +47,11 @@
   <ItemGroup>
     <Compile Update="Common\Styles\Fonts.xaml.cs">
       <DependentUpon>Fonts.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="RazorTemplates\PayoutPdf.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PayoutPdf.cshtml</DependentUpon>
     </Compile>
     <Compile Update="Views\Template\EditHistoryContentView.xaml.cs">
       <DependentUpon>EditHistoryContentView.xaml</DependentUpon>
@@ -96,6 +102,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="MembershipPlayersDetailView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="QrPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Template\EditHistoryContentView.xaml">
@@ -166,6 +175,10 @@
   <ItemGroup>
     <None Update="PlayerDetailsView.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="RazorTemplates\PayoutPdf.cshtml">
+      <Generator>RazorTemplatePreprocessor</Generator>
+      <LastGenOutput>PayoutPdf.cs</LastGenOutput>
     </None>
   </ItemGroup>
 </Project>

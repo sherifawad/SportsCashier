@@ -1,0 +1,40 @@
+﻿@using SportsCashier.Common.Models;
+
+@model Payoutput
+
+<html lang="en">
+
+<body>
+
+    <div style="font-size: 45px; color:red; text-align:center">
+        Code:   @Model.MemberShipCode
+    </div>
+    @foreach (var item in @Model.PlayerPayoutput)
+    {
+        <table>
+            <tr>
+                <td style="font-size: 36px; color: blue; border-bottom: 1px solid ">
+                    @item.Name
+                </td>
+            </tr>
+            @foreach (var sport in @item.GetSports)
+            {
+                <tr>
+                    <td>
+                        @sport.Price
+                    </td>
+                    <td>
+                        @sport.Name
+                    </td>
+                    <td>
+                        %@sport.Discount
+                    </td>
+                    <td>
+                        $@sport.Total
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</body>
+</html>

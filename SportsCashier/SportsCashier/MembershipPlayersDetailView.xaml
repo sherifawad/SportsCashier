@@ -5,11 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:model="clr-namespace:SportsCashier.Models"
     xmlns:template="clr-namespace:SportsCashier.Views.Template"
+    xmlns:valueconverters="clr-namespace:SportsCashier.ValueConverters"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="page"
     BackgroundColor="{StaticResource OrangeColor}"
     Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <valueconverters:AnyTrueMultiConverter x:Key="AnyTrueMultiConverter" />
             <Style x:Key="BarLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="{StaticResource FontSize14}" />
                 <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
@@ -25,15 +28,9 @@
             RowDefinitions="Auto, Auto, Auto, Auto"
             RowSpacing="20"
             VerticalOptions="FillAndExpand">
-            <Button
-                Grid.Row="0"
-                Margin="20,20,0,0"
-                BackgroundColor="{StaticResource BlackColor}"
-                Command="{Binding AddPlayerCommand}"
-                CornerRadius="20"
-                HorizontalOptions="Start"
-                Text="Add"
-                TextColor="{StaticResource WhiteColor}" />
+
+
+
             <!--<Frame
                 Grid.Row="0"
                 Margin="0,20,20,0"
@@ -44,16 +41,62 @@
                 <Label Text="1988/55" TextColor="{StaticResource WhiteColor}" />
             </Frame>-->
 
-            <Label
-                Grid.Row="0"
-                Margin="20,20,20,0"
-                FontAttributes="Bold"
-                FontSize="{StaticResource FontSize26}"
-                HorizontalOptions="Center"
-                Text="1988/55"
-                TextColor="{StaticResource WhiteBlueColor}"
-                VerticalOptions="Center" />
+            <Grid Grid.Row="0">
+                <Label
+                    Margin="20,20,20,0"
+                    FontAttributes="Bold"
+                    FontSize="{StaticResource FontSize26}"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding EditCode, Converter={xct:InvertedBoolConverter}}"
+                    Text="{Binding FullMembershipCode, TargetNullValue=FullMembershipCode}"
+                    TextColor="{StaticResource WhiteBlueColor}"
+                    VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding EditCodeCommand}" NumberOfTapsRequired="2" />
+                    </Label.GestureRecognizers>
+                </Label>
 
+                <StackLayout
+                    HorizontalOptions="CenterAndExpand"
+                    IsVisible="{Binding EditCode}"
+                    Orientation="Horizontal"
+                    VerticalOptions="End">
+                    <Entry Placeholder="Year" Text="{Binding MembershipYear}" />
+                    <Label
+                        FontAttributes="Bold"
+                        Text="/"
+                        TextColor="{StaticResource DarkBlackColor}"
+                        VerticalOptions="Center" />
+                    <Entry Placeholder="Code" Text="{Binding MembershipCode}" />
+                    <Label
+                        Margin="5,0"
+                        xct:TouchEffect.Command="{Binding CancelCodeCommand}"
+                        FontAttributes="Bold"
+                        FontSize="{StaticResource FontSize16}"
+                        Text="X"
+                        TextColor="{StaticResource RedColor}"
+                        VerticalOptions="Center" />
+                    <Label
+                        Margin="5,0"
+                        xct:TouchEffect.Command="{Binding SaveCodeCommand}"
+                        FontAttributes="Bold"
+                        FontSize="{StaticResource FontSize18}"
+                        Text="&#10004;"
+                        TextColor="{StaticResource DarkBlueColor}"
+                        VerticalOptions="CenterAndExpand" />
+
+                </StackLayout>
+            </Grid>
+
+            <Button
+                Grid.Row="0"
+                Margin="20,20,0,0"
+                BackgroundColor="{StaticResource BlackColor}"
+                Command="{Binding AddPlayerCommand}"
+                CornerRadius="20"
+                HorizontalOptions="Start"
+                Text="Add"
+                TextColor="{StaticResource WhiteColor}" />
             <StackLayout
                 Grid.Row="0"
                 Margin="0,20,20,0"
@@ -117,6 +160,7 @@
                 SelectedIndicatorColor="{StaticResource DarkBlueColor}"
                 VerticalOptions="Start" />
 
+            <!--  Sports List  -->
             <Frame
                 x:Name="sportsFrame"
                 Grid.Row="0"
@@ -128,11 +172,11 @@
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
                     <Frame
                         Grid.Column="0"
+                        BackgroundColor="{StaticResource WhiteBlueColor}"
                         BorderColor="{StaticResource OrangeColor}"
                         HasShadow="True">
 
                         <ListView
-                            BackgroundColor="{StaticResource WhiteColor}"
                             HasUnevenRows="True"
                             ItemsSource="{x:Static model:SportsData.GetSpoertsData}"
                             SelectionMode="None">
@@ -184,11 +228,12 @@
                     <Button
                         x:Name="sportListToggleBtn"
                         Grid.Column="1"
-                        BackgroundColor="{StaticResource WhiteColor}"
+                        BackgroundColor="{StaticResource DarkBlackColor}"
                         Clicked="Button_Clicked"
                         CornerRadius="20"
                         HorizontalOptions="End"
                         Text="Sports"
+                        TextColor="{StaticResource WhiteColor}"
                         TranslationX="-10"
                         TranslationY="-10"
                         VerticalOptions="End"
@@ -196,37 +241,68 @@
                 </Grid>
             </Frame>
 
+            <!--  Pay Grid  -->
             <Grid
+                x:Name="payGrid"
                 Grid.Row="0"
                 Grid.RowSpan="4"
-                BackgroundColor="Beige"
-                RowDefinitions="Auto,*">
+                BackgroundColor="Transparent"
+                ColumnDefinitions="*,Auto,*"
+                RowDefinitions="Auto, Auto,*">
+
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource DarkBlackColor}"
+                    Clicked="PayBtnClicked"
+                    Command="{Binding PayCommand}"
+                    FontSize="{StaticResource FontSize12}"
+                    HeightRequest="40"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="Pay"
+                    TextColor="{StaticResource WhiteColor}"
+                    WidthRequest="90" />
+
                 <StackLayout
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
                     Padding="15"
                     BackgroundColor="{StaticResource WhiteBlueColor}"
                     Orientation="Horizontal">
                     <Button
+                        x:Name="keepBtn"
                         BackgroundColor="{StaticResource BlackColor}"
-                        Command="{Binding PayCommand}"
+                        Command="{Binding PDFCommand}"
                         CornerRadius="20"
                         Text="PDF"
                         TextColor="{StaticResource WhiteColor}" />
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="{StaticResource FontSize20}"
-                        HorizontalOptions="CenterAndExpand"
-                        Text="{Binding Total}"
-                        TextColor="{StaticResource BlackColor}"
-                        VerticalOptions="Center" />
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="{StaticResource FontSize20}"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="{Binding FullMembershipCode}"
+                            TextColor="{StaticResource BlackColor}" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="{StaticResource FontSize20}"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="{Binding Total}"
+                            TextColor="{StaticResource BlackColor}" />
+                    </StackLayout>
+
                     <Button
                         BackgroundColor="{StaticResource BlackColor}"
+                        Command="{Binding QrCommand}"
                         CornerRadius="20"
                         Text="Qr"
                         TextColor="{StaticResource WhiteColor}" />
                 </StackLayout>
 
                 <CollectionView
-                    Grid.Row="1"
+                    Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    BackgroundColor="Beige"
                     ItemsSource="{Binding PlayersToPaid}"
                     SelectionMode="None">
                     <CollectionView.ItemTemplate>
@@ -249,14 +325,29 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
-                                                <StackLayout Orientation="Horizontal">
-                                                    <CheckBox CheckedChanged="OnCheckBoxChanged" IsChecked="{Binding IsChecked}" />
+                                                <Grid ColumnDefinitions="*,*,3*,*,*">
+                                                    <CheckBox
+                                                        Grid.Column="0"
+                                                        CheckedChanged="OnCheckBoxChanged"
+                                                        IsChecked="{Binding IsChecked}" />
                                                     <Label
+                                                        Grid.Column="1"
+                                                        Text="{Binding Price}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Column="2"
                                                         HorizontalOptions="CenterAndExpand"
                                                         Text="{Binding Name}"
                                                         VerticalOptions="Center" />
-                                                    <Label Text="{Binding Price}" VerticalOptions="Center" />
-                                                </StackLayout>
+                                                    <Label
+                                                        Grid.Column="3"
+                                                        Text="{Binding Discount, StringFormat='{0}%'}"
+                                                        VerticalOptions="Center" />
+                                                    <Label
+                                                        Grid.Column="4"
+                                                        Text="{Binding Total}"
+                                                        VerticalOptions="Center" />
+                                                </Grid>
                                             </ViewCell>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -267,6 +358,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Grid>
+
 
         </Grid>
     </ContentPage.Content>

@@ -56,6 +56,7 @@ namespace SportsCashier.Views.Template
         private void OnSuggestBoxFocused(object sender, FocusEventArgs e)
         {
             (sender as AutoSuggestBox).ItemsSource?.Clear();
+            (sender as AutoSuggestBox).Text = "";
             MessagingCenter.Send<string>(AppConstants.App, AppConstants.ScrollSportsToBottom);
 
         }

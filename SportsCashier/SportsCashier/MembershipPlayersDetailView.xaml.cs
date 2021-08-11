@@ -19,21 +19,29 @@ namespace SportsCashier
     public partial class MembershipPlayersDetailView : ContentPage, INotifyPropertyChanged
     {
         private readonly MembershipPlayersDetailViewModel _viewModel;
+        private double currentHeight;
         const uint ExpandAnimationSpeed = 350;
         const uint CollapseAnimationSpeed = 250;
 
         public MembershipPlayersDetailView()
         {
             InitializeComponent();
-             
+
             BindingContext = _viewModel = new MembershipPlayersDetailViewModel();
+            SizeChanged += MembershipPlayersDetailView_SizeChanged;
 
+        }
 
+        private void MembershipPlayersDetailView_SizeChanged(object sender, EventArgs e)
+        {
+            currentHeight = this.Height;
+            payGrid.TranslationY = currentHeight - 40;
         }
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
+            base.OnAppearing(); 
+
             if (_viewModel != null)
                 await _viewModel.InitializeAsync();
         }
@@ -46,9 +54,9 @@ namespace SportsCashier
         }
 
         // Send message to close swipview
-        private void OnCurrentItemChanged(object sender, CurrentItemChangedEventArgs e) 
-        { 
-            MessagingCenter.Send<string>("App", "Close"); 
+        private void OnCurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
+        {
+            MessagingCenter.Send<string>("App", "Close");
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -67,14 +75,28 @@ namespace SportsCashier
                 return;
             await _viewModel.CalculateAsync();
         }
-    }
 
-    //public class HistoryGroup
-    //{
-    //    public HistoryGroup(List<History> histories)
-    //    {
-    //        Histories = histories;
-    //    }
-    //    public List<History> Histories { get; set; }
-    //}
+
+
+        private void PayBtnClicked(object sender, EventArgs e)
+        {
+            var gridHeight = (payGrid.Height - ((Button)sender).Height);
+
+            if (payGrid.TranslationY == 0)
+            {
+                payGrid.BackgroundColor = Color.Transparent;
+                ((Button)sender).BackgroundColor = Color.Black;
+                ((Button)sender).Text = "Pay";
+                payGrid.TranslateTo(0, gridHeight, CollapseAnimationSpeed, Easing.SinInOut);
+            }
+            else
+            {
+                payGrid.BackgroundColor = Color.Beige;
+                ((Button)sender).BackgroundColor = Color.Orange;
+                ((Button)sender).Text = "Close";
+                payGrid.TranslateTo(0, 0, ExpandAnimationSpeed, Easing.SinInOut);
+            }
+        }
+
+    }
 }

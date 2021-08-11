@@ -15,7 +15,9 @@ namespace SportsCashier.Common.Models
 
         public string Name { get; private set; }
         public string Icon { get; private set; }
-        public double Price { get; private set; }
+        public decimal Price { get; private set; }
+        public double Discount { get; internal set; }
+        public decimal Total { get; internal set; }
         public bool IsChecked { get => isChecked; set => SetProperty(ref isChecked, value); }
         public bool IsPaid { get => isPaid; set => SetProperty(ref isPaid, value); }
         public int Code

@@ -15,5 +15,7 @@ namespace SportsCashier
         public const string SportChecked = "SportChecked";
         public const string PlayerChecked = "PlayerChecked";
         public const string TotalPayment = "TotalPayment";
+        public const string Membership_Code = "MembershipCode";
+        public const string Membership_Year = "MembershipYear";
     }
 }
